@@ -9,7 +9,7 @@
         aprende: ['aprende.html', 'tema.html'],
         nosotros: ['nosotros.html'],
         registro: ['registro.html'],
-        huerto: ['ajardin.html', 'jardin.html'],
+        huerto: ['jardin.html'],
         usuario: ['preferencias_usuario.html']
     };
 
@@ -32,7 +32,7 @@
                 <a class="agro-navbar__link" data-nav="nosotros" href="nosotros.html">Nosotros</a>
                 <span class="agro-navbar__spacer"></span>
                 <a class="agro-navbar__link" data-nav="registro" href="registro.html">Regístrate</a>
-                <a class="agro-navbar__link" data-nav="huerto" href="ajardin.html">Mi huerto</a>
+                <a class="agro-navbar__link" data-nav="huerto" href="jardin.html">Mi huerto</a>
                 <a class="agro-navbar__user-link" data-nav="usuario" href="preferencias_usuario.html" aria-label="Preferencias de usuario">
                     <span class="agro-navbar__avatar" aria-hidden="true">👤</span>
                 </a>
