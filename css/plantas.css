@@ -1,1 +1,429 @@
-/* Estilos de plantas.html */
+/* ==================================================
+   CATÁLOGO DE AGROPEDIA
+   Diseño reutilizado de Agropedia V1.
+   Adaptado para Agropedia V2.
+   ================================================== */
+
+:root {
+    --plants-green: #3d8b40;
+    --plants-green-dark: #205b25;
+    --plants-green-soft: #edf5eb;
+    --plants-text: #263126;
+    --plants-text-light: #697469;
+    --plants-border: #e2e9df;
+}
+
+/* ==================================================
+   HERO
+   ================================================== */
+
+.plants-hero {
+    background: linear-gradient(
+        rgba(28, 67, 34, 0.9),
+        rgba(28, 67, 34, 0.9)
+    );
+
+    color: #ffffff;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.plants-hero-content {
+    max-width: 850px;
+    margin: auto;
+}
+
+.plants-hero .section-label {
+    color: #d7ebd2;
+}
+
+.plants-hero h1 {
+    font-size: clamp(40px, 6vw, 68px);
+    line-height: 1.05;
+    margin: 15px 0;
+}
+
+.plants-hero p {
+    max-width: 600px;
+    margin: 0 auto 35px;
+    color: #dce9dc;
+    line-height: 1.7;
+}
+
+/* ==================================================
+   BUSCADOR
+   ================================================== */
+
+.plants-search {
+    position: relative;
+    display: flex;
+    max-width: 650px;
+    margin: auto;
+    padding: 6px;
+    background: #ffffff;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.plants-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 15px 20px;
+    border-radius: 40px;
+    font-size: 14px;
+}
+
+.plants-search button {
+    border: none;
+    background: var(--plants-green);
+    color: #ffffff;
+    border-radius: 40px;
+    padding: 0 25px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.plants-search button:hover {
+    background: var(--plants-green-dark);
+}
+
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+
+    display: none;
+    overflow: hidden;
+
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+    text-align: left;
+}
+
+.search-suggestions.active {
+    display: block;
+}
+
+.search-suggestion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px 18px;
+
+    color: var(--plants-text);
+    text-decoration: none;
+}
+
+.search-suggestion:hover {
+    background: var(--plants-green-soft);
+}
+
+.search-suggestion img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.search-suggestion small {
+    color: var(--plants-text-light);
+    font-style: italic;
+}
+
+/* ==================================================
+   CATÁLOGO
+   ================================================== */
+
+.plants-catalog {
+    padding: 90px 0;
+}
+
+.catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 30px;
+}
+
+.catalog-header h2 {
+    font-size: 38px;
+    color: var(--plants-green-dark);
+    margin: 5px 0;
+}
+
+.catalog-header p {
+    color: var(--plants-text-light);
+}
+
+.plant-count {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    color: var(--plants-text-light);
+}
+
+.plant-count strong {
+    font-size: 30px;
+    color: var(--plants-green);
+}
+
+/* ==================================================
+   CATEGORÍAS
+   ================================================== */
+
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 25px;
+}
+
+.category-button {
+    border: 1px solid var(--plants-border);
+    background: #ffffff;
+    color: var(--plants-text-light);
+    border-radius: 30px;
+    padding: 9px 17px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+.category-button:hover {
+    border-color: var(--plants-green);
+    color: var(--plants-green);
+}
+
+.category-button.active {
+    background: var(--plants-green);
+    border-color: var(--plants-green);
+    color: #ffffff;
+}
+
+/* ==================================================
+   FILTROS
+   ================================================== */
+
+.filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 15px;
+
+    padding: 20px;
+    margin-bottom: 40px;
+
+    background: #f5f8f4;
+    border-radius: 15px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-group label {
+    color: var(--plants-text-light);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.filter-group select {
+    border: 1px solid var(--plants-border);
+    background: #ffffff;
+    padding: 9px 12px;
+    border-radius: 8px;
+    outline: none;
+    color: var(--plants-text);
+}
+
+.clear-filters {
+    margin-left: auto;
+    border: none;
+    background: transparent;
+    color: var(--plants-green);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==================================================
+   GRID DE PLANTAS
+   ================================================== */
+
+.plants-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.plant-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e7ece6;
+    border-radius: 16px;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.plant-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(30, 70, 35, 0.12);
+}
+
+.plant-card a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.plant-card-image {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+}
+
+.plant-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.plant-card:hover .plant-card-image img {
+    transform: scale(1.05);
+}
+
+.plant-card-category {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+
+    padding: 6px 11px;
+
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--plants-green-dark);
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.plant-card-content {
+    padding: 22px;
+}
+
+.plant-card h3 {
+    color: var(--plants-green-dark);
+    font-size: 22px;
+    margin: 0 0 3px;
+}
+
+.scientific-name {
+    color: #8a948a;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.plant-card-description {
+    min-height: 63px;
+    color: var(--plants-text-light);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.plant-card .plant-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 15px 0;
+}
+
+.plant-card .plant-tags span {
+    padding: 5px 8px;
+    background: var(--plants-green-soft);
+    color: var(--plants-green);
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.view-plant {
+    display: block;
+    color: var(--plants-green);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* ==================================================
+   SIN RESULTADOS
+   ================================================== */
+
+.no-results {
+    display: none;
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.no-results span {
+    font-size: 50px;
+}
+
+.no-results h3 {
+    color: var(--plants-green-dark);
+    margin: 15px 0 5px;
+}
+
+.no-results p {
+    color: var(--plants-text-light);
+}
+
+/* ==================================================
+   RESPONSIVE
+   ================================================== */
+
+@media (max-width: 1100px) {
+    .plants-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .plants-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .catalog-header {
+        align-items: start;
+    }
+}
+
+@media (max-width: 550px) {
+    .plants-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .catalog-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .plants-search {
+        flex-direction: column;
+        border-radius: 15px;
+    }
+
+    .plants-search button {
+        padding: 13px;
+    }
+
+    .clear-filters {
+        margin-left: 0;
+    }
+}
