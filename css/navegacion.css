@@ -1,7 +1,6 @@
 /* Navegación universal de Agropedia */
 :root {
     --verde-agropedia: #2e7d32;
-    --verde-agropedia-hover: #256628;
     --nav-texto: #263126;
     --nav-fondo: #ffffff;
     --nav-borde: #e6ebe6;
@@ -17,7 +16,6 @@
     height: 76px;
     display: flex;
     align-items: center;
-    gap: 0;
     padding: 0 32px;
     background: var(--nav-fondo);
     border-bottom: 1px solid var(--nav-borde);
@@ -43,17 +41,22 @@
 
 .agro-navbar__links {
     position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
     height: 100%;
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.agro-navbar__link {
+.agro-navbar__link,
+.agro-navbar__user-link {
     position: relative;
+    flex: 0 0 auto;
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0 14px;
     color: var(--nav-texto);
     text-decoration: none;
@@ -66,6 +69,8 @@
 .agro-navbar__link:hover,
 .agro-navbar__link.is-active { color: var(--verde-agropedia); }
 
+.agro-navbar__spacer { flex: 1 1 auto; }
+
 .agro-navbar__indicator {
     position: absolute;
     left: 0;
@@ -77,25 +82,6 @@
     transform: translateX(0);
     transition: transform .45s cubic-bezier(.22,.61,.36,1), width .35s ease;
     pointer-events: none;
-}
-
-.agro-navbar__spacer { flex: 1 1 auto; }
-
-.agro-navbar__user {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin-left: 12px;
-}
-
-.agro-navbar__user-link {
-    position: relative;
-    height: 100%;
-    width: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
 }
 
 .agro-navbar__avatar {
@@ -117,34 +103,18 @@
     transform: scale(1.04);
 }
 
-.agro-navbar__user-link::after {
-    content: "";
-    position: absolute;
-    left: 5px;
-    right: 5px;
-    bottom: 0;
-    height: 3px;
-    border-radius: 3px 3px 0 0;
-    background: var(--verde-agropedia);
-    transform: scaleX(0);
-    transition: transform .35s ease;
-}
-
-.agro-navbar__user-link.is-active::after { transform: scaleX(1); }
-
 @media (max-width: 800px) {
     .agro-navbar { padding: 0 14px; }
     .agro-navbar__logo { margin-right: 8px; }
-    .agro-navbar__link { padding: 0 8px; font-size: 14px; }
+    .agro-navbar__link,
+    .agro-navbar__user-link { padding: 0 8px; font-size: 14px; }
 }
 
 @media (max-width: 620px) {
     .agro-navbar { height: auto; min-height: 68px; flex-wrap: wrap; padding: 8px 12px 0; }
     .agro-navbar__logo { width: 46px; height: 46px; }
     .agro-navbar__logo img { width: 46px; height: 46px; }
-    .agro-navbar__links { height: 52px; order: 3; width: 100%; overflow-x: auto; }
-    .agro-navbar__link { height: 52px; }
-    .agro-navbar__spacer { display: none; }
-    .agro-navbar__user { margin-left: auto; height: 52px; }
+    .agro-navbar__links { height: 52px; order: 3; width: 100%; overflow-x: auto; flex: 1 0 100%; }
+    .agro-navbar__link,
     .agro-navbar__user-link { height: 52px; }
 }
