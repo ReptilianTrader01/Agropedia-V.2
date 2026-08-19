@@ -30,15 +30,13 @@
                 <a class="agro-navbar__link" data-nav="plantas" href="plantas.html">Plantas</a>
                 <a class="agro-navbar__link" data-nav="aprende" href="aprende.html">Aprende</a>
                 <a class="agro-navbar__link" data-nav="nosotros" href="nosotros.html">Nosotros</a>
-                <span class="agro-navbar__indicator" aria-hidden="true"></span>
-            </div>
-            <div class="agro-navbar__spacer"></div>
-            <a class="agro-navbar__link" data-nav="registro" href="registro.html">Regístrate</a>
-            <a class="agro-navbar__link" data-nav="huerto" href="ajardin.html">Mi huerto</a>
-            <div class="agro-navbar__user">
+                <span class="agro-navbar__spacer"></span>
+                <a class="agro-navbar__link" data-nav="registro" href="registro.html">Regístrate</a>
+                <a class="agro-navbar__link" data-nav="huerto" href="ajardin.html">Mi huerto</a>
                 <a class="agro-navbar__user-link" data-nav="usuario" href="preferencias_usuario.html" aria-label="Preferencias de usuario">
                     <span class="agro-navbar__avatar" aria-hidden="true">👤</span>
                 </a>
+                <span class="agro-navbar__indicator" aria-hidden="true"></span>
             </div>
         `;
 
@@ -52,10 +50,8 @@
         const indicador = nav.querySelector('.agro-navbar__indicator');
         const contenedor = nav.querySelector('.agro-navbar__links');
 
-        if (!activo) return;
+        if (!activo || !indicador) return;
         activo.classList.add('is-active');
-
-        if (activo.classList.contains('agro-navbar__user-link')) return;
 
         function moverIndicador(elemento, animar) {
             const contenedorRect = contenedor.getBoundingClientRect();
