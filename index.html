@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agropedia</title>
-    <link rel="stylesheet" href="css/navegacion.css">
-    <link rel="stylesheet" href="css/index.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Agropedia: aprendizaje, gestión y planeación de huertos.">
+<title>Agropedia | Inicio</title>
+<link rel="stylesheet" href="css/navegacion.css"><link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <main id="app"></main>
-    <script src="js/navegacion.js"></script>
-    <script src="js/index.js"></script>
-</body>
-</html>
+<main>
+<section class="hero"><div class="hero__content"><span class="hero__eyebrow">Bienvenido a Agropedia</span><h1>Cultiva conocimiento,<br><span>haz crecer tu huerto.</span></h1><p>Una herramienta para aprender sobre plantas, planear tus cultivos y cuidar tu huerto de acuerdo con el momento adecuado.</p><div class="hero__actions"><a class="btn btn--primary" href="plantas.html">Explorar plantas</a><a class="btn btn--secondary" href="aprende.html">Quiero aprender</a></div></div><div class="hero__decoration" aria-hidden="true"><div class="hero__sun"></div><div class="hero__leaf hero__leaf--one"></div><div class="hero__leaf hero__leaf--two"></div><div class="hero__circle"></div></div></section>
+<section class="section recommended"><div class="section-heading"><div><span class="section-heading__eyebrow">Descubre</span><h2>Plantas recomendadas</h2><p>Las plantas ideales para comenzar a cultivar durante <strong id="current-month">este mes</strong>.</p></div><a href="plantas.html" class="section-link">Ver todas las plantas →</a></div><div class="plant-carousel"><button class="carousel-button" id="carousel-prev" type="button" aria-label="Plantas anteriores">‹</button><div class="plant-carousel__viewport"><div class="plant-carousel__track" id="plant-track"></div></div><button class="carousel-button" id="carousel-next" type="button" aria-label="Siguientes plantas">›</button></div><div class="carousel-dots" id="carousel-dots"></div></section>
+<section class="section garden-info"><div class="info-grid"><article class="info-card"><div class="info-card__icon">☀</div><div><span class="info-card__label">Estación actual</span><h2 id="season-name">Calculando...</h2><p id="season-description">Preparando información para tu huerto.</p></div></article><article class="info-card"><div class="info-card__icon" id="moon-icon">◐</div><div><span class="info-card__label">Fase lunar</span><h2 id="moon-name">Calculando...</h2><p id="moon-description">Consultando el ciclo lunar actual.</p></div></article><article class="advice-card"><div class="advice-card__header"><div><span class="info-card__label">Momento para tu huerto</span><time id="current-time">00:00:00</time></div><span class="advice-card__status" id="time-period">Ahora</span></div><div class="advice-card__body"><div class="advice-card__icon">🌱</div><div><span class="advice-card__label">Consejo de jardinería</span><p id="garden-advice">Preparando un consejo para este momento...</p></div></div></article></div></section>
+<section class="section popular"><div class="section-heading"><div><span class="section-heading__eyebrow">Comunidad</span><h2>Las plantas más populares</h2><p>Las 10 plantas con más usuarios que las han guardado como favoritas este mes.</p></div><span class="month-badge" id="popular-month">Este mes</span></div><div class="table-wrapper"><table class="popular-table"><thead><tr><th>#</th><th>Planta</th><th>Tipo</th><th>Favoritos</th></tr></thead><tbody id="popular-plants"></tbody></table></div></section>
+<section class="section learning"><div class="learning__text"><span class="section-heading__eyebrow">Aprende con Agropedia</span><h2>Comienza tu propio huerto</h2><p>Empezar un huerto no requiere tener experiencia. Conocer el espacio disponible, elegir las plantas adecuadas y preparar correctamente la tierra son los primeros pasos para cultivar con éxito.</p><p>En Agropedia encontrarás información para acompañarte desde la preparación del suelo hasta el cuidado de tus plantas.</p><a href="aprende.html" class="text-link">Explorar contenido educativo →</a></div><div class="video-placeholder"><div class="video-placeholder__play">▶</div><span>Video de introducción al huerto</span><small>Aquí colocaremos el enlace de YouTube</small></div></section>
+</main>
+<footer class="site-footer"><div class="site-footer__main"><div class="site-footer__brand"><img src="assets/images/logo.png" alt="Agropedia" class="site-footer__logo"><p>Herramienta de aprendizaje, gestión y planeación de huertos.</p></div><div class="site-footer__column"><h3>Agropedia</h3><a href="nosotros.html">Nosotros</a><a href="plantas.html">Plantas</a><a href="aprende.html">Aprende</a></div><div class="site-footer__column"><h3>Tu espacio</h3><a href="registro.html">Regístrate</a><a href="jardin.html">Mi huerto</a><a href="preferencias_usuario.html">Preferencias</a></div></div><div class="site-footer__bottom"><span>© 2026 Agropedia. Todos los derechos reservados.</span><span>Cultiva conocimiento.</span></div></footer>
+<script src="js/navegacion.js"></script><script src="js/index.js"></script>
+</body></html>
