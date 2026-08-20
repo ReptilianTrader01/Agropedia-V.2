@@ -1,42 +1,76 @@
 /* ==================================================
    TEMA GLOBAL DE AGROPEDIA
-   Se activa con body.agropedia-dark.
+   Se activa con html/body.agropedia-dark.
 ================================================== */
 
+html.agropedia-dark,
 body.agropedia-dark {
-    background: #121712;
-    color: #e2e9e1;
+    background: #121712 !important;
+    color: #e2e9e1 !important;
 }
 
 body.agropedia-dark .agro-navbar {
     --nav-texto: #e4ebe4;
     --nav-fondo: #1b211c;
     --nav-borde: #343d35;
+    background: #1b211c !important;
+    border-color: #343d35 !important;
     box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
 }
 
-body.agropedia-dark .agro-navbar__avatar {
-    border-color: #465147;
-    background: #293129;
-    color: #d9e2d9;
+body.agropedia-dark .agro-navbar__link,
+body.agropedia-dark .agro-navbar__user-link {
+    color: #e4ebe4 !important;
 }
 
-/* Fondos generales de las páginas */
+body.agropedia-dark .agro-navbar__link:hover,
+body.agropedia-dark .agro-navbar__link.is-active {
+    color: #8bc67f !important;
+}
+
+body.agropedia-dark .agro-navbar__avatar {
+    border-color: #465147 !important;
+    background: #293129 !important;
+    color: #d9e2d9 !important;
+}
 
 body.agropedia-dark main,
-body.agropedia-dark section {
+body.agropedia-dark section,
+body.agropedia-dark header,
+body.agropedia-dark .container,
+body.agropedia-dark [class*="container"] {
     background-color: #121712;
     color: #e2e9e1;
 }
 
-/* Tarjetas y paneles */
+/* Superficies comunes */
 
 body.agropedia-dark article,
 body.agropedia-dark [class*="card"],
-body.agropedia-dark [class*="panel"] {
+body.agropedia-dark [class*="panel"],
+body.agropedia-dark [class*="box"],
+body.agropedia-dark [class*="item"] {
     background-color: #202720;
     border-color: #394339;
     color: #e2e9e1;
+}
+
+/* Elementos que suelen conservar fondos claros en CSS específicos */
+
+body.agropedia-dark [style*="background"],
+body.agropedia-dark [style*="background-color"] {
+    background-color: #202720 !important;
+}
+
+body.agropedia-dark table,
+body.agropedia-dark thead,
+body.agropedia-dark tbody,
+body.agropedia-dark tr,
+body.agropedia-dark td,
+body.agropedia-dark th {
+    background-color: #202720;
+    color: #e2e9e1;
+    border-color: #394339;
 }
 
 /* Texto */
@@ -46,13 +80,16 @@ body.agropedia-dark h2,
 body.agropedia-dark h3,
 body.agropedia-dark h4,
 body.agropedia-dark h5,
-body.agropedia-dark h6 {
+body.agropedia-dark h6,
+body.agropedia-dark strong,
+body.agropedia-dark b {
     color: #dfe8de;
 }
 
 body.agropedia-dark p,
 body.agropedia-dark li,
-body.agropedia-dark label {
+body.agropedia-dark label,
+body.agropedia-dark small {
     color: #b8c2b8;
 }
 
@@ -60,7 +97,8 @@ body.agropedia-dark label {
 
 body.agropedia-dark input,
 body.agropedia-dark select,
-body.agropedia-dark textarea {
+body.agropedia-dark textarea,
+body.agropedia-dark button {
     background: #202720;
     color: #e2e9e1;
     border-color: #465146;
@@ -71,24 +109,51 @@ body.agropedia-dark textarea::placeholder {
     color: #849084;
 }
 
+body.agropedia-dark option {
+    background: #202720;
+    color: #e2e9e1;
+}
+
 /* Enlaces */
 
 body.agropedia-dark a {
     color: #8bc67f;
 }
 
+/* Controles */
+
+body.agropedia-dark hr {
+    border-color: #394339;
+}
+
+body.agropedia-dark ::selection {
+    background: #356338;
+    color: #ffffff;
+}
+
 /* Footer */
 
 body.agropedia-dark .site-footer {
-    background: #0d120e;
-    color: #cdd7ce;
+    background: #0d120e !important;
+    color: #cdd7ce !important;
+    border-color: #273027;
+}
+
+body.agropedia-dark .site-footer h3,
+body.agropedia-dark .site-footer__wordmark {
+    color: #ffffff !important;
+}
+
+body.agropedia-dark .site-footer p,
+body.agropedia-dark .site-footer span {
+    color: #aeb9af;
 }
 
 body.agropedia-dark .site-footer a {
-    color: #aebcae;
+    color: #aebcae !important;
 }
 
-/* Las imágenes conservan sus colores originales. */
+/* Las fotografías e ilustraciones conservan sus colores. */
 body.agropedia-dark img {
     filter: none;
 }
