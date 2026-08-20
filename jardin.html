@@ -14,6 +14,40 @@
 
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/jardin.css">
+
+    <!-- Ajustes visuales específicos del diagrama. -->
+    <style>
+        .garden-cell .cell-status {
+            top: 7px;
+            right: 7px;
+            width: 15px;
+            height: 15px;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        }
+
+        .garden-cell .cell-status.warning {
+            background: #d6a426;
+        }
+
+        .garden-cell .cell-status.danger {
+            background: #bd4646;
+        }
+
+        .garden-cell .cell-status.harvest {
+            background: #7d6a3d;
+        }
+
+        @media (max-width: 600px) {
+            .garden-cell .cell-status {
+                top: 4px;
+                right: 4px;
+                width: 11px;
+                height: 11px;
+                border-width: 2px;
+            }
+        }
+    </style>
 </head>
 
 <body>
