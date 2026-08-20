@@ -1,0 +1,152 @@
+/* ==================================================
+   HERO DINÁMICO DE AGROPEDIA
+   Cambia entre pradera de día y bosque nocturno.
+================================================== */
+
+.hero {
+    isolation: isolate;
+    min-height: 540px;
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(244, 250, 239, 0.98) 0%,
+            rgba(244, 250, 239, 0.88) 31%,
+            rgba(244, 250, 239, 0.28) 58%,
+            rgba(244, 250, 239, 0.04) 100%
+        ),
+        url('../assets/images/hero-dia.svg');
+    background-size: cover;
+    background-position: center;
+    transition:
+        background-image 0.8s ease,
+        color 0.5s ease;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+        0deg,
+        rgba(42, 86, 42, 0.08),
+        transparent 35%
+    );
+    pointer-events: none;
+}
+
+.hero__decoration {
+    display: none !important;
+}
+
+.hero__content {
+    max-width: 650px;
+    padding: 20px 0;
+}
+
+.hero h1,
+.hero p,
+.hero__eyebrow,
+.hero__actions {
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.35);
+}
+
+/* ==================================================
+   MODO NOCTURNO
+================================================== */
+
+body.agropedia-dark .hero {
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(5, 16, 23, 0.97) 0%,
+            rgba(5, 16, 23, 0.88) 31%,
+            rgba(5, 16, 23, 0.35) 59%,
+            rgba(5, 16, 23, 0.08) 100%
+        ),
+        url('../assets/images/hero-noche.svg');
+}
+
+body.agropedia-dark .hero::after {
+    background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.25),
+        transparent 45%
+    );
+}
+
+body.agropedia-dark .hero h1,
+body.agropedia-dark .hero p {
+    color: #f0f5ef;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+body.agropedia-dark .hero h1 span {
+    color: #8bc779;
+}
+
+body.agropedia-dark .hero__eyebrow {
+    color: #9bd58b;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+body.agropedia-dark .btn--secondary {
+    background: rgba(10, 25, 28, 0.72);
+    border-color: rgba(157, 204, 143, 0.55);
+    color: #c7e8bd;
+    backdrop-filter: blur(5px);
+}
+
+body.agropedia-dark .btn--primary {
+    background: #4f963f;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+/* ==================================================
+   INDICADOR VISUAL DE TRANSICIÓN
+================================================== */
+
+.hero {
+    transition-property: background-image;
+}
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 900px) {
+    .hero {
+        background-position: 62% center;
+    }
+}
+
+@media (max-width: 650px) {
+    .hero {
+        min-height: 570px;
+        background-position: 67% center;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: linear-gradient(
+            90deg,
+            rgba(244, 250, 239, 0.98),
+            rgba(244, 250, 239, 0.72)
+        );
+    }
+
+    body.agropedia-dark .hero::before {
+        background: linear-gradient(
+            90deg,
+            rgba(5, 16, 23, 0.98),
+            rgba(5, 16, 23, 0.70)
+        );
+    }
+
+    .hero__content {
+        z-index: 2;
+    }
+}
