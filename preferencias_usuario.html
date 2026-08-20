@@ -1,15 +1,293 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preferencias de usuario | Agropedia</title>
+    <meta
+        name="description"
+        content="Personaliza tu experiencia, perfil y preferencias dentro de Agropedia."
+    >
+
+    <title>Preferencias | Agropedia</title>
+
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/preferencias_usuario.css">
 </head>
+
 <body>
-    <main id="app"></main>
+
+    <!-- La navegación y el footer universales se cargan desde navegacion.js. -->
+
+    <main>
+
+        <!-- ==================================================
+             HERO
+        =================================================== -->
+        <section class="preferences-hero">
+            <div class="preferences-container">
+                <div class="hero-content">
+                    <span class="section-label">⚙️ Tu espacio</span>
+
+                    <h1>
+                        Personaliza<br>
+                        <span>Agropedia a tu manera.</span>
+                    </h1>
+
+                    <p>
+                        Configura tu experiencia, administra tu perfil y decide
+                        qué información quieres recibir mientras cultivas.
+                    </p>
+                </div>
+
+                <div class="hero-decoration" aria-hidden="true">
+                    <span>⚙️</span>
+                    <span>🌱</span>
+                    <span>🌙</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             AVISO DE SESIÓN
+        =================================================== -->
+        <section class="session-notice" id="sessionNotice">
+            <div class="preferences-container">
+                <div class="notice-card">
+                    <div class="notice-icon">🔐</div>
+
+                    <div>
+                        <strong>Estás utilizando Agropedia sin iniciar sesión.</strong>
+                        <p>
+                            Las acciones y preferencias que realices en esta página
+                            no se guardarán permanentemente hasta que inicies sesión
+                            o te registres.
+                        </p>
+                    </div>
+
+                    <a href="registro.html" class="notice-button">
+                        Iniciar sesión / Registrarme →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             PROGRESO DE APRENDIZAJE
+        =================================================== -->
+        <section class="learning-progress-section">
+            <div class="preferences-container">
+                <div class="section-heading">
+                    <span class="section-label">📚 Mi aprendizaje</span>
+                    <h2>Progreso de mis cursos</h2>
+                    <p>
+                        Consulta cuánto has avanzado en los cursos de Agropedia
+                        y cuáles ya has completado.
+                    </p>
+                </div>
+
+                <div class="learning-summary">
+                    <div class="learning-stat">
+                        <span>📖</span>
+                        <strong id="enrolledCount">0</strong>
+                        <small>Cursos inscritos</small>
+                    </div>
+
+                    <div class="learning-stat">
+                        <span>⏳</span>
+                        <strong id="inProgressCount">0</strong>
+                        <small>En progreso</small>
+                    </div>
+
+                    <div class="learning-stat">
+                        <span>🏆</span>
+                        <strong id="completedCount">0</strong>
+                        <small>Completados</small>
+                    </div>
+
+                    <div class="learning-stat">
+                        <span>📊</span>
+                        <strong id="overallProgress">0%</strong>
+                        <small>Progreso general</small>
+                    </div>
+                </div>
+
+                <div class="course-list" id="courseList"></div>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             PREFERENCIAS Y PERFIL
+        =================================================== -->
+        <section class="settings-section">
+            <div class="preferences-container">
+                <div class="section-heading">
+                    <span class="section-label">🛠️ Configuración</span>
+                    <h2>Personaliza tu experiencia</h2>
+                    <p>
+                        Elige qué quieres ver y cómo quieres utilizar Agropedia.
+                    </p>
+                </div>
+
+                <div class="settings-grid">
+
+                    <!-- Preferencias del sitio -->
+                    <article class="settings-panel">
+                        <div class="panel-heading">
+                            <div class="panel-icon">🌿</div>
+                            <div>
+                                <span>Experiencia</span>
+                                <h3>Preferencias del sitio</h3>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <strong>Modo nocturno</strong>
+                                <p>Cambia la apariencia de Agropedia a un tema oscuro.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="darkMode">
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <strong>Mostrar plantas favoritas</strong>
+                                <p>Permite que tus favoritas aparezcan en secciones personalizadas.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="showFavorites" checked>
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <strong>Recomendaciones lunares</strong>
+                                <p>Recibe sugerencias relacionadas con la fase lunar.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="moonRecommendations" checked>
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <strong>Consejos de jardinería</strong>
+                                <p>Muestra recomendaciones según estación, clima y hora.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="gardenTips" checked>
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item setting-item--select">
+                            <div>
+                                <strong>Frecuencia de recomendaciones</strong>
+                                <p>Decide cuándo quieres recibir nuevas sugerencias.</p>
+                            </div>
+
+                            <select id="recommendationFrequency">
+                                <option value="daily">Diarias</option>
+                                <option value="weekly">Semanales</option>
+                                <option value="monthly">Mensuales</option>
+                            </select>
+                        </div>
+                    </article>
+
+                    <!-- Información del perfil -->
+                    <article class="settings-panel">
+                        <div class="panel-heading">
+                            <div class="panel-icon">👤</div>
+                            <div>
+                                <span>Cuenta</span>
+                                <h3>Información de mi perfil</h3>
+                            </div>
+                        </div>
+
+                        <form id="profileForm" class="profile-form">
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <label for="profileName">Nombre</label>
+                                    <input id="profileName" type="text" placeholder="Tu nombre">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="profileUsername">Nombre de usuario</label>
+                                    <input id="profileUsername" type="text" placeholder="Usuario">
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="profileContact">Correo o número de teléfono</label>
+                                <input
+                                    id="profileContact"
+                                    type="text"
+                                    placeholder="correo@ejemplo.com"
+                                >
+                            </div>
+
+                            <div class="form-field">
+                                <label for="profileZone">Zona / ubicación</label>
+                                <input
+                                    id="profileZone"
+                                    type="text"
+                                    placeholder="Ciudad, estado o región"
+                                >
+                                <small>
+                                    Esta información permitirá adaptar recomendaciones de clima y cultivo.
+                                </small>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="profileClimate">Tipo de clima</label>
+                                <select id="profileClimate">
+                                    <option value="auto">Detectar automáticamente</option>
+                                    <option value="tropical">Tropical</option>
+                                    <option value="seco">Seco</option>
+                                    <option value="templado">Templado</option>
+                                    <option value="frio">Frío</option>
+                                    <option value="mediterraneo">Mediterráneo</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="save-profile-button">
+                                Guardar cambios
+                            </button>
+
+                            <p class="save-message" id="saveMessage" aria-live="polite"></p>
+                        </form>
+
+                        <div class="account-actions">
+                            <div>
+                                <strong>Zona de cuenta</strong>
+                                <p>Acciones que afectan a tu sesión y a tu cuenta.</p>
+                            </div>
+
+                            <div class="account-buttons">
+                                <button type="button" id="logoutButton" class="logout-button">
+                                    Cerrar sesión
+                                </button>
+
+                                <button type="button" id="deleteAccountButton" class="delete-button">
+                                    Borrar cuenta
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
     <script src="js/navegacion.js"></script>
     <script src="js/preferencias_usuario.js"></script>
+
 </body>
 </html>
