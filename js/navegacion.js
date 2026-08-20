@@ -20,6 +20,38 @@
         ) || null;
     }
 
+    /* ==================================================
+       MODO NOCTURNO GLOBAL
+       La preferencia se comparte entre todas las páginas.
+    ================================================== */
+
+    function aplicarModoNocturno() {
+        let preferencias = {};
+
+        try {
+            preferencias = JSON.parse(
+                localStorage.getItem('agropedia_preferences') || '{}'
+            );
+        } catch (error) {
+            preferencias = {};
+        }
+
+        document.body.classList.toggle(
+            'agropedia-dark',
+            preferencias.darkMode === true
+        );
+    }
+
+    function observarCambiosDeModo() {
+        window.addEventListener('storage', event => {
+            if (event.key !== 'agropedia_preferences') {
+                return;
+            }
+
+            aplicarModoNocturno();
+        });
+    }
+
     function crearNavegacion() {
         const nav = document.createElement('nav');
 
@@ -138,8 +170,6 @@
     // =========================================================
 
     function crearFooter() {
-        // index.html ya contiene el footer de V2.
-        // Las demás páginas lo reciben automáticamente.
         if (document.querySelector('.site-footer')) {
             return;
         }
@@ -191,7 +221,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        /* Se aplica inmediatamente después de cargar el DOM. */
+        aplicarModoNocturno();
+
         crearNavegacion();
         crearFooter();
+        observarCambiosDeModo();
     });
 })();
