@@ -3,13 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Aprende | Agropedia</title>
+
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/aprende.css">
 </head>
+
 <body>
-    <main id="app"></main>
+
+    <main id="app">
+
+        <!-- ==================================================
+             HERO
+        ================================================== -->
+        <section class="learn-hero">
+            <div class="learn-hero__content">
+                <span class="section-kicker">APRENDE CON AGROPEDIA</span>
+
+                <h1>
+                    Cultiva conocimiento,
+                    <span>haz crecer tu huerto.</span>
+                </h1>
+
+                <p>
+                    Descubre cursos, videos y documentos para aprender a cultivar,
+                    cuidar el suelo y comprender mejor todo lo que ocurre en tu huerto.
+                </p>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             BUSCADOR
+        ================================================== -->
+        <section class="learn-search-section">
+            <div class="learn-search">
+                <span class="learn-search__icon" aria-hidden="true">⌕</span>
+
+                <input
+                    type="search"
+                    id="learnSearch"
+                    placeholder="¿Qué quieres aprender? Busca cursos, videos o documentos..."
+                    autocomplete="off"
+                >
+
+                <button type="button" id="clearSearch" class="learn-search__clear" aria-label="Limpiar búsqueda">
+                    ×
+                </button>
+            </div>
+
+            <p id="searchMessage" class="search-message">
+                Explora todo el contenido disponible en Agropedia.
+            </p>
+        </section>
+
+        <!-- ==================================================
+             TEMAS
+        ================================================== -->
+        <section class="learn-section topics-section">
+            <div class="section-heading">
+                <span class="section-kicker">TEMAS</span>
+                <h2>¿Qué quieres aprender?</h2>
+                <p>
+                    Explora los grandes temas de la agricultura y encuentra contenido
+                    relacionado con cada uno.
+                </p>
+            </div>
+
+            <div id="topicsGrid" class="topics-grid"></div>
+        </section>
+
+        <!-- ==================================================
+             CURSOS
+        ================================================== -->
+        <section class="learn-section content-section" id="coursesSection">
+            <div class="content-section__heading">
+                <div>
+                    <span class="section-kicker">APRENDE A TU RITMO</span>
+                    <h2>Cursos</h2>
+                    <p>Recorridos de aprendizaje para desarrollar tus conocimientos paso a paso.</p>
+                </div>
+
+                <a class="view-more-button" href="catalogo.html?tipo=cursos">
+                    Ver más cursos →
+                </a>
+            </div>
+
+            <div id="coursesGrid" class="learning-grid"></div>
+        </section>
+
+        <!-- ==================================================
+             VIDEOS
+        ================================================== -->
+        <section class="learn-section content-section" id="videosSection">
+            <div class="content-section__heading">
+                <div>
+                    <span class="section-kicker">APRENDE VIENDO</span>
+                    <h2>Videos</h2>
+                    <p>Explicaciones prácticas y demostraciones para aprender de forma visual.</p>
+                </div>
+
+                <a class="view-more-button" href="catalogo.html?tipo=videos">
+                    Ver más videos →
+                </a>
+            </div>
+
+            <div id="videosGrid" class="learning-grid"></div>
+        </section>
+
+        <!-- ==================================================
+             DOCUMENTOS
+        ================================================== -->
+        <section class="learn-section content-section" id="documentsSection">
+            <div class="content-section__heading">
+                <div>
+                    <span class="section-kicker">MATERIAL DE ESTUDIO</span>
+                    <h2>Documentos</h2>
+                    <p>Guías y documentos de consulta para profundizar en cada tema.</p>
+                </div>
+
+                <a class="view-more-button" href="catalogo.html?tipo=documentos">
+                    Ver más documentos →
+                </a>
+            </div>
+
+            <div id="documentsGrid" class="learning-grid"></div>
+        </section>
+
+        <!-- ==================================================
+             SIN RESULTADOS
+        ================================================== -->
+        <section id="noResults" class="no-results hidden">
+            <div class="no-results__icon">🌱</div>
+            <h2>No encontramos ese contenido</h2>
+            <p>
+                Prueba con otro término o explora alguno de los temas de Agropedia.
+            </p>
+            <button type="button" id="resetSearch" class="primary-button">
+                Ver todo el contenido
+            </button>
+        </section>
+
+    </main>
+
     <script src="js/navegacion.js"></script>
     <script src="js/aprende.js"></script>
+
 </body>
 </html>
