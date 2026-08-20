@@ -1,15 +1,425 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Administra tu huerto, organiza tus bancales y lleva el control de tus plantas en Agropedia."
+    >
+
     <title>Mi huerto | Agropedia</title>
+
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/jardin.css">
 </head>
+
 <body>
-    <main id="app"></main>
+
+    <!-- La navegación y el footer universales se cargan desde navegacion.js. -->
+
+    <main class="garden-page">
+
+        <!-- ==================================================
+             BIENVENIDA
+        =================================================== -->
+        <section class="garden-welcome">
+            <div class="garden-container">
+                <div class="welcome-content">
+                    <span class="section-label">🌱 Mi espacio de cultivo</span>
+
+                    <h1>
+                        Bienvenido a tu huerto
+                    </h1>
+
+                    <p>
+                        Organiza tus bancales, cuida tus plantas y lleva
+                        el seguimiento de todo lo que ocurre en tu jardín.
+                    </p>
+                </div>
+
+                <div class="garden-summary">
+                    <div class="summary-card">
+                        <span class="summary-icon">🌱</span>
+                        <strong id="plantCount">0</strong>
+                        <span>Plantas</span>
+                    </div>
+
+                    <div class="summary-card">
+                        <span class="summary-icon">🟢</span>
+                        <strong id="healthyCount">0</strong>
+                        <span>Saludables</span>
+                    </div>
+
+                    <div class="summary-card">
+                        <span class="summary-icon">⚠️</span>
+                        <strong id="attentionCount">0</strong>
+                        <span>Atención</span>
+                    </div>
+
+                    <div class="summary-card">
+                        <span class="summary-icon">🌾</span>
+                        <strong id="harvestCount">0</strong>
+                        <span>Cosechas</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================================================
+             EDITOR DEL HUERTO
+        =================================================== -->
+        <section class="garden-editor-section">
+            <div class="garden-container">
+                <div class="section-heading left-heading">
+                    <span class="section-label">🧱 Tu huerto</span>
+
+                    <h2>
+                        Organiza tus bancales
+                    </h2>
+
+                    <p>
+                        Selecciona una herramienta y después interactúa
+                        con el diagrama para construir y administrar tu huerto.
+                    </p>
+                </div>
+
+                <div class="garden-editor">
+
+                    <!-- Herramientas -->
+                    <aside class="garden-tools">
+                        <div class="tools-header">
+                            <span>🛠️</span>
+                            <h3>Herramientas</h3>
+                        </div>
+
+                        <button class="tool-button active" data-tool="select" type="button">
+                            <span>👆</span>
+                            <span>Seleccionar</span>
+                        </button>
+
+                        <button class="tool-button" data-tool="add" type="button">
+                            <span>➕</span>
+                            <span>Agregar planta</span>
+                        </button>
+
+                        <button class="tool-button" data-tool="edit" type="button">
+                            <span>✏️</span>
+                            <span>Modificar</span>
+                        </button>
+
+                        <button class="tool-button" data-tool="delete" type="button">
+                            <span>➖</span>
+                            <span>Eliminar</span>
+                        </button>
+
+                        <button class="tool-button" data-tool="bed" type="button">
+                            <span>🧱</span>
+                            <span>Agregar bancal</span>
+                        </button>
+
+                        <button class="tool-button" data-tool="clear" type="button">
+                            <span>🗑️</span>
+                            <span>Limpiar huerto</span>
+                        </button>
+
+                        <div class="tools-divider"></div>
+
+                        <button class="tool-help" id="resetGarden" type="button">
+                            ↻ Restaurar ejemplo
+                        </button>
+                    </aside>
+
+
+                    <!-- Diagrama -->
+                    <div class="garden-board-wrapper">
+                        <div class="board-toolbar">
+                            <div>
+                                <strong>Huerto principal</strong>
+                                <span id="selectedCellLabel">Selecciona un bancal</span>
+                            </div>
+
+                            <div class="board-size">
+                                <span>6 × 4</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="garden-board"
+                            id="gardenBoard"
+                            aria-label="Diagrama cuadriculado del huerto"
+                        >
+                            <!-- Las celdas se generan mediante jardin.js. -->
+                        </div>
+
+                        <p class="board-hint">
+                            💡 Haz clic sobre una celda para consultar su estado.
+                        </p>
+                    </div>
+
+
+                    <!-- Panel de estado -->
+                    <aside class="plant-status-panel" id="plantStatusPanel">
+                        <div class="empty-status" id="emptyStatus">
+                            <span>🌱</span>
+
+                            <h3>
+                                Selecciona un bancal
+                            </h3>
+
+                            <p>
+                                Haz clic sobre una planta para consultar
+                                y modificar su estado.
+                            </p>
+                        </div>
+
+                        <div class="status-content hidden" id="statusContent">
+                            <div class="status-title">
+                                <div class="status-plant-icon" id="statusPlantIcon">🌱</div>
+
+                                <div>
+                                    <span id="statusPlantType">Planta</span>
+                                    <h3 id="statusPlantName">Tomate</h3>
+                                </div>
+                            </div>
+
+                            <div class="status-location" id="statusLocation">
+                                Bancal 01 · Celda A1
+                            </div>
+
+                            <div class="status-field">
+                                <span>Estado</span>
+                                <strong id="statusCondition">🟢 Saludable</strong>
+                            </div>
+
+                            <div class="status-checks">
+                                <label class="status-check">
+                                    <input type="checkbox" id="wateredCheck">
+                                    <span>💧 Regada</span>
+                                </label>
+
+                                <label class="status-check">
+                                    <input type="checkbox" id="pestCheck">
+                                    <span>🐛 Tiene plaga</span>
+                                </label>
+
+                                <label class="status-check">
+                                    <input type="checkbox" id="fungusCheck">
+                                    <span>🍄 Tiene hongo</span>
+                                </label>
+
+                                <label class="status-check">
+                                    <input type="checkbox" id="diseaseCheck">
+                                    <span>🦠 Tiene enfermedad</span>
+                                </label>
+
+                                <label class="status-check">
+                                    <input type="checkbox" id="harvestCheck">
+                                    <span>🌾 Ciclo completado</span>
+                                </label>
+                            </div>
+
+                            <button class="plant-info-button" id="plantInfoButton" type="button">
+                                📖 Ver información de la planta
+                            </button>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================================================
+             ESTADO Y PROGRESO
+        =================================================== -->
+        <section class="garden-status-section">
+            <div class="garden-container">
+                <div class="status-grid">
+
+                    <!-- Estado actual -->
+                    <article class="daily-status-card">
+                        <div class="card-heading">
+                            <div>
+                                <span class="section-label">🌦️ Hoy</span>
+                                <h2>Estado actual</h2>
+                            </div>
+
+                            <span class="weather-icon" id="weatherIcon">☀️</span>
+                        </div>
+
+                        <div class="daily-date" id="currentDate">
+                            Cargando fecha...
+                        </div>
+
+                        <div class="daily-information">
+                            <div class="daily-info-item">
+                                <span>🌱</span>
+                                <div>
+                                    <small>Estación</small>
+                                    <strong id="currentSeason">Cargando...</strong>
+                                </div>
+                            </div>
+
+                            <div class="daily-info-item">
+                                <span>🌙</span>
+                                <div>
+                                    <small>Fase lunar</small>
+                                    <strong id="currentMoon">Cargando...</strong>
+                                </div>
+                            </div>
+
+                            <div class="daily-info-item">
+                                <span>🌡️</span>
+                                <div>
+                                    <small>Temperatura</small>
+                                    <strong id="currentTemperature">-- °C</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+
+                    <!-- Progreso -->
+                    <article class="garden-progress-card">
+                        <div class="card-heading">
+                            <div>
+                                <span class="section-label">📊 Seguimiento</span>
+                                <h2>Progreso del huerto</h2>
+                            </div>
+
+                            <strong id="progressPercentage">0%</strong>
+                        </div>
+
+                        <div class="progress-track">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+
+                        <p id="progressMessage">
+                            Revisa las tareas de tu huerto para comenzar.
+                        </p>
+
+                        <div class="task-list" id="taskList">
+                            <!-- Las tareas se generan mediante jardin.js. -->
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================================================
+             PLANTAS FAVORITAS
+        =================================================== -->
+        <section class="favorites-section">
+            <div class="garden-container">
+                <div class="section-heading">
+                    <span class="section-label">❤️ Tu colección</span>
+
+                    <h2>
+                        Plantas favoritas
+                    </h2>
+
+                    <p>
+                        Accede rápidamente a las plantas que has guardado
+                        como favoritas.
+                    </p>
+                </div>
+
+                <div class="favorites-grid" id="favoritesGrid">
+                    <!-- Las plantas favoritas se generan mediante jardin.js. -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================================================
+             COMENTARIOS
+        =================================================== -->
+        <section class="comments-section">
+            <div class="garden-container">
+                <div class="section-heading">
+                    <span class="section-label">💬 Comunidad</span>
+
+                    <h2>
+                        Ayúdanos a mejorar Agropedia
+                    </h2>
+
+                    <p>
+                        Comparte tu opinión, una recomendación o una idea
+                        para futuras versiones de la plataforma.
+                    </p>
+                </div>
+
+                <div class="comments-layout">
+
+                    <!-- Formulario -->
+                    <form class="comment-form" id="commentForm">
+                        <div class="form-group">
+                            <label for="commentType">
+                                Tipo de comentario
+                            </label>
+
+                            <select id="commentType" name="commentType">
+                                <option value="review">Reseña</option>
+                                <option value="comment">Comentario</option>
+                                <option value="suggestion">Recomendación</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="ratingGroup">
+                            <label>
+                                Calificación
+                            </label>
+
+                            <div class="rating-input" id="ratingInput">
+                                <button type="button" data-rating="1">★</button>
+                                <button type="button" data-rating="2">★</button>
+                                <button type="button" data-rating="3">★</button>
+                                <button type="button" data-rating="4">★</button>
+                                <button type="button" data-rating="5">★</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commentText">
+                                Tu comentario
+                            </label>
+
+                            <textarea
+                                id="commentText"
+                                name="commentText"
+                                rows="6"
+                                maxlength="500"
+                                placeholder="Cuéntanos qué te parece Agropedia o qué te gustaría encontrar en el futuro..."
+                                required
+                            ></textarea>
+
+                            <small id="characterCount">
+                                0 / 500
+                            </small>
+                        </div>
+
+                        <button class="comment-submit" type="submit">
+                            Publicar comentario
+                        </button>
+                    </form>
+
+
+                    <!-- Comentarios existentes -->
+                    <div class="comments-list" id="commentsList">
+                        <!-- Los comentarios de demostración se generan mediante jardin.js. -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
     <script src="js/navegacion.js"></script>
     <script src="js/jardin.js"></script>
+
 </body>
 </html>
