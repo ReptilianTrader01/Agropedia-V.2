@@ -7,10 +7,6 @@
 
 'use strict';
 
-/* ==================================================
-   DATOS DE DEMOSTRACIÓN
-================================================== */
-
 const courses = [
     {
         icon: '🌱',
@@ -66,10 +62,6 @@ const defaultProfile = {
     climate: 'auto'
 };
 
-/* ==================================================
-   ELEMENTOS DEL DOM
-================================================== */
-
 const body = document.body;
 const sessionNotice = document.getElementById('sessionNotice');
 
@@ -96,21 +88,30 @@ const completedCount = document.getElementById('completedCount');
 const overallProgress = document.getElementById('overallProgress');
 const courseList = document.getElementById('courseList');
 
-/* ==================================================
-   ALMACENAMIENTO LOCAL
-================================================== */
+function readPreferences() {
+    try {
+        const stored = localStorage.getItem('agropedia_preferences');
+        return stored
+            ? { ...defaultPreferences, ...JSON.parse(stored) }
+            : { ...defaultPreferences };
+    } catch (error) {
+        return { ...defaultPreferences };
+    }
+}
 
 function loadLocalData() {
-    const storedPreferences = localStorage.getItem('agropedia_preferences');
+    const preferences = readPreferences();
     const storedProfile = localStorage.getItem('agropedia_profile');
 
-    const preferences = storedPreferences
-        ? { ...defaultPreferences, ...JSON.parse(storedPreferences) }
-        : { ...defaultPreferences };
+    let profile = { ...defaultProfile };
 
-    const profile = storedProfile
-        ? { ...defaultProfile, ...JSON.parse(storedProfile) }
-        : { ...defaultProfile };
+    try {
+        profile = storedProfile
+            ? { ...defaultProfile, ...JSON.parse(storedProfile) }
+            : { ...defaultProfile };
+    } catch (error) {
+        profile = { ...defaultProfile };
+    }
 
     applyPreferences(preferences);
     fillProfile(profile);
@@ -129,6 +130,31 @@ function savePreferences() {
         'agropedia_preferences',
         JSON.stringify(preferences)
     );
+
+    applyGlobalTheme(preferences.darkMode);
+}
+
+function applyGlobalTheme(enabled) {
+    body.classList.toggle('agropedia-dark', enabled);
+    body.classList.toggle('preferences-dark', enabled);
+}
+
+function applyPreferences(preferences) {
+    darkMode.checked = preferences.darkMode;
+    showFavorites.checked = preferences.showFavorites;
+    moonRecommendations.checked = preferences.moonRecommendations;
+    gardenTips.checked = preferences.gardenTips;
+    recommendationFrequency.value = preferences.recommendationFrequency;
+
+    applyGlobalTheme(preferences.darkMode);
+}
+
+function fillProfile(profile) {
+    profileName.value = profile.name;
+    profileUsername.value = profile.username;
+    profileContact.value = profile.contact;
+    profileZone.value = profile.zone;
+    profileClimate.value = profile.climate;
 }
 
 function saveProfile() {
@@ -145,28 +171,6 @@ function saveProfile() {
         JSON.stringify(profile)
     );
 }
-
-function applyPreferences(preferences) {
-    darkMode.checked = preferences.darkMode;
-    showFavorites.checked = preferences.showFavorites;
-    moonRecommendations.checked = preferences.moonRecommendations;
-    gardenTips.checked = preferences.gardenTips;
-    recommendationFrequency.value = preferences.recommendationFrequency;
-
-    body.classList.toggle('preferences-dark', preferences.darkMode);
-}
-
-function fillProfile(profile) {
-    profileName.value = profile.name;
-    profileUsername.value = profile.username;
-    profileContact.value = profile.contact;
-    profileZone.value = profile.zone;
-    profileClimate.value = profile.climate;
-}
-
-/* ==================================================
-   PROGRESO DE CURSOS
-================================================== */
 
 function renderCourses() {
     const enrolledCourses = courses.filter(course => course.progress > 0);
@@ -206,9 +210,7 @@ function renderCourses() {
 
             <h3>${escapeHtml(course.title)}</h3>
 
-            <p>
-                ${escapeHtml(course.description)}
-            </p>
+            <p>${escapeHtml(course.description)}</p>
 
             <div class="course-progress-row">
                 <span>Progreso</span>
@@ -227,13 +229,8 @@ function renderCourses() {
     });
 }
 
-/* ==================================================
-   PREFERENCIAS DEL SITIO
-================================================== */
-
 function setupPreferenceEvents() {
     darkMode.addEventListener('change', () => {
-        body.classList.toggle('preferences-dark', darkMode.checked);
         savePreferences();
     });
 
@@ -241,11 +238,16 @@ function setupPreferenceEvents() {
     moonRecommendations.addEventListener('change', savePreferences);
     gardenTips.addEventListener('change', savePreferences);
     recommendationFrequency.addEventListener('change', savePreferences);
-}
 
-/* ==================================================
-   PERFIL
-================================================== */
+    window.addEventListener('storage', event => {
+        if (event.key !== 'agropedia_preferences') {
+            return;
+        }
+
+        const preferences = readPreferences();
+        applyPreferences(preferences);
+    });
+}
 
 profileForm.addEventListener('submit', event => {
     event.preventDefault();
@@ -259,17 +261,11 @@ profileForm.addEventListener('submit', event => {
     }, 3000);
 });
 
-/* ==================================================
-   CUENTA
-================================================== */
-
 logoutButton.addEventListener('click', () => {
     const confirmed = confirm('¿Quieres cerrar sesión?');
 
     if (!confirmed) return;
 
-    // No existe autenticación todavía. Esta acción solamente limpia
-    // los datos locales de demostración.
     localStorage.removeItem('agropedia_profile');
     localStorage.removeItem('agropedia_preferences');
 
@@ -296,19 +292,11 @@ deleteAccountButton.addEventListener('click', () => {
     window.location.reload();
 });
 
-/* ==================================================
-   UTILIDAD
-================================================== */
-
 function escapeHtml(value) {
     const div = document.createElement('div');
     div.textContent = value;
     return div.innerHTML;
 }
-
-/* ==================================================
-   INICIALIZACIÓN
-================================================== */
 
 function initPreferences() {
     loadLocalData();
