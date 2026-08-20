@@ -1,0 +1,94 @@
+/* ==================================================
+   TEMA GLOBAL DE AGROPEDIA
+   Se activa con body.agropedia-dark.
+================================================== */
+
+body.agropedia-dark {
+    background: #121712;
+    color: #e2e9e1;
+}
+
+body.agropedia-dark .agro-navbar {
+    --nav-texto: #e4ebe4;
+    --nav-fondo: #1b211c;
+    --nav-borde: #343d35;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
+}
+
+body.agropedia-dark .agro-navbar__avatar {
+    border-color: #465147;
+    background: #293129;
+    color: #d9e2d9;
+}
+
+/* Fondos generales de las páginas */
+
+body.agropedia-dark main,
+body.agropedia-dark section {
+    background-color: #121712;
+    color: #e2e9e1;
+}
+
+/* Tarjetas y paneles */
+
+body.agropedia-dark article,
+body.agropedia-dark [class*="card"],
+body.agropedia-dark [class*="panel"] {
+    background-color: #202720;
+    border-color: #394339;
+    color: #e2e9e1;
+}
+
+/* Texto */
+
+body.agropedia-dark h1,
+body.agropedia-dark h2,
+body.agropedia-dark h3,
+body.agropedia-dark h4,
+body.agropedia-dark h5,
+body.agropedia-dark h6 {
+    color: #dfe8de;
+}
+
+body.agropedia-dark p,
+body.agropedia-dark li,
+body.agropedia-dark label {
+    color: #b8c2b8;
+}
+
+/* Formularios */
+
+body.agropedia-dark input,
+body.agropedia-dark select,
+body.agropedia-dark textarea {
+    background: #202720;
+    color: #e2e9e1;
+    border-color: #465146;
+}
+
+body.agropedia-dark input::placeholder,
+body.agropedia-dark textarea::placeholder {
+    color: #849084;
+}
+
+/* Enlaces */
+
+body.agropedia-dark a {
+    color: #8bc67f;
+}
+
+/* Footer */
+
+body.agropedia-dark .site-footer {
+    background: #0d120e;
+    color: #cdd7ce;
+}
+
+body.agropedia-dark .site-footer a {
+    color: #aebcae;
+}
+
+/* Las imágenes conservan sus colores originales. */
+body.agropedia-dark img {
+    filter: none;
+}
