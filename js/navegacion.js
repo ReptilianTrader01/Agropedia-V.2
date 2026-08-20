@@ -21,6 +21,24 @@
     }
 
     /* ==================================================
+       TEMA GLOBAL
+    ================================================== */
+
+    function cargarTemaGlobal() {
+        if (document.getElementById('agropedia-global-theme')) {
+            return;
+        }
+
+        const link = document.createElement('link');
+
+        link.id = 'agropedia-global-theme';
+        link.rel = 'stylesheet';
+        link.href = 'css/tema_global.css';
+
+        document.head.appendChild(link);
+    }
+
+    /* ==================================================
        MODO NOCTURNO GLOBAL
        La preferencia se comparte entre todas las páginas.
     ================================================== */
@@ -221,7 +239,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        /* Se aplica inmediatamente después de cargar el DOM. */
+        cargarTemaGlobal();
         aplicarModoNocturno();
 
         crearNavegacion();
