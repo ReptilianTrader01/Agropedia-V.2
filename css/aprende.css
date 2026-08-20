@@ -1,1 +1,469 @@
-/* Estilos de aprende.html */
+/* ==================================================
+   APRENDE - AGROPEDIA V2
+================================================== */
+
+:root {
+    --learn-green: #315b38;
+    --learn-green-light: #eaf3e6;
+    --learn-cream: #f5f1e8;
+    --learn-line: #dfe6dc;
+    --learn-text: #253028;
+    --learn-muted: #68736b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    color: var(--learn-text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.learn-hero {
+    min-height: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 7%;
+    text-align: center;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(206, 224, 195, .7), transparent 28%),
+        radial-gradient(circle at 85% 80%, rgba(233, 220, 184, .7), transparent 30%),
+        linear-gradient(135deg, #f4f7ef, #eef4ea 55%, #f8f3e8);
+    border-bottom: 1px solid var(--learn-line);
+}
+
+.learn-hero__content {
+    max-width: 850px;
+}
+
+.section-kicker {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: var(--learn-green);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.learn-hero h1 {
+    margin: 0;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -2px;
+}
+
+.learn-hero h1 span {
+    display: block;
+    color: var(--learn-green);
+}
+
+.learn-hero p {
+    max-width: 680px;
+    margin: 24px auto 0;
+    color: var(--learn-muted);
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.learn-search-section {
+    max-width: 950px;
+    margin: -30px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.learn-search {
+    min-height: 66px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 18px;
+    background: #fff;
+    border: 1px solid var(--learn-line);
+    border-radius: 16px;
+    box-shadow: 0 16px 38px rgba(38, 59, 41, .12);
+}
+
+.learn-search__icon {
+    color: var(--learn-green);
+    font-size: 30px;
+    line-height: 1;
+}
+
+.learn-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--learn-text);
+    font-size: 16px;
+}
+
+.learn-search input::placeholder {
+    color: #8a938c;
+}
+
+.learn-search__clear {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #7a847c;
+    cursor: pointer;
+    font-size: 23px;
+}
+
+.learn-search__clear:hover {
+    background: var(--learn-green-light);
+    color: var(--learn-green);
+}
+
+.search-message {
+    margin: 12px 4px 0;
+    color: var(--learn-muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+.learn-section {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 76px 28px 0;
+}
+
+.section-heading {
+    max-width: 700px;
+    margin-bottom: 32px;
+}
+
+.section-heading h2,
+.content-section__heading h2 {
+    margin: 0 0 10px;
+    font-size: 36px;
+    letter-spacing: -.8px;
+}
+
+.section-heading p,
+.content-section__heading p {
+    margin: 0;
+    color: var(--learn-muted);
+    line-height: 1.6;
+}
+
+/* ==================================================
+   TEMAS
+================================================== */
+
+.topics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.topic-card {
+    min-height: 145px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 21px;
+    border: 1px solid var(--learn-line);
+    border-radius: 17px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.topic-card:hover {
+    transform: translateY(-4px);
+    border-color: #b8cdb2;
+    box-shadow: 0 12px 28px rgba(40, 70, 45, .09);
+}
+
+.topic-card__icon {
+    width: 45px;
+    height: 45px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--learn-green-light);
+    font-size: 23px;
+}
+
+.topic-card h3 {
+    margin: 18px 0 4px;
+    font-size: 17px;
+}
+
+.topic-card p {
+    margin: 0;
+    color: var(--learn-muted);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* ==================================================
+   CONTENIDO
+================================================== */
+
+.content-section {
+    padding-top: 88px;
+}
+
+.content-section__heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.view-more-button,
+.primary-button {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid #b8cdb2;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--learn-green);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.view-more-button:hover,
+.primary-button:hover {
+    background: var(--learn-green-light);
+    transform: translateY(-2px);
+}
+
+.learning-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.learning-card {
+    overflow: hidden;
+    border: 1px solid var(--learn-line);
+    border-radius: 16px;
+    background: #fff;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.learning-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(40, 70, 45, .09);
+}
+
+.learning-card__visual {
+    min-height: 130px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #edf4e9, #f5f1e7);
+    font-size: 42px;
+}
+
+.learning-card__body {
+    padding: 18px;
+}
+
+.learning-card__tag {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--learn-green);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.learning-card h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.learning-card p {
+    min-height: 58px;
+    margin: 0;
+    color: var(--learn-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.learning-card__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid var(--learn-line);
+    color: #758078;
+    font-size: 11px;
+}
+
+.no-results {
+    max-width: 700px;
+    margin: 80px auto;
+    padding: 50px 28px;
+    border: 1px solid var(--learn-line);
+    border-radius: 20px;
+    text-align: center;
+    background: #fff;
+}
+
+.no-results__icon {
+    font-size: 48px;
+}
+
+.no-results h2 {
+    margin: 18px 0 8px;
+}
+
+.no-results p {
+    margin: 0 0 24px;
+    color: var(--learn-muted);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==================================================
+   MODO NOCTURNO
+================================================== */
+
+body.agropedia-dark {
+    background: #101610;
+    color: #e7eee6;
+}
+
+body.agropedia-dark .learn-hero {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(51, 89, 57, .45), transparent 28%),
+        radial-gradient(circle at 85% 80%, rgba(92, 78, 44, .28), transparent 30%),
+        linear-gradient(135deg, #172019, #111a14 55%, #1c2018);
+    border-color: #2c392f;
+}
+
+body.agropedia-dark .learn-hero p,
+body.agropedia-dark .section-heading p,
+body.agropedia-dark .content-section__heading p,
+body.agropedia-dark .learning-card p,
+body.agropedia-dark .topic-card p,
+body.agropedia-dark .search-message,
+body.agropedia-dark .no-results p {
+    color: #aeb9ae;
+}
+
+body.agropedia-dark .learn-search,
+body.agropedia-dark .topic-card,
+body.agropedia-dark .learning-card,
+body.agropedia-dark .no-results,
+body.agropedia-dark .view-more-button,
+body.agropedia-dark .primary-button {
+    background: #182119;
+    border-color: #344337;
+    color: #e7eee6;
+}
+
+body.agropedia-dark .learn-search input {
+    color: #e7eee6;
+}
+
+body.agropedia-dark .learn-search input::placeholder {
+    color: #879488;
+}
+
+body.agropedia-dark .topic-card:hover,
+body.agropedia-dark .learning-card:hover {
+    border-color: #58705b;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .24);
+}
+
+body.agropedia-dark .topic-card__icon {
+    background: #243628;
+}
+
+body.agropedia-dark .learning-card__visual {
+    background: linear-gradient(135deg, #203125, #2b2b20);
+}
+
+body.agropedia-dark .learning-card__meta {
+    border-color: #344337;
+    color: #95a297;
+}
+
+body.agropedia-dark .view-more-button,
+body.agropedia-dark .primary-button {
+    border-color: #4c6b50;
+    color: #bcd6bc;
+}
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 1050px) {
+    .topics-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .learning-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+    .learn-hero {
+        min-height: 340px;
+        padding: 65px 22px;
+    }
+
+    .learn-hero h1 {
+        letter-spacing: -1px;
+    }
+
+    .learn-search-section {
+        padding: 0 16px;
+    }
+
+    .learn-section {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .topics-grid,
+    .learning-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .content-section__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .topics-grid,
+    .learning-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .learn-search {
+        min-height: 58px;
+    }
+}
