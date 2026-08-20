@@ -2,6 +2,26 @@
 (function () {
     'use strict';
 
+    /* ==================================================
+       TEMA GLOBAL
+       Se carga automáticamente en todas las páginas.
+    ================================================== */
+
+    function cargarTemaGlobal() {
+        if (document.getElementById('agropedia-global-theme')) {
+            return;
+        }
+
+        const link = document.createElement('link');
+        link.id = 'agropedia-global-theme';
+        link.rel = 'stylesheet';
+        link.href = 'css/tema_global.css';
+
+        document.head.appendChild(link);
+    }
+
+    cargarTemaGlobal();
+
     const pagina = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
     const grupos = {
@@ -21,52 +41,31 @@
     }
 
     /* ==================================================
-       TEMA GLOBAL
-    ================================================== */
-
-    function cargarTemaGlobal() {
-        if (document.getElementById('agropedia-global-theme')) {
-            return;
-        }
-
-        const link = document.createElement('link');
-
-        link.id = 'agropedia-global-theme';
-        link.rel = 'stylesheet';
-        link.href = 'css/tema_global.css';
-
-        document.head.appendChild(link);
-    }
-
-    /* ==================================================
        MODO NOCTURNO GLOBAL
-       La preferencia se comparte entre todas las páginas.
     ================================================== */
 
-    function aplicarModoNocturno() {
-        let preferencias = {};
-
+    function leerPreferencias() {
         try {
-            preferencias = JSON.parse(
+            return JSON.parse(
                 localStorage.getItem('agropedia_preferences') || '{}'
             );
         } catch (error) {
-            preferencias = {};
+            return {};
         }
+    }
 
-        document.body.classList.toggle(
-            'agropedia-dark',
-            preferencias.darkMode === true
-        );
+    function aplicarModoNocturno() {
+        const activo = leerPreferencias().darkMode === true;
+
+        document.documentElement.classList.toggle('agropedia-dark', activo);
+        document.body.classList.toggle('agropedia-dark', activo);
     }
 
     function observarCambiosDeModo() {
         window.addEventListener('storage', event => {
-            if (event.key !== 'agropedia_preferences') {
-                return;
+            if (event.key === 'agropedia_preferences') {
+                aplicarModoNocturno();
             }
-
-            aplicarModoNocturno();
         });
     }
 
@@ -77,43 +76,20 @@
         nav.setAttribute('aria-label', 'Navegación principal');
 
         nav.innerHTML = `
-            <a
-                class="agro-navbar__logo"
-                href="index.html"
-                aria-label="Agropedia - Inicio"
-            >
-                <img
-                    src="assets/images/logo.png"
-                    alt="Logo de Agropedia"
-                >
+            <a class="agro-navbar__logo" href="index.html" aria-label="Agropedia - Inicio">
+                <img src="assets/images/logo.png" alt="Logo de Agropedia">
             </a>
 
             <div class="agro-navbar__links">
-                <a class="agro-navbar__link" data-nav="inicio" href="index.html">
-                    Inicio
-                </a>
-
-                <a class="agro-navbar__link" data-nav="plantas" href="plantas.html">
-                    Plantas
-                </a>
-
-                <a class="agro-navbar__link" data-nav="aprende" href="aprende.html">
-                    Aprende
-                </a>
-
-                <a class="agro-navbar__link" data-nav="nosotros" href="nosotros.html">
-                    Nosotros
-                </a>
+                <a class="agro-navbar__link" data-nav="inicio" href="index.html">Inicio</a>
+                <a class="agro-navbar__link" data-nav="plantas" href="plantas.html">Plantas</a>
+                <a class="agro-navbar__link" data-nav="aprende" href="aprende.html">Aprende</a>
+                <a class="agro-navbar__link" data-nav="nosotros" href="nosotros.html">Nosotros</a>
 
                 <span class="agro-navbar__spacer"></span>
 
-                <a class="agro-navbar__link" data-nav="registro" href="registro.html">
-                    Regístrate
-                </a>
-
-                <a class="agro-navbar__link" data-nav="huerto" href="jardin.html">
-                    Mi huerto
-                </a>
+                <a class="agro-navbar__link" data-nav="registro" href="registro.html">Regístrate</a>
+                <a class="agro-navbar__link" data-nav="huerto" href="jardin.html">Mi huerto</a>
 
                 <a
                     class="agro-navbar__user-link"
@@ -128,11 +104,7 @@
             </div>
         `;
 
-        document.body.insertBefore(
-            nav,
-            document.body.firstChild
-        );
-
+        document.body.insertBefore(nav, document.body.firstChild);
         activar(nav);
     }
 
@@ -169,23 +141,16 @@
         moverIndicador(activo, false);
 
         nav.querySelectorAll('[data-nav]').forEach(enlace => {
-            enlace.addEventListener('mouseenter', () => {
-                moverIndicador(enlace, true);
-            });
-
-            enlace.addEventListener('mouseleave', () => {
-                moverIndicador(activo, true);
-            });
+            enlace.addEventListener('mouseenter', () => moverIndicador(enlace, true));
+            enlace.addEventListener('mouseleave', () => moverIndicador(activo, true));
         });
 
-        window.addEventListener('resize', () => {
-            moverIndicador(activo, false);
-        });
+        window.addEventListener('resize', () => moverIndicador(activo, false));
     }
 
-    // =========================================================
-    // FOOTER UNIVERSAL
-    // =========================================================
+    /* ==================================================
+       FOOTER UNIVERSAL
+    ================================================== */
 
     function crearFooter() {
         if (document.querySelector('.site-footer')) {
@@ -197,15 +162,9 @@
 
         footer.innerHTML = `
             <div class="site-footer__main">
-
                 <div class="site-footer__brand">
-                    <strong class="site-footer__wordmark">
-                        Agropedia
-                    </strong>
-
-                    <p>
-                        Herramienta de aprendizaje, gestión y planeación de huertos.
-                    </p>
+                    <strong class="site-footer__wordmark">Agropedia</strong>
+                    <p>Herramienta de aprendizaje, gestión y planeación de huertos.</p>
                 </div>
 
                 <div class="site-footer__column">
@@ -221,17 +180,11 @@
                     <a href="jardin.html">Mi huerto</a>
                     <a href="preferencias_usuario.html">Preferencias</a>
                 </div>
-
             </div>
 
             <div class="site-footer__bottom">
-                <span>
-                    © 2026 Agropedia. Todos los derechos reservados.
-                </span>
-
-                <span>
-                    Cultiva conocimiento.
-                </span>
+                <span>© 2026 Agropedia. Todos los derechos reservados.</span>
+                <span>Cultiva conocimiento.</span>
             </div>
         `;
 
@@ -239,9 +192,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        cargarTemaGlobal();
         aplicarModoNocturno();
-
         crearNavegacion();
         crearFooter();
         observarCambiosDeModo();
