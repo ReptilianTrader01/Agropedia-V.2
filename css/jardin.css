@@ -1,1 +1,720 @@
-/* Estilos de jardin.html */
+/* ==================================================
+   MI HUERTO
+================================================== */
+
+.garden-page {
+    background: #f7f9f5;
+    color: #263326;
+}
+
+.garden-container {
+    width: min(1240px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.section-label {
+    display: inline-block;
+    color: #2f7d32;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.section-heading {
+    max-width: 760px;
+    margin: 0 auto 45px;
+    text-align: center;
+}
+
+.left-heading {
+    margin-left: 0;
+    text-align: left;
+}
+
+.section-heading h2,
+.card-heading h2 {
+    margin: 8px 0 14px;
+    color: #205b25;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+}
+
+.section-heading p {
+    margin: 0;
+    color: #687268;
+    line-height: 1.7;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==================================================
+   BIENVENIDA
+================================================== */
+
+.garden-welcome {
+    padding: 85px 0 65px;
+    background: linear-gradient(135deg, #eef5e9, #f9fbf7);
+    border-bottom: 1px solid #e1e9dd;
+}
+
+.garden-welcome .garden-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.welcome-content {
+    max-width: 650px;
+}
+
+.welcome-content h1 {
+    margin: 10px 0 18px;
+    color: #205b25;
+    font-size: clamp(40px, 6vw, 62px);
+    line-height: 1.03;
+}
+
+.welcome-content p {
+    max-width: 620px;
+    margin: 0;
+    color: #657064;
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+.garden-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    min-width: 330px;
+}
+
+.summary-card {
+    min-width: 145px;
+    padding: 20px;
+    border: 1px solid #dde7d8;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 8px 24px rgba(35, 70, 35, 0.06);
+}
+
+.summary-icon {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 24px;
+}
+
+.summary-card strong {
+    display: block;
+    color: #205b25;
+    font-size: 28px;
+}
+
+.summary-card > span:last-child {
+    color: #778077;
+    font-size: 12px;
+}
+
+/* ==================================================
+   EDITOR
+================================================== */
+
+.garden-editor-section {
+    padding: 85px 0;
+}
+
+.garden-editor {
+    display: grid;
+    grid-template-columns: 190px minmax(440px, 1fr) 290px;
+    gap: 20px;
+}
+
+.garden-tools,
+.garden-board-wrapper,
+.plant-status-panel {
+    border: 1px solid #dfe8db;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 12px 35px rgba(35, 70, 35, 0.06);
+}
+
+.garden-tools {
+    padding: 18px;
+}
+
+.tools-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 5px 15px;
+    border-bottom: 1px solid #e8eee5;
+}
+
+.tools-header h3 {
+    margin: 0;
+    color: #285c2c;
+    font-size: 15px;
+}
+
+.tool-button,
+.tool-help {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 8px;
+    padding: 11px 10px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: #586258;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.tool-button:hover,
+.tool-button.active {
+    border-color: #cfe0c9;
+    background: #edf5e9;
+    color: #205b25;
+}
+
+.tools-divider {
+    height: 1px;
+    margin: 16px 0 8px;
+    background: #e8eee5;
+}
+
+.tool-help {
+    justify-content: center;
+    color: #2f7d32;
+    font-weight: 700;
+    text-align: center;
+}
+
+.garden-board-wrapper {
+    padding: 20px;
+}
+
+.board-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.board-toolbar strong {
+    display: block;
+    color: #285c2c;
+    font-size: 17px;
+}
+
+.board-toolbar span {
+    display: block;
+    margin-top: 3px;
+    color: #889188;
+    font-size: 11px;
+}
+
+.board-size {
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: #eef5eb;
+}
+
+.board-size span {
+    margin: 0;
+    color: #2f7d32;
+    font-weight: 800;
+}
+
+.garden-board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    aspect-ratio: 6 / 4;
+    overflow: hidden;
+    border: 5px solid #8a6b43;
+    border-radius: 10px;
+    background: #9c7549;
+}
+
+.garden-cell {
+    position: relative;
+    min-width: 0;
+    border: 1px solid rgba(77, 57, 31, 0.42);
+    background: linear-gradient(135deg, #987047, #a57c4e);
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.garden-cell:hover {
+    z-index: 2;
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.55);
+}
+
+.garden-cell.selected {
+    z-index: 3;
+    box-shadow: inset 0 0 0 4px #f5f9e9;
+}
+
+.garden-cell.empty::after {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 25px;
+    opacity: 0;
+}
+
+.garden-cell.empty:hover::after {
+    opacity: 1;
+}
+
+.cell-plant {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(22px, 4vw, 38px);
+}
+
+.cell-name {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    padding: 3px 4px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: rgba(30, 38, 25, 0.65);
+    color: white;
+    font-size: 8px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cell-status {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 9px;
+    height: 9px;
+    border: 2px solid white;
+    border-radius: 50%;
+    background: #48a04d;
+}
+
+.cell-status.warning { background: #d6a426; }
+.cell-status.danger { background: #bd4646; }
+.cell-status.harvest { background: #7d6a3d; }
+
+.board-hint {
+    margin: 14px 0 0;
+    color: #879087;
+    font-size: 11px;
+    text-align: center;
+}
+
+/* ==================================================
+   PANEL DE ESTADO
+================================================== */
+
+.plant-status-panel {
+    min-height: 100%;
+    padding: 22px;
+}
+
+.empty-status {
+    min-height: 390px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.empty-status > span {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.empty-status h3 {
+    margin: 0 0 9px;
+    color: #315f35;
+}
+
+.empty-status p {
+    max-width: 210px;
+    margin: 0;
+    color: #7a837a;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.status-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #e6ece3;
+}
+
+.status-plant-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: #edf5e9;
+    font-size: 27px;
+}
+
+.status-title span {
+    color: #879087;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.status-title h3 {
+    margin: 3px 0 0;
+    color: #285c2c;
+    font-size: 18px;
+}
+
+.status-location {
+    margin: 13px 0 18px;
+    color: #7a837a;
+    font-size: 11px;
+}
+
+.status-field {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #f5f8f3;
+}
+
+.status-field span { color: #7a837a; font-size: 11px; }
+.status-field strong { color: #2f7d32; font-size: 11px; }
+
+.status-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.status-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    color: #596259;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.status-check input { accent-color: #2f7d32; }
+
+.plant-info-button {
+    width: 100%;
+    margin-top: 17px;
+    padding: 11px;
+    border: 0;
+    border-radius: 8px;
+    background: #2f7d32;
+    color: white;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* ==================================================
+   ESTADO Y PROGRESO
+================================================== */
+
+.garden-status-section { padding: 0 0 85px; }
+
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.daily-status-card,
+.garden-progress-card {
+    min-height: 330px;
+    padding: 30px;
+    border: 1px solid #dfe8db;
+    border-radius: 18px;
+    background: white;
+}
+
+.card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card-heading h2 { font-size: 28px; }
+.weather-icon { font-size: 34px; }
+
+.daily-date {
+    margin: 8px 0 22px;
+    color: #6d766d;
+    font-size: 13px;
+}
+
+.daily-information {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.daily-info-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 14px 10px;
+    border-radius: 11px;
+    background: #f3f7f0;
+}
+
+.daily-info-item > span { font-size: 20px; }
+.daily-info-item small { display: block; color: #879087; font-size: 9px; }
+.daily-info-item strong { display: block; margin-top: 3px; color: #315f35; font-size: 11px; }
+
+.garden-progress-card .card-heading > strong {
+    color: #2f7d32;
+    font-size: 30px;
+}
+
+.progress-track {
+    height: 12px;
+    overflow: hidden;
+    margin: 8px 0 12px;
+    border-radius: 10px;
+    background: #e7ede4;
+}
+
+.progress-bar {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #6a9e4b, #2f7d32);
+    transition: width 0.35s ease;
+}
+
+.garden-progress-card > p {
+    margin: 0 0 18px;
+    color: #7a837a;
+    font-size: 11px;
+}
+
+.task-list { display: flex; flex-direction: column; gap: 7px; }
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    background: #f6f8f5;
+    color: #596259;
+    font-size: 11px;
+}
+
+.task-item.completed { color: #889188; text-decoration: line-through; }
+.task-item input { accent-color: #2f7d32; }
+
+/* ==================================================
+   FAVORITOS
+================================================== */
+
+.favorites-section {
+    padding: 90px 0;
+    background: #eef4eb;
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.favorite-card {
+    overflow: hidden;
+    border: 1px solid #dae5d6;
+    border-radius: 14px;
+    background: white;
+    text-decoration: none;
+    color: inherit;
+    transition: 0.2s;
+}
+
+.favorite-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(35, 70, 35, 0.08);
+}
+
+.favorite-image {
+    height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #dfead9;
+    font-size: 55px;
+}
+
+.favorite-content { padding: 15px; }
+.favorite-content h3 { margin: 0 0 5px; color: #285c2c; font-size: 15px; }
+.favorite-content p { margin: 0 0 10px; color: #7a837a; font-size: 10px; }
+.favorite-content strong { color: #2f7d32; font-size: 10px; }
+
+/* ==================================================
+   COMENTARIOS
+================================================== */
+
+.comments-section {
+    padding: 90px 0;
+    background: white;
+}
+
+.comments-layout {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.comment-form,
+.comments-list {
+    padding: 28px;
+    border: 1px solid #dfe8db;
+    border-radius: 17px;
+    background: #f9fbf8;
+}
+
+.form-group { margin-bottom: 18px; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #425143;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d6e0d2;
+    border-radius: 8px;
+    outline: none;
+    background: white;
+    color: #4d584d;
+    font: inherit;
+    font-size: 12px;
+}
+
+.form-group select { height: 40px; padding: 0 10px; }
+.form-group textarea { resize: vertical; padding: 12px; line-height: 1.6; }
+.form-group small { display: block; margin-top: 5px; color: #929a92; font-size: 9px; text-align: right; }
+
+.rating-input { display: flex; gap: 3px; }
+
+.rating-input button {
+    padding: 0 2px;
+    border: 0;
+    background: transparent;
+    color: #d5ddd1;
+    cursor: pointer;
+    font-size: 27px;
+}
+
+.rating-input button.active,
+.rating-input button:hover { color: #e2b536; }
+
+.comment-submit {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 8px;
+    background: #2f7d32;
+    color: white;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.comments-list { display: flex; flex-direction: column; gap: 13px; }
+
+.community-comment {
+    padding: 17px;
+    border: 1px solid #e2e9df;
+    border-radius: 11px;
+    background: white;
+}
+
+.comment-author-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.comment-author { color: #315f35; font-size: 12px; font-weight: 800; }
+.comment-stars { color: #e2b536; font-size: 12px; letter-spacing: 1px; }
+.comment-type { margin-top: 5px; color: #909990; font-size: 9px; }
+.community-comment p { margin: 12px 0 0; color: #667066; font-size: 11px; line-height: 1.7; }
+.comment-date { display: block; margin-top: 10px; color: #a0a7a0; font-size: 9px; }
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 1100px) {
+    .garden-editor { grid-template-columns: 165px minmax(400px, 1fr); }
+    .plant-status-panel { grid-column: 1 / -1; }
+    .empty-status { min-height: 180px; }
+    .status-content { max-width: 700px; margin: auto; }
+    .favorites-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 850px) {
+    .garden-welcome .garden-container { flex-direction: column; align-items: flex-start; }
+    .garden-summary { width: 100%; min-width: 0; max-width: 500px; }
+    .garden-editor { grid-template-columns: 1fr; }
+    .garden-tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
+    .tools-header, .tools-divider, .tool-help { grid-column: 1 / -1; }
+    .tool-button { margin: 0; }
+    .status-grid, .comments-layout { grid-template-columns: 1fr; }
+    .daily-information { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+    .garden-container { width: calc(100% - 28px); }
+    .garden-welcome { padding: 55px 0 45px; }
+    .garden-summary { grid-template-columns: repeat(2, 1fr); }
+    .garden-editor-section, .favorites-section, .comments-section { padding: 60px 0; }
+    .garden-board-wrapper { padding: 12px; }
+    .garden-board { border-width: 3px; }
+    .favorites-grid { grid-template-columns: repeat(2, 1fr); }
+    .daily-status-card, .garden-progress-card, .comment-form, .comments-list { padding: 20px; }
+}
