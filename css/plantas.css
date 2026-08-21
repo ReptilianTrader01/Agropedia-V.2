@@ -15,38 +15,50 @@
 
 /* ==================================================
    HERO
+   Inspirado en el diseño de aprende.html
    ================================================== */
 
 .plants-hero {
-    background: linear-gradient(
-        rgba(28, 67, 34, 0.9),
-        rgba(28, 67, 34, 0.9)
-    );
-
-    color: #ffffff;
-    padding: 100px 20px;
+    min-height: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 7%;
     text-align: center;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(206, 224, 195, .7), transparent 28%),
+        radial-gradient(circle at 85% 80%, rgba(233, 220, 184, .7), transparent 30%),
+        linear-gradient(135deg, #f4f7ef, #eef4ea 55%, #f8f3e8);
+    border-bottom: 1px solid var(--plants-border);
 }
 
 .plants-hero-content {
     max-width: 850px;
-    margin: auto;
+    width: 100%;
 }
 
 .plants-hero .section-label {
-    color: #d7ebd2;
+    display: inline-block;
+    margin-bottom: 12px;
+    color: var(--plants-green-dark);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
 }
 
 .plants-hero h1 {
-    font-size: clamp(40px, 6vw, 68px);
-    line-height: 1.05;
-    margin: 15px 0;
+    margin: 0;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -2px;
+    color: var(--plants-text);
 }
 
 .plants-hero p {
-    max-width: 600px;
-    margin: 0 auto 35px;
-    color: #dce9dc;
+    max-width: 680px;
+    margin: 24px auto 0;
+    color: var(--plants-text-light);
+    font-size: 18px;
     line-height: 1.7;
 }
 
@@ -56,36 +68,57 @@
 
 .plants-search {
     position: relative;
+    z-index: 2;
     display: flex;
+    align-items: center;
+    gap: 12px;
     max-width: 650px;
-    margin: auto;
-    padding: 6px;
+    min-height: 66px;
+    margin: 30px auto 0;
+    padding: 8px 18px;
     background: #ffffff;
-    border-radius: 50px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--plants-border);
+    border-radius: 16px;
+    box-shadow: 0 16px 38px rgba(38, 59, 41, .12);
+}
+
+.plants-search::before {
+    content: '🔍';
+    color: var(--plants-green);
+    font-size: 24px;
+    line-height: 1;
 }
 
 .plants-search input {
     flex: 1;
+    min-width: 0;
     border: none;
     outline: none;
-    padding: 15px 20px;
+    padding: 10px 4px;
     border-radius: 40px;
-    font-size: 14px;
+    background: transparent;
+    color: var(--plants-text);
+    font-size: 15px;
+}
+
+.plants-search input::placeholder {
+    color: #8a938c;
 }
 
 .plants-search button {
     border: none;
     background: var(--plants-green);
     color: #ffffff;
-    border-radius: 40px;
-    padding: 0 25px;
+    border-radius: 10px;
+    padding: 12px 20px;
     font-weight: 700;
     cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
 }
 
 .plants-search button:hover {
     background: var(--plants-green-dark);
+    transform: translateY(-1px);
 }
 
 .search-suggestions {
@@ -94,14 +127,12 @@
     left: 0;
     right: 0;
     z-index: 20;
-
     display: none;
     overflow: hidden;
-
     background: #ffffff;
+    border: 1px solid var(--plants-border);
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
     text-align: left;
 }
 
@@ -113,9 +144,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-
     padding: 12px 18px;
-
     color: var(--plants-text);
     text-decoration: none;
 }
@@ -215,10 +244,8 @@
     flex-wrap: wrap;
     align-items: end;
     gap: 15px;
-
     padding: 20px;
     margin-bottom: 40px;
-
     background: #f5f8f4;
     border-radius: 15px;
 }
@@ -304,13 +331,10 @@
     position: absolute;
     top: 15px;
     left: 15px;
-
     padding: 6px 11px;
-
     background: rgba(255, 255, 255, 0.92);
     color: var(--plants-green-dark);
     border-radius: 20px;
-
     font-size: 11px;
     font-weight: 800;
 }
@@ -385,6 +409,62 @@
 }
 
 /* ==================================================
+   MODO NOCTURNO
+   ================================================== */
+
+body.agropedia-dark .plants-hero {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(51, 89, 57, .45), transparent 28%),
+        radial-gradient(circle at 85% 80%, rgba(92, 78, 44, .28), transparent 30%),
+        linear-gradient(135deg, #172019, #111a14 55%, #1c2018);
+    border-color: #2c392f;
+}
+
+body.agropedia-dark .plants-hero .section-label {
+    color: #bcd6bc;
+}
+
+body.agropedia-dark .plants-hero h1 {
+    color: #e7eee6;
+}
+
+body.agropedia-dark .plants-hero p {
+    color: #aeb9ae;
+}
+
+body.agropedia-dark .plants-search {
+    background: #182119;
+    border-color: #344337;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, .28);
+}
+
+body.agropedia-dark .plants-search input {
+    color: #e7eee6;
+}
+
+body.agropedia-dark .plants-search input::placeholder {
+    color: #879488;
+}
+
+body.agropedia-dark .search-suggestions {
+    background: #182119;
+    border-color: #344337;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .3);
+}
+
+body.agropedia-dark .search-suggestion {
+    color: #d9e5da;
+}
+
+body.agropedia-dark .search-suggestion:hover {
+    background: #243627;
+}
+
+body.agropedia-dark .search-suggestion small {
+    color: #9aa79c;
+}
+
+/* ==================================================
    RESPONSIVE
    ================================================== */
 
@@ -414,12 +494,27 @@
         gap: 15px;
     }
 
+    .plants-hero {
+        min-height: 340px;
+        padding: 65px 22px;
+    }
+
+    .plants-hero h1 {
+        letter-spacing: -1px;
+    }
+
     .plants-search {
-        flex-direction: column;
-        border-radius: 15px;
+        flex-wrap: wrap;
+        min-height: 58px;
+        border-radius: 16px;
+    }
+
+    .plants-search input {
+        min-width: 0;
     }
 
     .plants-search button {
+        width: 100%;
         padding: 13px;
     }
 
