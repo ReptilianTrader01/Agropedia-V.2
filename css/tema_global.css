@@ -1,6 +1,9 @@
 /* ==================================================
    TEMA GLOBAL DE AGROPEDIA
    Se activa con html/body.agropedia-dark.
+
+   El hero de index.html queda fuera de estas reglas porque
+   tiene su propio sistema día/noche con ilustraciones.
 ================================================== */
 
 html.agropedia-dark,
@@ -8,6 +11,10 @@ body.agropedia-dark {
     background: #121712 !important;
     color: #e2e9e1 !important;
 }
+
+/* ==================================================
+   NAVEGACIÓN
+================================================== */
 
 body.agropedia-dark .agro-navbar {
     --nav-texto: #e4ebe4;
@@ -34,6 +41,10 @@ body.agropedia-dark .agro-navbar__avatar {
     color: #d9e2d9 !important;
 }
 
+/* ==================================================
+   FONDOS GENERALES
+================================================== */
+
 body.agropedia-dark main,
 body.agropedia-dark section,
 body.agropedia-dark header,
@@ -43,7 +54,103 @@ body.agropedia-dark [class*="container"] {
     color: #e2e9e1;
 }
 
-/* Superficies comunes */
+/* ==================================================
+   HEROES GLOBALES
+
+   Todos los hero del sitio adoptan una paleta nocturna
+   verde profunda, excepto el hero especial de index.html.
+================================================== */
+
+body.agropedia-dark .learn-hero,
+body.agropedia-dark .topic-hero,
+body.agropedia-dark .catalog-hero,
+body.agropedia-dark .plants-hero,
+body.agropedia-dark .plant-hero,
+body.agropedia-dark .preferences-hero,
+body.agropedia-dark .garden-welcome,
+body.agropedia-dark .about-hero {
+    background:
+        radial-gradient(
+            circle at 82% 25%,
+            rgba(90, 135, 91, 0.18),
+            transparent 24%
+        ),
+        linear-gradient(
+            135deg,
+            #0b160e 0%,
+            #14271a 50%,
+            #263b29 100%
+        ) !important;
+    color: #edf5ed !important;
+    border-color: #2d3b2f !important;
+}
+
+/* Heroes que utilizan una fotografía como fondo */
+
+body.agropedia-dark .about-hero-overlay {
+    background: linear-gradient(
+        rgba(5, 15, 8, 0.88),
+        rgba(10, 25, 14, 0.92)
+    ) !important;
+}
+
+body.agropedia-dark .plant-hero {
+    background-image:
+        linear-gradient(
+            rgba(5, 16, 9, 0.84),
+            rgba(8, 23, 13, 0.92)
+        ),
+        url("../assets/images/plants/tomate-hero.jpg") !important;
+}
+
+/* Textos de los hero */
+
+body.agropedia-dark .learn-hero h1,
+body.agropedia-dark .topic-hero h1,
+body.agropedia-dark .catalog-hero h1,
+body.agropedia-dark .plants-hero h1,
+body.agropedia-dark .plant-hero h1,
+body.agropedia-dark .preferences-hero h1,
+body.agropedia-dark .garden-welcome h1,
+body.agropedia-dark .about-hero h1 {
+    color: #edf5ed !important;
+}
+
+body.agropedia-dark .learn-hero p,
+body.agropedia-dark .topic-hero p,
+body.agropedia-dark .catalog-hero p,
+body.agropedia-dark .plants-hero p,
+body.agropedia-dark .plant-hero p,
+body.agropedia-dark .preferences-hero p,
+body.agropedia-dark .garden-welcome p,
+body.agropedia-dark .about-hero p {
+    color: #b9c8ba !important;
+}
+
+body.agropedia-dark .learn-hero .section-kicker,
+body.agropedia-dark .topic-hero__eyebrow,
+body.agropedia-dark .catalog-hero__eyebrow,
+body.agropedia-dark .plants-hero .section-label,
+body.agropedia-dark .preferences-hero .section-label,
+body.agropedia-dark .garden-welcome .section-label,
+body.agropedia-dark .about-hero .section-label {
+    color: #9bc997 !important;
+}
+
+/* Elementos decorativos dentro de los hero */
+
+body.agropedia-dark .topic-hero__badge,
+body.agropedia-dark .catalog-hero__icon,
+body.agropedia-dark .plant-hero-category,
+body.agropedia-dark .plant-tags span {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(180, 215, 183, 0.24) !important;
+    color: #dcebdd !important;
+}
+
+/* ==================================================
+   SUPERFICIES COMUNES
+================================================== */
 
 body.agropedia-dark article,
 body.agropedia-dark [class*="card"],
@@ -73,7 +180,9 @@ body.agropedia-dark th {
     border-color: #394339;
 }
 
-/* Texto */
+/* ==================================================
+   TEXTO
+================================================== */
 
 body.agropedia-dark h1,
 body.agropedia-dark h2,
@@ -93,7 +202,9 @@ body.agropedia-dark small {
     color: #b8c2b8;
 }
 
-/* Formularios */
+/* ==================================================
+   FORMULARIOS
+================================================== */
 
 body.agropedia-dark input,
 body.agropedia-dark select,
@@ -114,13 +225,13 @@ body.agropedia-dark option {
     color: #e2e9e1;
 }
 
-/* Enlaces */
+/* ==================================================
+   ENLACES Y CONTROLES
+================================================== */
 
 body.agropedia-dark a {
     color: #8bc67f;
 }
-
-/* Controles */
 
 body.agropedia-dark hr {
     border-color: #394339;
@@ -131,7 +242,9 @@ body.agropedia-dark ::selection {
     color: #ffffff;
 }
 
-/* Footer */
+/* ==================================================
+   FOOTER
+================================================== */
 
 body.agropedia-dark .site-footer {
     background: #0d120e !important;
@@ -154,6 +267,7 @@ body.agropedia-dark .site-footer a {
 }
 
 /* Las fotografías e ilustraciones conservan sus colores. */
+
 body.agropedia-dark img {
     filter: none;
 }
