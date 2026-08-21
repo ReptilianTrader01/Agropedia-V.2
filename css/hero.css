@@ -14,7 +14,7 @@
             rgba(244, 250, 239, 0.28) 58%,
             rgba(244, 250, 239, 0.04) 100%
         ),
-        url('../assets/images/hero-dia.svg');
+        url('../assets/images/hero-día.jpeg');
     background-size: cover;
     background-position: center;
     transition:
@@ -64,7 +64,7 @@ body.agropedia-dark .hero {
             rgba(5, 16, 23, 0.35) 59%,
             rgba(5, 16, 23, 0.08) 100%
         ),
-        url('../assets/images/hero-noche.svg');
+        url('../assets/images/hero-noche.jpeg');
 }
 
 body.agropedia-dark .hero::after {
@@ -100,14 +100,6 @@ body.agropedia-dark .btn--secondary {
 body.agropedia-dark .btn--primary {
     background: #4f963f;
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
-}
-
-/* ==================================================
-   INDICADOR VISUAL DE TRANSICIÓN
-================================================== */
-
-.hero {
-    transition-property: background-image;
 }
 
 /* ==================================================
