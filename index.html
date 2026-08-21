@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Agropedia: aprendizaje, gestión y planeación de huertos.">
 
-    <title>Agropedia | Inicio</title>
+    <title>Agropedia | Cultiva conocimiento</title>
 
     <link rel="stylesheet" href="css/navegacion.css">
+    <link rel="stylesheet" href="css/tema_global.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/index-ajustes.css">
 </head>
 
 <body>
@@ -19,81 +19,99 @@
 
         <!-- ==================== HERO ==================== -->
         <section class="hero">
+
             <div class="hero__content">
                 <span class="hero__eyebrow">Bienvenido a Agropedia</span>
 
                 <h1>
-                    Cultiva conocimiento,<br>
-                    <span>haz crecer tu huerto.</span>
+                    Cultiva conocimiento.<br>
+                    <span>Haz crecer tu huerto.</span>
                 </h1>
 
                 <p>
-                    Una herramienta para aprender sobre plantas, planear tus cultivos
-                    y cuidar tu huerto de acuerdo con el momento adecuado.
+                    Descubre el mundo de las plantas, aprende a cultivarlas y
+                    lleva el control de tu propio huerto desde un solo lugar.
                 </p>
 
                 <div class="hero__actions">
-                    <a class="btn btn--primary" href="plantas.html">Explorar plantas</a>
-                    <a class="btn btn--secondary" href="aprende.html">Quiero aprender</a>
+                    <a href="plantas.html" class="btn btn--primary">
+                        Explorar plantas
+                    </a>
+
+                    <a href="aprende.html" class="btn btn--secondary">
+                        Comenzar a aprender
+                    </a>
                 </div>
             </div>
 
-            <!-- La ilustración del hero se carga mediante css/hero.css.
-                 De día muestra una pradera y de noche un bosque de pinos. -->
-            <div class="hero__decoration" aria-hidden="true"></div>
+            <div class="hero__decoration" aria-hidden="true">
+                <div class="hero__sun"></div>
+                <div class="hero__circle"></div>
+                <div class="hero__leaf hero__leaf--one"></div>
+                <div class="hero__leaf hero__leaf--two"></div>
+            </div>
+
         </section>
 
 
         <!-- ==================== PLANTAS RECOMENDADAS ==================== -->
-        <section class="section recommended">
+        <section class="section recommendations">
+
             <div class="section-heading">
                 <div>
-                    <span class="section-heading__eyebrow">Descubre</span>
+                    <span class="section-heading__eyebrow">Para este mes</span>
                     <h2>Plantas recomendadas</h2>
                     <p>
-                        Las plantas ideales para comenzar a cultivar durante
-                        <strong id="current-month">este mes</strong>.
+                        Descubre algunas plantas que puedes cultivar durante
+                        esta época del año.
                     </p>
                 </div>
 
                 <a href="plantas.html" class="section-link">
-                    Ver todas las plantas →
+                    Ver todas →
                 </a>
             </div>
 
             <div class="plant-carousel">
-                <button
-                    class="carousel-button"
-                    id="carousel-prev"
-                    type="button"
-                    aria-label="Plantas anteriores">
+                <button class="carousel-button" id="carousel-prev" type="button" aria-label="Anterior">
                     ‹
                 </button>
 
                 <div class="plant-carousel__viewport">
-                    <div class="plant-carousel__track" id="plant-track"></div>
+                    <div class="plant-carousel__track" id="plant-track">
+                        <!-- JS -->
+                    </div>
                 </div>
 
-                <button
-                    class="carousel-button"
-                    id="carousel-next"
-                    type="button"
-                    aria-label="Siguientes plantas">
+                <button class="carousel-button" id="carousel-next" type="button" aria-label="Siguiente">
                     ›
                 </button>
             </div>
 
             <div class="carousel-dots" id="carousel-dots"></div>
+
         </section>
 
 
-        <!-- ==================== INFORMACIÓN DEL HUERTO ==================== -->
+        <!-- ==================== ESTADO DEL HUERTO ==================== -->
         <section class="section garden-info">
+
+            <div class="section-heading">
+                <div>
+                    <span class="section-heading__eyebrow">Tu entorno</span>
+                    <h2>Información para tu huerto</h2>
+                    <p>
+                        Consulta las condiciones actuales y recibe consejos
+                        adaptados al momento del día.
+                    </p>
+                </div>
+            </div>
+
             <div class="info-grid">
 
                 <!-- Estación -->
                 <article class="info-card info-card--season">
-                    <div class="info-card__icon">☀</div>
+                    <div class="info-card__icon" id="season-icon">☀</div>
 
                     <div>
                         <span class="info-card__label">Estación actual</span>
@@ -299,8 +317,6 @@
         </div>
     </footer>
 
-
-    <!-- ==================== JAVASCRIPT ==================== -->
     <script src="js/navegacion.js"></script>
     <script src="js/index.js"></script>
 
