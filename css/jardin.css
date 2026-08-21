@@ -686,6 +686,183 @@
 .comment-date { display: block; margin-top: 10px; color: #a0a7a0; font-size: 9px; }
 
 /* ==================================================
+   MODO NOCTURNO — MI HUERTO
+================================================== */
+
+body.agropedia-dark .garden-page {
+    background: #101810;
+    color: #e3ebe3;
+}
+
+body.agropedia-dark .garden-welcome {
+    background: linear-gradient(135deg, #18251a, #111a12);
+    border-bottom-color: #26372a;
+}
+
+body.agropedia-dark .welcome-content h1,
+body.agropedia-dark .section-heading h2,
+body.agropedia-dark .card-heading h2 {
+    color: #b9ddb9;
+}
+
+body.agropedia-dark .welcome-content p,
+body.agropedia-dark .section-heading p,
+body.agropedia-dark .daily-date,
+body.agropedia-dark .garden-progress-card > p {
+    color: #a8b4a9;
+}
+
+body.agropedia-dark .garden-tools,
+body.agropedia-dark .garden-board-wrapper,
+body.agropedia-dark .plant-status-panel,
+body.agropedia-dark .daily-status-card,
+body.agropedia-dark .garden-progress-card {
+    background: #182119;
+    border-color: #304033;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.24);
+}
+
+body.agropedia-dark .summary-card {
+    background: #1b281d;
+    border-color: #304033;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+body.agropedia-dark .summary-card strong,
+body.agropedia-dark .tools-header h3,
+body.agropedia-dark .board-toolbar strong,
+body.agropedia-dark .status-title h3,
+body.agropedia-dark .empty-status h3,
+body.agropedia-dark .favorite-content h3 {
+    color: #b9ddb9;
+}
+
+body.agropedia-dark .summary-card > span:last-child,
+body.agropedia-dark .board-toolbar span,
+body.agropedia-dark .board-hint,
+body.agropedia-dark .empty-status p,
+body.agropedia-dark .status-location,
+body.agropedia-dark .status-title span,
+body.agropedia-dark .status-field span,
+body.agropedia-dark .daily-info-item small,
+body.agropedia-dark .favorite-content p,
+body.agropedia-dark .comment-type,
+body.agropedia-dark .comment-date {
+    color: #8f9c91;
+}
+
+body.agropedia-dark .tools-header,
+body.agropedia-dark .tools-divider,
+body.agropedia-dark .status-title {
+    border-color: #304033;
+}
+
+body.agropedia-dark .tool-button,
+body.agropedia-dark .tool-help,
+body.agropedia-dark .status-check {
+    color: #b7c2b8;
+}
+
+body.agropedia-dark .tool-button:hover,
+body.agropedia-dark .tool-button.active {
+    border-color: #38563c;
+    background: #243627;
+    color: #b9ddb9;
+}
+
+body.agropedia-dark .tool-help {
+    color: #73bd78;
+}
+
+body.agropedia-dark .board-size {
+    background: #243627;
+}
+
+body.agropedia-dark .board-size span {
+    color: #83c987;
+}
+
+body.agropedia-dark .status-plant-icon {
+    background: #243627;
+}
+
+body.agropedia-dark .status-field,
+body.agropedia-dark .daily-info-item,
+body.agropedia-dark .task-item {
+    background: #202d22;
+}
+
+body.agropedia-dark .status-field strong,
+body.agropedia-dark .daily-info-item strong {
+    color: #83c987;
+}
+
+body.agropedia-dark .status-check {
+    color: #b1bcb2;
+}
+
+body.agropedia-dark .progress-track {
+    background: #29372b;
+}
+
+body.agropedia-dark .favorites-section {
+    background: #141e15;
+}
+
+body.agropedia-dark .favorite-card {
+    background: #1b281d;
+    border-color: #304033;
+}
+
+body.agropedia-dark .favorite-image {
+    background: #26372a;
+}
+
+body.agropedia-dark .comments-section {
+    background: #101810;
+}
+
+body.agropedia-dark .comment-form,
+body.agropedia-dark .comments-list {
+    background: #182119;
+    border-color: #304033;
+}
+
+body.agropedia-dark .form-group label {
+    color: #bdc8be;
+}
+
+body.agropedia-dark .form-group select,
+body.agropedia-dark .form-group textarea {
+    background: #101810;
+    border-color: #344638;
+    color: #dce6dd;
+}
+
+body.agropedia-dark .form-group select:focus,
+body.agropedia-dark .form-group textarea:focus {
+    border-color: #4d7b52;
+    box-shadow: 0 0 0 2px rgba(77, 123, 82, 0.18);
+}
+
+body.agropedia-dark .rating-input button {
+    color: #465449;
+}
+
+body.agropedia-dark .community-comment {
+    background: #202d22;
+    border-color: #344638;
+}
+
+body.agropedia-dark .comment-author {
+    color: #a9d2ab;
+}
+
+body.agropedia-dark .community-comment p {
+    color: #aab5ab;
+}
+
+/* ==================================================
    RESPONSIVE
 ================================================== */
 
@@ -699,22 +876,23 @@
 
 @media (max-width: 850px) {
     .garden-welcome .garden-container { flex-direction: column; align-items: flex-start; }
-    .garden-summary { width: 100%; min-width: 0; max-width: 500px; }
+    .garden-summary { width: 100%; min-width: 0; }
     .garden-editor { grid-template-columns: 1fr; }
-    .garden-tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
-    .tools-header, .tools-divider, .tool-help { grid-column: 1 / -1; }
-    .tool-button { margin: 0; }
-    .status-grid, .comments-layout { grid-template-columns: 1fr; }
-    .daily-information { grid-template-columns: 1fr; }
+    .garden-tools { order: 1; }
+    .garden-board-wrapper { order: 2; }
+    .plant-status-panel { order: 3; grid-column: auto; }
+    .status-grid { grid-template-columns: 1fr; }
+    .favorites-grid { grid-template-columns: repeat(2, 1fr); }
+    .comments-layout { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
-    .garden-container { width: calc(100% - 28px); }
-    .garden-welcome { padding: 55px 0 45px; }
-    .garden-summary { grid-template-columns: repeat(2, 1fr); }
-    .garden-editor-section, .favorites-section, .comments-section { padding: 60px 0; }
-    .garden-board-wrapper { padding: 12px; }
-    .garden-board { border-width: 3px; }
-    .favorites-grid { grid-template-columns: repeat(2, 1fr); }
-    .daily-status-card, .garden-progress-card, .comment-form, .comments-list { padding: 20px; }
+    .garden-container { width: min(100% - 28px, 1240px); }
+    .garden-welcome { padding: 60px 0 45px; }
+    .garden-summary { grid-template-columns: 1fr 1fr; }
+    .garden-editor-section { padding: 60px 0; }
+    .daily-information { grid-template-columns: 1fr; }
+    .favorites-section,
+    .comments-section { padding: 60px 0; }
+    .favorites-grid { grid-template-columns: 1fr; }
 }
