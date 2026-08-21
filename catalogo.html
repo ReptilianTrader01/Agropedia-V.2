@@ -3,13 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Catálogo | Agropedia</title>
+
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/catalogo.css">
 </head>
+
 <body>
-    <main id="app"></main>
+
+    <main id="app">
+
+        <!-- ==================================================
+             HERO DINÁMICO
+        ================================================== -->
+        <section class="catalog-hero">
+            <div class="catalog-hero__content">
+                <span class="catalog-hero__eyebrow">BIBLIOTECA DE AGROPEDIA</span>
+
+                <h1 id="catalogTitle">Cursos</h1>
+
+                <p id="catalogPhrase">
+                    Avanza a tu ritmo y convierte cada aprendizaje en experiencia.
+                </p>
+
+                <span class="catalog-hero__icon" id="catalogIcon">🎓</span>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             BUSCADOR Y FILTROS
+        ================================================== -->
+        <section class="catalog-tools-section">
+            <div class="catalog-container">
+
+                <div class="catalog-search-box">
+                    <span class="catalog-search-icon">⌕</span>
+
+                    <input
+                        type="search"
+                        id="catalogSearch"
+                        placeholder="Busca por nombre, tema o descripción..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        id="clearCatalogSearch"
+                    >
+                        Limpiar
+                    </button>
+                </div>
+
+                <div class="catalog-filters">
+                    <div class="filter-group">
+                        <label for="topicFilter">Tema</label>
+                        <select id="topicFilter">
+                            <option value="all">Todos los temas</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="difficultyFilter">Dificultad</label>
+                        <select id="difficultyFilter">
+                            <option value="all">Todos los niveles</option>
+                            <option value="principiante">Principiante</option>
+                            <option value="intermedio">Intermedio</option>
+                            <option value="avanzado">Avanzado</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="durationFilter">Duración</label>
+                        <select id="durationFilter">
+                            <option value="all">Cualquier duración</option>
+                            <option value="corta">Corta</option>
+                            <option value="media">Media</option>
+                            <option value="larga">Larga</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="resetCatalogFilters" class="reset-filters">
+                        Restablecer filtros
+                    </button>
+                </div>
+
+                <p class="catalog-results-message" id="catalogResultsMessage">
+                    Mostrando todo el contenido disponible.
+                </p>
+
+            </div>
+        </section>
+
+        <!-- ==================================================
+             CATÁLOGO
+        ================================================== -->
+        <section class="catalog-content-section">
+            <div class="catalog-container">
+
+                <div class="catalog-heading">
+                    <div>
+                        <span class="section-kicker">EXPLORA</span>
+                        <h2 id="catalogHeading">Todos los cursos</h2>
+                    </div>
+
+                    <a href="aprende.html" class="catalog-back-link">
+                        ← Volver a Aprende
+                    </a>
+                </div>
+
+                <div class="catalog-grid" id="catalogGrid"></div>
+
+                <div class="catalog-empty hidden" id="catalogEmpty">
+                    <span>🔎</span>
+                    <h3>No encontramos contenido</h3>
+                    <p>
+                        No hay elementos que coincidan con tu búsqueda y filtros actuales.
+                    </p>
+                    <button type="button" id="emptyResetButton">
+                        Restablecer búsqueda
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
     <script src="js/navegacion.js"></script>
     <script src="js/catalogo.js"></script>
+
 </body>
 </html>
