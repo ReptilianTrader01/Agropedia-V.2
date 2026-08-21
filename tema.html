@@ -3,13 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Tema | Agropedia</title>
+
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/tema.css">
 </head>
+
 <body>
-    <main id="app"></main>
+
+    <main id="app">
+
+        <!-- ==================================================
+             HERO DINÁMICO
+        ================================================== -->
+        <section class="topic-hero">
+            <div class="topic-hero__content">
+                <span class="topic-hero__eyebrow">APRENDE EN AGROPEDIA</span>
+
+                <h1 id="topicTitle">Cultivo</h1>
+
+                <p id="topicPhrase">
+                    Aprende a cultivar con conocimiento, paciencia y propósito.
+                </p>
+
+                <span class="topic-hero__badge" id="topicIcon">🌱</span>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             BUSCADOR
+        ================================================== -->
+        <section class="topic-search-section">
+            <div class="topic-container">
+                <div class="topic-search-box">
+                    <span class="topic-search-icon">⌕</span>
+
+                    <input
+                        type="search"
+                        id="topicSearch"
+                        placeholder="Busca cursos, videos o documentos sobre este tema..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        id="clearTopicSearch"
+                        aria-label="Limpiar búsqueda"
+                    >
+                        Limpiar
+                    </button>
+                </div>
+
+                <p class="topic-search-message" id="topicSearchMessage">
+                    Explora el contenido disponible sobre este tema.
+                </p>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             CONTENIDO DEL TEMA
+        ================================================== -->
+        <section class="topic-content-section">
+            <div class="topic-container">
+
+                <div class="topic-section-heading">
+                    <div>
+                        <span class="section-kicker">CONTENIDO</span>
+                        <h2>Aprende sobre <span id="topicHeading">cultivo</span></h2>
+                    </div>
+
+                    <a href="aprende.html" class="topic-back-link">
+                        ← Volver a Aprende
+                    </a>
+                </div>
+
+                <div class="topic-content-grid" id="topicContentGrid"></div>
+
+                <div class="topic-empty hidden" id="topicEmpty">
+                    <span>🔎</span>
+                    <h3>No encontramos resultados</h3>
+                    <p>
+                        Prueba con otra palabra o limpia la búsqueda para volver a explorar el tema.
+                    </p>
+                    <button type="button" id="resetTopicSearch">
+                        Mostrar todo
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================================================
+             CTA
+        ================================================== -->
+        <section class="topic-cta">
+            <div class="topic-container">
+                <div class="topic-cta__content">
+                    <span>🌿</span>
+                    <div>
+                        <h2>¿Quieres seguir aprendiendo?</h2>
+                        <p>
+                            Explora todos los cursos, videos y documentos disponibles en Agropedia.
+                        </p>
+                    </div>
+                    <a href="catalogo.html" class="topic-cta__button">
+                        Ver catálogo completo →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
     <script src="js/navegacion.js"></script>
     <script src="js/tema.js"></script>
+
 </body>
 </html>
