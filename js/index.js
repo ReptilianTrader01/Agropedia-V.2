@@ -20,8 +20,6 @@
         'diciembre'
     ];
 
-    // Plantas que aparecerán como recomendadas según el mes.
-    // Más adelante estos datos podrán venir desde Supabase.
     const recommendedByMonth = {
         1: ['Lechuga', 'Zanahoria', 'Rábano', 'Espinaca', 'Cilantro'],
         2: ['Jitomate', 'Lechuga', 'Zanahoria', 'Rábano', 'Cilantro'],
@@ -41,9 +39,8 @@
 
     let carouselIndex = 0;
 
-
     // =========================================================
-    // CALCULAR LA ESTACIÓN DEL AÑO
+    // ESTACIÓN
     // =========================================================
 
     function season(date) {
@@ -89,18 +86,14 @@
         ];
     }
 
-
     // =========================================================
-    // CALCULAR LA FASE LUNAR
+    // FASE LUNAR
     // =========================================================
 
     function moonPhase(date) {
         const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14));
         const lunarCycle = 29.530588853;
-
         const days = (date.getTime() - knownNewMoon.getTime()) / 86400000;
-
-        // Edad aproximada de la luna dentro del ciclo actual.
         const age = ((days % lunarCycle) + lunarCycle) % lunarCycle;
 
         const names = [
@@ -130,52 +123,55 @@
         return {
             name: names[phaseIndex],
             icon: icons[phaseIndex],
-            age: age
+            age
         };
     }
 
+    // =========================================================
+    // INFORMACIÓN DE CALENDARIO
+    // =========================================================
 
-    // =========================================================
-    // MOSTRAR ESTACIÓN Y FASE LUNAR
-    // =========================================================
+    function setText(id, value) {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+    }
 
     function renderCalendarInfo() {
         const now = new Date();
-
         const [currentSeason, seasonDescription] = season(now);
         const moon = moonPhase(now);
 
-        document.getElementById('current-month').textContent =
-            monthNames[now.getMonth()];
+        // current-month es opcional: algunas versiones del diseño no lo usan.
+        setText('current-month', monthNames[now.getMonth()]);
+        setText('popular-month', monthNames[now.getMonth()]);
 
-        document.getElementById('popular-month').textContent =
-            monthNames[now.getMonth()];
-
-        document.getElementById('season-name').textContent = currentSeason;
-        document.getElementById('season-description').textContent = seasonDescription;
-
-        document.getElementById('moon-name').textContent = moon.name;
-        document.getElementById('moon-icon').textContent = moon.icon;
-
-        document.getElementById('moon-description').textContent =
-            'Ciclo lunar aproximado · día ' +
-            Math.round(moon.age) +
-            ' de 29.5';
+        setText('season-name', currentSeason);
+        setText('season-description', seasonDescription);
+        setText('moon-name', moon.name);
+        setText('moon-icon', moon.icon);
+        setText(
+            'moon-description',
+            'Ciclo lunar aproximado · día ' + Math.round(moon.age) + ' de 29.5'
+        );
     }
 
-
     // =========================================================
-    // HORA Y CONSEJO DE JARDINERÍA
+    // HORA Y CONSEJO
     // =========================================================
 
     function timeAdvice() {
         const now = new Date();
-
         const hour = now.getHours();
         const minutes = now.getMinutes();
         const seconds = now.getSeconds();
-
         const timeElement = document.getElementById('current-time');
+
+        if (!timeElement) {
+            return;
+        }
 
         timeElement.textContent = [hour, minutes, seconds]
             .map(value => String(value).padStart(2, '0'))
@@ -186,100 +182,74 @@
         let period;
         let advice;
 
-        // Mañana temprana.
         if (hour >= 5 && hour < 8) {
             period = 'Mañana';
-            advice =
-                'El sol aún es suave. Revisa la humedad del suelo y riega temprano para reducir la evaporación.';
-        }
-
-        // Mañana.
-        else if (hour >= 8 && hour < 12) {
+            advice = 'El sol aún es suave. Revisa la humedad del suelo y riega temprano para reducir la evaporación.';
+        } else if (hour >= 8 && hour < 12) {
             period = 'Mañana';
-            advice =
-                'Con luz creciente, revisa hojas y tallos. Retira hojas dañadas y observa señales tempranas de plagas.';
-        }
-
-        // Mediodía.
-        else if (hour >= 12 && hour < 17) {
+            advice = 'Con luz creciente, revisa hojas y tallos. Retira hojas dañadas y observa señales tempranas de plagas.';
+        } else if (hour >= 12 && hour < 17) {
             period = 'Mediodía';
-            advice =
-                'Evita trabajar intensamente el suelo bajo el calor. Mantén el acolchado y revisa que las plantas no sufran estrés hídrico.';
-        }
-
-        // Tarde.
-        else if (hour >= 17 && hour < 20) {
+            advice = 'Evita trabajar intensamente el suelo bajo el calor. Mantén el acolchado y revisa que las plantas no sufran estrés hídrico.';
+        } else if (hour >= 17 && hour < 20) {
             period = 'Tarde';
-            advice =
-                'Es un buen momento para revisar el huerto y, si hace falta, realizar un riego moderado cuando el calor haya disminuido.';
-        }
-
-        // Noche.
-        else {
+            advice = 'Es un buen momento para revisar el huerto y, si hace falta, realizar un riego moderado cuando el calor haya disminuido.';
+        } else {
             period = 'Noche';
-            advice =
-                'Deja descansar el huerto. Observa la humedad y planifica las tareas de mañana en lugar de regar de más.';
+            advice = 'Deja descansar el huerto. Observa la humedad y planifica las tareas de mañana en lugar de regar de más.';
         }
 
-        // Obtener estación y fase lunar para personalizar el consejo.
         const [currentSeason] = season(now);
         const moon = moonPhase(now);
 
         if (currentSeason === 'Verano' && hour >= 8 && hour < 17) {
-            advice +=
-                ' En verano, prioriza conservar la humedad del suelo.';
+            advice += ' En verano, prioriza conservar la humedad del suelo.';
         }
 
         if (currentSeason === 'Invierno' && hour < 8) {
-            advice +=
-                ' En invierno, evita regar cuando pueda producirse una helada.';
+            advice += ' En invierno, evita regar cuando pueda producirse una helada.';
         }
 
-        if (
-            moon.name === 'Luna nueva' ||
-            moon.name === 'Luna menguante'
-        ) {
-            advice +=
-                ' Esta fase puede ser un buen momento para labores de mantenimiento y preparación.';
+        if (moon.name === 'Luna nueva' || moon.name === 'Luna menguante') {
+            advice += ' Esta fase puede ser un buen momento para labores de mantenimiento y preparación.';
         }
 
         if (moon.name === 'Luna llena') {
-            advice +=
-                ' Observa especialmente el estado de las plantas y la humedad del suelo.';
+            advice += ' Observa especialmente el estado de las plantas y la humedad del suelo.';
         }
 
-        document.getElementById('time-period').textContent = period;
-        document.getElementById('garden-advice').textContent = advice;
+        setText('time-period', period);
+        setText('garden-advice', advice);
     }
 
-
     // =========================================================
-    // CARRUSEL DE PLANTAS
+    // CARRUSEL DE PLANTAS RECOMENDADAS
     // =========================================================
 
     function renderCarousel() {
         const month = new Date().getMonth() + 1;
-        const plants = recommendedByMonth[month];
+        const plants = recommendedByMonth[month] || [];
         const track = document.getElementById('plant-track');
+        const dots = document.getElementById('carousel-dots');
+
+        if (!track || !dots) {
+            return;
+        }
 
         track.innerHTML = plants
             .map((plant, index) => `
                 <article class="plant-card">
                     <div class="plant-card__image">
-                        ${plantEmoji[index]}
+                        ${plantEmoji[index % plantEmoji.length]}
                     </div>
 
                     <div class="plant-card__body">
                         <h3>${plant}</h3>
-                        <p>
-                            Recomendada para ${monthNames[month - 1]}.
-                        </p>
+                        <p>Recomendada para ${monthNames[month - 1]}.</p>
                     </div>
                 </article>
             `)
             .join('');
-
-        const dots = document.getElementById('carousel-dots');
 
         dots.innerHTML = plants
             .map((_, index) => `
@@ -292,7 +262,6 @@
             `)
             .join('');
 
-        // Botones de los indicadores.
         dots.querySelectorAll('.carousel-dot').forEach(button => {
             button.addEventListener('click', () => {
                 carouselIndex = Number(button.dataset.slide);
@@ -300,38 +269,32 @@
             });
         });
 
-        // Botón anterior.
-        document
-            .getElementById('carousel-prev')
-            .addEventListener('click', () => {
-                carouselIndex =
-                    (carouselIndex + plants.length - 1) % plants.length;
+        const previous = document.getElementById('carousel-prev');
+        const next = document.getElementById('carousel-next');
 
+        if (previous) {
+            previous.addEventListener('click', () => {
+                carouselIndex = (carouselIndex + plants.length - 1) % plants.length;
                 moveCarousel();
             });
+        }
 
-        // Botón siguiente.
-        document
-            .getElementById('carousel-next')
-            .addEventListener('click', () => {
-                carouselIndex =
-                    (carouselIndex + 1) % plants.length;
-
+        if (next) {
+            next.addEventListener('click', () => {
+                carouselIndex = (carouselIndex + 1) % plants.length;
                 moveCarousel();
             });
+        }
 
         window.addEventListener('resize', moveCarousel);
-
         moveCarousel();
     }
 
-
-    // Mover visualmente el carrusel.
     function moveCarousel() {
         const track = document.getElementById('plant-track');
-        const card = track.querySelector('.plant-card');
+        const card = track?.querySelector('.plant-card');
 
-        if (!card) {
+        if (!track || !card) {
             return;
         }
 
@@ -345,33 +308,26 @@
                     ? 3
                     : 5;
 
-        const maxIndex = Math.max(
-            0,
-            track.children.length - visibleCards
-        );
-
+        const maxIndex = Math.max(0, track.children.length - visibleCards);
         carouselIndex = Math.min(carouselIndex, maxIndex);
 
-        track.style.transform =
-            `translateX(-${carouselIndex * cardWidth}px)`;
+        track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
 
-        document
-            .querySelectorAll('.carousel-dot')
-            .forEach((dot, index) => {
-                dot.classList.toggle(
-                    'is-active',
-                    index === carouselIndex
-                );
-            });
+        document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+            dot.classList.toggle('is-active', index === carouselIndex);
+        });
     }
 
-
     // =========================================================
-    // TABLA DE PLANTAS POPULARES
+    // TABLA DE 10 PLANTAS POPULARES
     // =========================================================
 
     function renderPopular() {
         const tableBody = document.getElementById('popular-plants');
+
+        if (!tableBody) {
+            return;
+        }
 
         tableBody.innerHTML = Array.from(
             { length: 10 },
@@ -386,7 +342,6 @@
         ).join('');
     }
 
-
     // =========================================================
     // INICIALIZACIÓN
     // =========================================================
@@ -397,7 +352,6 @@
         renderCarousel();
         renderPopular();
 
-        // Actualizar la información dinámica cada segundo.
         setInterval(() => {
             timeAdvice();
             renderCalendarInfo();
