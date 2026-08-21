@@ -1,0 +1,66 @@
+/* =========================================================
+   AJUSTES DEL INDEX — MODO NOCTURNO
+   ========================================================= */
+
+/* Panel de estación */
+body.agropedia-dark .info-card--season {
+    background: linear-gradient(135deg, #403722, #302b1d);
+    border: 1px solid #554a2f;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+}
+
+body.agropedia-dark .info-card--season .info-card__icon {
+    color: #e0b85a;
+    background: #4a4028;
+}
+
+/* Panel de fase lunar */
+body.agropedia-dark .info-card--moon {
+    background: linear-gradient(135deg, #302b45, #27233a);
+    border: 1px solid #45405f;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+}
+
+body.agropedia-dark .info-card--moon .info-card__icon {
+    color: #c7b9ef;
+    background: #3c3655;
+}
+
+/* Panel de hora y consejo */
+body.agropedia-dark .advice-card {
+    background: linear-gradient(135deg, #263c2b, #1f3024);
+    border-color: #36533b;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.24);
+}
+
+body.agropedia-dark .info-card__label,
+body.agropedia-dark .advice-card__label {
+    color: #b9c5bb;
+}
+
+body.agropedia-dark .info-card h2,
+body.agropedia-dark .info-card p,
+body.agropedia-dark .advice-card p {
+    color: #edf2ed;
+}
+
+body.agropedia-dark .advice-card time {
+    color: #d9ead9;
+}
+
+body.agropedia-dark .advice-card__header {
+    border-bottom-color: rgba(177, 207, 181, 0.16);
+}
+
+body.agropedia-dark .advice-card__status {
+    background: #334d38;
+    color: #bfe2c2;
+}
+
+/*
+   El hero nocturno conserva la fotografía pero desplaza
+   el encuadre hacia abajo para mostrar la lechuza.
+*/
+body.agropedia-dark .hero {
+    background-position: center 62%;
+}
