@@ -74,37 +74,99 @@
         ]
     };
 
+    // =========================================================
+    // CONFIGURACIÓN VISUAL
+    // =========================================================
+
+    const stageIcons = {
+        Siembra: '🌱',
+        Germinación: '🌿',
+        Crecimiento: '🌿',
+        Floración: '🌸',
+        Fructificación: '🍅',
+        Cosecha: '🧺'
+    };
+
+    const activityIcons = {
+        'Preparar el suelo': '🌱',
+        'Riego': '💧',
+        'Fertilización': '🧪',
+        'Poda': '✂️',
+        'Revisión de flores': '🌸',
+        'Recolección': '🧺'
+    };
 
     // =========================================================
     // MOSTRAR LOS CUIDADOS DE UNA ETAPA
     // =========================================================
 
-    function renderCareTable(stage) {
-        const tableBody = document.getElementById('care-table-body');
+    function renderCareCards(stage) {
+        const cardsContainer = document.getElementById('care-cards');
+        const stageTitle = document.getElementById('care-stage-title');
+        const stageIcon = document.getElementById('care-stage-icon');
         const stageCare = cuidados[stage] || [];
 
-        if (!tableBody) {
+        if (!cardsContainer) {
             return;
         }
 
-        tableBody.innerHTML = '';
+        if (stageTitle) {
+            stageTitle.textContent = stage;
+        }
+
+        if (stageIcon) {
+            stageIcon.textContent = stageIcons[stage] || '🌱';
+        }
+
+        cardsContainer.innerHTML = '';
+
+        if (stageCare.length === 0) {
+            cardsContainer.innerHTML = `
+                <div class="care-empty">
+                    No hay cuidados registrados para esta etapa.
+                </div>
+            `;
+            return;
+        }
 
         stageCare.forEach(care => {
-            const row = document.createElement('tr');
+            const card = document.createElement('article');
+            const icon = activityIcons[care.actividad] || '🌱';
 
-            row.innerHTML = `
-                <td>${stage}</td>
-                <td>${care.actividad}</td>
-                <td>${care.frecuencia}</td>
-                <td>${care.momento}</td>
-                <td>🌙 ${care.luna}</td>
-                <td>${care.observaciones}</td>
+            card.className = 'care-card';
+
+            card.innerHTML = `
+                <div class="care-card-title">
+                    <div class="care-card-icon">${icon}</div>
+                    <h4>${care.actividad}</h4>
+                </div>
+
+                <div class="care-meta">
+                    <div class="care-meta-item">
+                        <span>Frecuencia</span>
+                        <strong>${care.frecuencia}</strong>
+                    </div>
+
+                    <div class="care-meta-item">
+                        <span>Momento</span>
+                        <strong>☀️ ${care.momento}</strong>
+                    </div>
+
+                    <div class="care-meta-item">
+                        <span>Luna</span>
+                        <strong>🌙 ${care.luna}</strong>
+                    </div>
+                </div>
+
+                <p class="care-observation">
+                    <strong>💡 Recomendación:</strong>
+                    ${care.observaciones}
+                </p>
             `;
 
-            tableBody.appendChild(row);
+            cardsContainer.appendChild(card);
         });
     }
-
 
     // =========================================================
     // CAMBIAR ENTRE ETAPAS DE CRECIMIENTO
@@ -120,15 +182,14 @@
                 });
 
                 stage.classList.add('active');
-                renderCareTable(stage.dataset.stage);
+                renderCareCards(stage.dataset.stage);
             });
         });
 
         if (stages.length > 0) {
-            renderCareTable(stages[0].dataset.stage);
+            renderCareCards(stages[0].dataset.stage);
         }
     }
-
 
     // =========================================================
     // INICIALIZACIÓN
