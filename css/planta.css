@@ -194,14 +194,31 @@
 .growth-stages {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    margin-bottom: 40px;
-    border-bottom: 2px solid var(--border);
+    gap: 0;
+    position: relative;
+    margin: 50px 0 35px;
+    padding: 0 15px;
+}
+
+.growth-stages::before {
+    content: "";
+    position: absolute;
+    top: 22px;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: var(--border);
+    z-index: 0;
 }
 
 .growth-stage {
     position: relative;
-    text-align: center;
-    padding: 10px 5px 20px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0 5px;
     color: #879187;
     background: transparent;
     border: 0;
@@ -213,17 +230,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
-    margin: 0 auto 8px;
+    width: 46px;
+    height: 46px;
+    border: 3px solid var(--border);
     border-radius: 50%;
-    background: #edf1ed;
+    background: var(--background, white);
+    color: #879187;
     font-size: 12px;
     font-weight: 800;
+    transition: .25s ease;
 }
 
 .growth-stage strong {
     font-size: 13px;
+    transition: .25s ease;
+}
+
+.growth-stage:hover span {
+    border-color: var(--green);
+    color: var(--green);
+    transform: translateY(-2px);
 }
 
 .growth-stage.active {
@@ -232,50 +258,143 @@
 
 .growth-stage.active span {
     background: var(--green);
+    border-color: var(--green);
     color: white;
+    box-shadow: 0 5px 16px rgba(50, 120, 65, .22);
 }
 
-.growth-stage.active::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--green);
+.care-content {
+    background: var(--background, white);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 30px;
+    box-shadow: 0 10px 35px rgba(30, 70, 35, .08);
 }
 
-.care-table-container {
-    overflow-x: auto;
-    border-radius: 15px;
-    box-shadow: 0 7px 25px rgba(30, 70, 35, .08);
+.care-stage-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
 }
 
-.care-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    min-width: 900px;
+.care-stage-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: var(--green-soft);
+    font-size: 28px;
 }
 
-.care-table th {
-    padding: 16px;
-    background: var(--green-dark);
-    color: white;
-    text-align: left;
+.care-stage-heading span {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--text-light);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+}
+
+.care-stage-heading h3 {
+    margin: 0;
+    color: var(--green-dark);
+    font-size: 26px;
+}
+
+.care-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.care-card {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--green-soft);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.care-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(55, 130, 70, .3);
+    box-shadow: 0 8px 22px rgba(30, 70, 35, .08);
+}
+
+.care-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.care-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--background, white);
+    font-size: 19px;
+}
+
+.care-card h4 {
+    margin: 0;
+    color: var(--green-dark);
+    font-size: 17px;
+}
+
+.care-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 17px;
+}
+
+.care-meta-item {
+    padding: 11px;
+    border-radius: 10px;
+    background: var(--background, white);
+}
+
+.care-meta-item span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-light);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.care-meta-item strong {
+    color: var(--green-dark);
     font-size: 12px;
 }
 
-.care-table td {
-    padding: 17px 16px;
-    border-bottom: 1px solid #edf1ed;
+.care-observation {
+    margin: 0;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
     color: var(--text-light);
     font-size: 13px;
+    line-height: 1.6;
 }
 
-.care-table td:first-child {
-    color: var(--green-dark);
-    font-weight: 700;
+.care-empty {
+    grid-column: 1 / -1;
+    padding: 30px;
+    border-radius: 14px;
+    background: var(--green-soft);
+    color: var(--text-light);
+    text-align: center;
 }
 
 /* ==================================================
@@ -355,6 +474,50 @@
 }
 
 /* ==================================================
+   MODO NOCTURNO
+================================================== */
+
+body.dark-mode .growth-stage span {
+    background: #1d2a20;
+    border-color: #3b4b3e;
+}
+
+body.dark-mode .growth-stages::before {
+    background: #3b4b3e;
+}
+
+body.dark-mode .growth-stage.active span {
+    background: var(--green);
+    border-color: var(--green);
+}
+
+body.dark-mode .care-content,
+body.dark-mode .care-card-icon,
+body.dark-mode .care-meta-item {
+    background: #172019;
+}
+
+body.dark-mode .care-card {
+    background: #1c2920;
+}
+
+body.dark-mode .care-stage-icon {
+    background: #243528;
+}
+
+body.dark-mode .care-card:hover {
+    border-color: rgba(100, 180, 110, .35);
+}
+
+body.dark-mode .plant-video-section {
+    background: #172219;
+}
+
+body.dark-mode .related-plant-card {
+    background: #172019;
+}
+
+/* ==================================================
    RESPONSIVE
 ================================================== */
 
@@ -397,7 +560,33 @@
 
     .growth-stages {
         grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
+        gap: 24px 5px;
+        padding: 0;
+    }
+
+    .growth-stages::before {
+        display: none;
+    }
+
+    .growth-stage span {
+        width: 42px;
+        height: 42px;
+    }
+
+    .growth-stage strong {
+        font-size: 11px;
+    }
+
+    .care-content {
+        padding: 20px;
+    }
+
+    .care-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .care-meta {
+        grid-template-columns: 1fr;
     }
 
     .related-plants-grid {
