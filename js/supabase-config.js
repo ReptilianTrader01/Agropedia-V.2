@@ -19,3 +19,11 @@ const agropediaSupabase = window.supabase.createClient(
 
 // Disponible también para módulos que cargan esta configuración dinámicamente.
 window.agropediaSupabase = agropediaSupabase;
+
+// El dashboard carga sus herramientas dinámicamente y necesita estos estilos.
+if (document.body && document.querySelector('link[href="css/dashboard-admin.css"]') === null) {
+    const dashboardStyles = document.createElement('link');
+    dashboardStyles.rel = 'stylesheet';
+    dashboardStyles.href = 'css/dashboard-admin.css';
+    document.head.appendChild(dashboardStyles);
+}
