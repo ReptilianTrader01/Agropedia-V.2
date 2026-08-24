@@ -14,20 +14,11 @@
 <body>
 
     <main id="app">
-
-        <!-- ==================================================
-             HERO DINÁMICO
-        ================================================== -->
         <section class="catalog-hero">
             <div class="catalog-hero__content">
                 <span class="catalog-hero__eyebrow">BIBLIOTECA DE AGROPEDIA</span>
-
                 <h1 id="catalogTitle">Cursos</h1>
-
-                <p id="catalogPhrase">
-                    Avanza a tu ritmo y convierte cada aprendizaje en experiencia.
-                </p>
-
+                <p id="catalogPhrase">Avanza a tu ritmo y convierte cada aprendizaje en experiencia.</p>
                 <span class="catalog-hero__icon" id="catalogIcon">🎓</span>
             </div>
         </section>
@@ -36,14 +27,7 @@
             <div class="catalog-container">
                 <div class="catalog-search-box">
                     <span class="catalog-search-icon">⌕</span>
-
-                    <input
-                        type="search"
-                        id="catalogSearch"
-                        placeholder="Busca por nombre, tema o descripción..."
-                        autocomplete="off"
-                    >
-
+                    <input type="search" id="catalogSearch" placeholder="Busca por nombre, tema o descripción..." autocomplete="off">
                     <button type="button" id="clearCatalogSearch">Limpiar</button>
                 </div>
 
@@ -75,14 +59,10 @@
                         </select>
                     </div>
 
-                    <button type="button" id="resetCatalogFilters" class="reset-filters">
-                        Restablecer filtros
-                    </button>
+                    <button type="button" id="resetCatalogFilters" class="reset-filters">Restablecer filtros</button>
                 </div>
 
-                <p class="catalog-results-message" id="catalogResultsMessage">
-                    Mostrando todo el contenido disponible.
-                </p>
+                <p class="catalog-results-message" id="catalogResultsMessage">Mostrando todo el contenido disponible.</p>
             </div>
         </section>
 
@@ -93,10 +73,7 @@
                         <span class="section-kicker">EXPLORA</span>
                         <h2 id="catalogHeading">Todos los cursos</h2>
                     </div>
-
-                    <a href="aprende.html" class="catalog-back-link">
-                        ← Volver a Aprende
-                    </a>
+                    <a href="aprende.html" class="catalog-back-link">← Volver a Aprende</a>
                 </div>
 
                 <div class="catalog-grid" id="catalogGrid"></div>
@@ -104,18 +81,16 @@
                 <div class="catalog-empty hidden" id="catalogEmpty">
                     <span>🔎</span>
                     <h3>No encontramos contenido</h3>
-                    <p>
-                        No hay elementos que coincidan con tu búsqueda y filtros actuales.
-                    </p>
-                    <button type="button" id="emptyResetButton">
-                        Restablecer búsqueda
-                    </button>
+                    <p>No hay elementos que coincidan con tu búsqueda y filtros actuales.</p>
+                    <button type="button" id="emptyResetButton">Restablecer búsqueda</button>
                 </div>
             </div>
         </section>
-
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/educacion-data.js"></script>
     <script src="js/navegacion.js"></script>
     <script src="js/catalogo.js"></script>
     <script src="js/catalogo-enlaces.js"></script>
