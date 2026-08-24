@@ -1,0 +1,174 @@
+/* =========================================================
+   VIDEO - AGROPEDIA
+   ========================================================= */
+
+.learning-hero {
+    padding: 100px 0 70px;
+    background: linear-gradient(135deg, #24523a, #4d815d);
+    color: #fff;
+}
+
+.learning-container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+.learning-hero h1 {
+    max-width: 850px;
+    margin: 14px 0;
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+}
+
+.learning-hero p {
+    max-width: 720px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.video-section {
+    padding: 60px 0 80px;
+    background: var(--background-color, #f6f8f5);
+}
+
+.video-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(280px, .8fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+.video-player,
+.video-information,
+.related-content {
+    background: var(--card-background, #fff);
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+.video-player {
+    min-height: 480px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #17241c;
+    color: #fff;
+}
+
+.video-placeholder {
+    text-align: center;
+    padding: 30px;
+}
+
+.video-placeholder span {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: #3d8b5a;
+    font-size: 1.5rem;
+}
+
+.video-placeholder p {
+    margin: 0 0 8px;
+    font-weight: 700;
+}
+
+.video-placeholder small {
+    opacity: .7;
+}
+
+.video-information {
+    padding: 30px;
+}
+
+.content-label {
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .6;
+}
+
+.video-information h2,
+.related-content h2 {
+    margin: 10px 0;
+}
+
+.video-information p {
+    line-height: 1.7;
+}
+
+.video-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.video-meta span {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(61,139,90,.1);
+}
+
+.related-content {
+    margin-top: 28px;
+    padding: 30px;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.related-card {
+    min-height: 130px;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(61,139,90,.08);
+}
+
+.related-card strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Modo nocturno */
+body.dark-mode .learning-hero {
+    background: linear-gradient(135deg, #101f17, #1c3928);
+}
+
+body.dark-mode .video-section {
+    background: #111814;
+}
+
+body.dark-mode .video-player,
+body.dark-mode .video-information,
+body.dark-mode .related-content {
+    background: #1a241e;
+    border-color: rgba(255,255,255,.08);
+}
+
+body.dark-mode .related-card {
+    background: rgba(100,170,120,.12);
+}
+
+@media (max-width: 850px) {
+    .video-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .video-player {
+        min-height: 360px;
+    }
+
+    .related-grid {
+        grid-template-columns: 1fr;
+    }
+}
