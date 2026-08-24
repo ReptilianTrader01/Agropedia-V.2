@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aprende con los cursos de Agropedia.">
+    <title>Curso | Agropedia</title>
+
+    <link rel="stylesheet" href="css/navegacion.css">
+    <link rel="stylesheet" href="css/curso.css">
+</head>
+<body>
+    <main>
+        <section class="course-hero">
+            <div class="course-container">
+                <span class="section-label">📚 Curso de Agropedia</span>
+                <h1 id="courseTitle">Aprende a cultivar</h1>
+                <p id="courseDescription">Descubre los conocimientos necesarios para comenzar y mejorar tu cultivo.</p>
+                <div class="course-meta">
+                    <span id="courseDifficulty">🌱 Principiante</span>
+                    <span id="courseDuration">⏱ 0 horas</span>
+                    <span id="courseProgress">📊 0% completado</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="course-content-section">
+            <div class="course-container course-layout">
+                <aside class="course-sidebar">
+                    <div class="course-sidebar-header">
+                        <span>Contenido del curso</span>
+                        <strong id="lessonCount">0 lecciones</strong>
+                    </div>
+                    <div id="courseModules" class="course-modules"></div>
+                </aside>
+
+                <article class="lesson-viewer">
+                    <div class="lesson-header">
+                        <span id="lessonType">Lección</span>
+                        <h2 id="lessonTitle">Selecciona una lección</h2>
+                    </div>
+
+                    <div id="lessonContent" class="lesson-content">
+                        <p>Selecciona una lección del contenido del curso para comenzar.</p>
+                    </div>
+
+                    <div class="lesson-navigation">
+                        <button type="button" id="previousLesson">← Anterior</button>
+                        <button type="button" id="completeLesson">✓ Completar lección</button>
+                        <button type="button" id="nextLesson">Siguiente →</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/navegacion.js"></script>
+    <script src="js/curso.js"></script>
+</body>
+</html>
