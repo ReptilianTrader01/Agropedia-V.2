@@ -16,3 +16,6 @@ const agropediaSupabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
 );
+
+// Disponible también para módulos que cargan esta configuración dinámicamente.
+window.agropediaSupabase = agropediaSupabase;
