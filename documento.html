@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Documentos y materiales de estudio de Agropedia.">
+    <title>Documento | Agropedia</title>
+
+    <link rel="stylesheet" href="css/navegacion.css">
+    <link rel="stylesheet" href="css/documento.css">
+</head>
+<body>
+    <main>
+        <section class="document-hero">
+            <div class="document-container">
+                <span class="section-label">📄 Material de estudio</span>
+                <h1 id="documentTitle">Guía de aprendizaje</h1>
+                <p id="documentDescription">Consulta material de estudio para ampliar tus conocimientos de agricultura.</p>
+            </div>
+        </section>
+
+        <section class="document-section">
+            <div class="document-container">
+                <div class="document-layout">
+                    <aside class="document-information">
+                        <span class="content-label">Información</span>
+                        <h2 id="documentHeading">Documento de Agropedia</h2>
+                        <p id="documentText">Aquí aparecerá la descripción del material seleccionado.</p>
+
+                        <div class="document-meta">
+                            <span id="documentTopic">🌱 Cultivo</span>
+                            <span id="documentDifficulty">📊 Principiante</span>
+                            <span id="documentDuration">⏱ 20 min</span>
+                        </div>
+
+                        <a id="documentLink" href="#" class="document-button" target="_blank" rel="noopener">
+                            Abrir documento →
+                        </a>
+                    </aside>
+
+                    <div class="document-viewer" id="documentViewer">
+                        <div class="document-placeholder">
+                            <span>📄</span>
+                            <h2>Visor de documentos</h2>
+                            <p>El PDF se mostrará aquí cuando conectemos Supabase Storage.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="related-documents">
+                    <span class="content-label">Continúa aprendiendo</span>
+                    <h2>Material relacionado</h2>
+                    <div id="relatedDocuments" class="related-grid"></div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/navegacion.js"></script>
+    <script src="js/documento.js"></script>
+</body>
+</html>
