@@ -1,0 +1,225 @@
+/* =========================================================
+   CURSO - AGROPEDIA
+   ========================================================= */
+
+.course-hero {
+    padding: 110px 0 80px;
+    background: linear-gradient(135deg, #173d2b, #2f6948);
+    color: #fff;
+}
+
+.course-container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+.course-hero h1 {
+    max-width: 800px;
+    margin: 12px 0;
+    font-size: clamp(2.3rem, 5vw, 4.5rem);
+}
+
+.course-hero p {
+    max-width: 760px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    opacity: .9;
+}
+
+.section-label {
+    font-weight: 700;
+    letter-spacing: .04em;
+}
+
+.course-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.course-meta span {
+    padding: 10px 15px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px;
+    background: rgba(255,255,255,.1);
+}
+
+.course-content-section {
+    padding: 60px 0;
+    background: var(--background-color, #f6f8f5);
+}
+
+.course-layout {
+    display: grid;
+    grid-template-columns: 310px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+}
+
+.course-sidebar,
+.lesson-viewer {
+    background: var(--card-background, #fff);
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+.course-sidebar {
+    overflow: hidden;
+    position: sticky;
+    top: 20px;
+}
+
+.course-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+.course-sidebar-header strong {
+    font-size: .85rem;
+    opacity: .65;
+}
+
+.course-modules {
+    padding: 10px;
+}
+
+.course-module-title {
+    margin: 12px 8px 6px;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    opacity: .6;
+}
+
+.lesson-button {
+    display: block;
+    width: 100%;
+    padding: 13px 14px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.lesson-button:hover,
+.lesson-button.active {
+    background: rgba(54, 120, 78, .12);
+}
+
+.lesson-button.completed::before {
+    content: '✓ ';
+    color: #3d8b5a;
+    font-weight: 700;
+}
+
+.lesson-viewer {
+    padding: 36px;
+    min-height: 560px;
+}
+
+.lesson-header {
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+.lesson-header span {
+    font-size: .85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .6;
+}
+
+.lesson-header h2 {
+    margin: 8px 0 0;
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+}
+
+.lesson-content {
+    padding: 30px 0;
+    min-height: 300px;
+    line-height: 1.8;
+}
+
+.lesson-navigation {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.lesson-navigation button {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 18px;
+    cursor: pointer;
+    background: #e8eee9;
+    color: inherit;
+    font-weight: 700;
+}
+
+.lesson-navigation button:hover {
+    transform: translateY(-1px);
+}
+
+#completeLesson {
+    background: #36784e;
+    color: #fff;
+}
+
+/* Modo nocturno */
+body.dark-mode .course-hero {
+    background: linear-gradient(135deg, #101f17, #1c3928);
+}
+
+body.dark-mode .course-content-section {
+    background: #111814;
+}
+
+body.dark-mode .course-sidebar,
+body.dark-mode .lesson-viewer {
+    background: #1a241e;
+    border-color: rgba(255,255,255,.08);
+}
+
+body.dark-mode .course-sidebar-header,
+body.dark-mode .lesson-header,
+body.dark-mode .lesson-navigation {
+    border-color: rgba(255,255,255,.08);
+}
+
+body.dark-mode .lesson-button:hover,
+body.dark-mode .lesson-button.active {
+    background: rgba(100, 170, 120, .15);
+}
+
+body.dark-mode .lesson-navigation button {
+    background: #26332b;
+}
+
+body.dark-mode #completeLesson {
+    background: #3f875a;
+}
+
+@media (max-width: 800px) {
+    .course-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .course-sidebar {
+        position: static;
+    }
+
+    .lesson-viewer {
+        padding: 24px;
+    }
+}
