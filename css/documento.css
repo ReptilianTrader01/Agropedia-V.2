@@ -1,0 +1,175 @@
+/* =========================================================
+   DOCUMENTO - AGROPEDIA
+   ========================================================= */
+
+.document-hero {
+    padding: 100px 0 70px;
+    background: linear-gradient(135deg, #31563f, #60856a);
+    color: #fff;
+}
+
+.document-container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+.document-hero h1 {
+    max-width: 850px;
+    margin: 14px 0;
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+}
+
+.document-hero p {
+    max-width: 720px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.document-section {
+    padding: 60px 0 80px;
+    background: var(--background-color, #f6f8f5);
+}
+
+.document-layout {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+.document-information,
+.document-viewer,
+.related-documents {
+    background: var(--card-background, #fff);
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+.document-information {
+    padding: 30px;
+}
+
+.content-label {
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .6;
+}
+
+.document-information h2,
+.related-documents h2 {
+    margin: 10px 0;
+}
+
+.document-information p {
+    line-height: 1.7;
+}
+
+.document-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.document-meta span {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(61,139,90,.1);
+}
+
+.document-button {
+    display: block;
+    padding: 13px 18px;
+    border-radius: 10px;
+    background: #36784e;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.document-viewer {
+    min-height: 620px;
+    overflow: hidden;
+}
+
+.document-placeholder {
+    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+}
+
+.document-placeholder > span {
+    font-size: 4rem;
+}
+
+.document-placeholder p {
+    max-width: 480px;
+    line-height: 1.7;
+    opacity: .7;
+}
+
+.related-documents {
+    margin-top: 28px;
+    padding: 30px;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.related-card {
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(61,139,90,.08);
+}
+
+.related-card strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Modo nocturno */
+body.dark-mode .document-hero {
+    background: linear-gradient(135deg, #101f17, #1c3928);
+}
+
+body.dark-mode .document-section {
+    background: #111814;
+}
+
+body.dark-mode .document-information,
+body.dark-mode .document-viewer,
+body.dark-mode .related-documents {
+    background: #1a241e;
+    border-color: rgba(255,255,255,.08);
+}
+
+body.dark-mode .related-card {
+    background: rgba(100,170,120,.12);
+}
+
+@media (max-width: 850px) {
+    .document-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .document-viewer,
+    .document-placeholder {
+        min-height: 480px;
+    }
+
+    .related-grid {
+        grid-template-columns: 1fr;
+    }
+}
