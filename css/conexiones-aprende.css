@@ -1,0 +1,51 @@
+/* ==================================================
+   INTERACCIONES DE APRENDIZAJE
+================================================== */
+
+#catalogGrid .catalog-card,
+#topicContentGrid .topic-content-card {
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+#catalogGrid .catalog-card:hover,
+#topicContentGrid .topic-content-card:hover {
+    transform: translateY(-4px);
+}
+
+#catalogGrid .catalog-card:focus-visible,
+#topicContentGrid .topic-content-card:focus-visible {
+    outline: 3px solid #4f9665;
+    outline-offset: 3px;
+}
+
+.catalog-card__topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 0 20px 18px;
+}
+
+.catalog-card__topic {
+    display: inline-flex;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(61, 139, 90, .1);
+    color: inherit;
+    text-decoration: none;
+    font-size: .78rem;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.catalog-card__topic:hover {
+    background: rgba(61, 139, 90, .2);
+    transform: translateY(-1px);
+}
+
+body.dark-mode .catalog-card__topic {
+    background: rgba(100, 170, 120, .14);
+}
+
+body.dark-mode .catalog-card__topic:hover {
+    background: rgba(100, 170, 120, .24);
+}
