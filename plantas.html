@@ -19,10 +19,6 @@
 
     <main>
 
-        <!-- ==================================================
-             HERO DEL CATÁLOGO
-        =================================================== -->
-
         <section class="plants-hero">
             <div class="plants-hero-content">
                 <span class="section-label">🌱 Catálogo de Agropedia</span>
@@ -44,10 +40,7 @@
                         autocomplete="off"
                     >
 
-                    <button
-                        type="button"
-                        id="plantSearchButton"
-                    >
+                    <button type="button" id="plantSearchButton">
                         🔍 Buscar
                     </button>
 
@@ -59,21 +52,12 @@
             </div>
         </section>
 
-
-        <!-- ==================================================
-             CATÁLOGO
-        =================================================== -->
-
         <section class="plants-catalog section-container">
 
             <div class="catalog-header">
                 <div>
                     <span class="section-label">🌿 Catálogo</span>
-
-                    <h2>
-                        Plantas
-                    </h2>
-
+                    <h2>Plantas</h2>
                     <p>
                         Explora nuestra colección de especies y encuentra la que buscas.
                     </p>
@@ -85,19 +69,12 @@
                 </div>
             </div>
 
-
-            <!-- Categorías -->
             <div class="categories-container"></div>
 
-
-            <!-- Filtros -->
             <div class="filters-container">
 
                 <div class="filter-group">
-                    <label for="difficultyFilter">
-                        Dificultad
-                    </label>
-
+                    <label for="difficultyFilter">Dificultad</label>
                     <select id="difficultyFilter">
                         <option value="todas">Todas</option>
                         <option value="facil">Fácil</option>
@@ -107,10 +84,7 @@
                 </div>
 
                 <div class="filter-group">
-                    <label for="climateFilter">
-                        Clima
-                    </label>
-
+                    <label for="climateFilter">Clima</label>
                     <select id="climateFilter">
                         <option value="todos">Todos</option>
                         <option value="calido">Cálido</option>
@@ -120,10 +94,7 @@
                 </div>
 
                 <div class="filter-group">
-                    <label for="sunFilter">
-                        Luz solar
-                    </label>
-
+                    <label for="sunFilter">Luz solar</label>
                     <select id="sunFilter">
                         <option value="todas">Todas</option>
                         <option value="sol">Sol directo</option>
@@ -133,10 +104,7 @@
                 </div>
 
                 <div class="filter-group">
-                    <label for="containerFilter">
-                        Cultivo
-                    </label>
-
+                    <label for="containerFilter">Cultivo</label>
                     <select id="containerFilter">
                         <option value="todos">Todos</option>
                         <option value="maceta">Maceta</option>
@@ -154,35 +122,20 @@
                 </button>
             </div>
 
+            <div class="plants-grid" id="plantsGrid"></div>
 
-            <!-- Plantas -->
-            <div
-                class="plants-grid"
-                id="plantsGrid"
-            ></div>
-
-
-            <!-- Sin resultados -->
-            <div
-                class="no-results"
-                id="noResults"
-            >
+            <div class="no-results" id="noResults">
                 <span>🌱</span>
-
-                <h3>
-                    No encontramos plantas
-                </h3>
-
-                <p>
-                    Prueba con otro término o cambia los filtros.
-                </p>
+                <h3>No encontramos plantas</h3>
+                <p>Prueba con otro término o cambia los filtros.</p>
             </div>
 
         </section>
 
     </main>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
     <script src="js/navegacion.js"></script>
     <script src="js/plantas.js"></script>
 
