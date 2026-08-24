@@ -12,18 +12,12 @@
 </head>
 
 <body>
-
     <main id="app">
         <section class="topic-hero">
             <div class="topic-hero__content">
                 <span class="topic-hero__eyebrow">APRENDE EN AGROPEDIA</span>
-
                 <h1 id="topicTitle">Cultivo</h1>
-
-                <p id="topicPhrase">
-                    Aprende a cultivar con conocimiento, paciencia y propósito.
-                </p>
-
+                <p id="topicPhrase">Aprende a cultivar con conocimiento, paciencia y propósito.</p>
                 <span class="topic-hero__badge" id="topicIcon">🌱</span>
             </div>
         </section>
@@ -32,26 +26,10 @@
             <div class="topic-container">
                 <div class="topic-search-box">
                     <span class="topic-search-icon">⌕</span>
-
-                    <input
-                        type="search"
-                        id="topicSearch"
-                        placeholder="Busca cursos, videos o documentos sobre este tema..."
-                        autocomplete="off"
-                    >
-
-                    <button
-                        type="button"
-                        id="clearTopicSearch"
-                        aria-label="Limpiar búsqueda"
-                    >
-                        Limpiar
-                    </button>
+                    <input type="search" id="topicSearch" placeholder="Busca cursos, videos o documentos sobre este tema..." autocomplete="off">
+                    <button type="button" id="clearTopicSearch" aria-label="Limpiar búsqueda">Limpiar</button>
                 </div>
-
-                <p class="topic-search-message" id="topicSearchMessage">
-                    Explora el contenido disponible sobre este tema.
-                </p>
+                <p class="topic-search-message" id="topicSearchMessage">Explora el contenido disponible sobre este tema.</p>
             </div>
         </section>
 
@@ -62,10 +40,7 @@
                         <span class="section-kicker">CONTENIDO</span>
                         <h2>Aprende sobre <span id="topicHeading">cultivo</span></h2>
                     </div>
-
-                    <a href="aprende.html" class="topic-back-link">
-                        ← Volver a Aprende
-                    </a>
+                    <a href="aprende.html" class="topic-back-link">← Volver a Aprende</a>
                 </div>
 
                 <div class="topic-content-grid" id="topicContentGrid"></div>
@@ -73,12 +48,8 @@
                 <div class="topic-empty hidden" id="topicEmpty">
                     <span>🔎</span>
                     <h3>No encontramos resultados</h3>
-                    <p>
-                        Prueba con otra palabra o limpia la búsqueda para volver a explorar el tema.
-                    </p>
-                    <button type="button" id="resetTopicSearch">
-                        Mostrar todo
-                    </button>
+                    <p>Prueba con otra palabra o limpia la búsqueda para volver a explorar el tema.</p>
+                    <button type="button" id="resetTopicSearch">Mostrar todo</button>
                 </div>
             </div>
         </section>
@@ -89,21 +60,19 @@
                     <span>🌿</span>
                     <div>
                         <h2>¿Quieres seguir aprendiendo?</h2>
-                        <p>
-                            Explora todos los cursos, videos y documentos disponibles en Agropedia.
-                        </p>
+                        <p>Explora todos los cursos, videos y documentos disponibles en Agropedia.</p>
                     </div>
-                    <a href="catalogo.html" class="topic-cta__button">
-                        Ver catálogo completo →
-                    </a>
+                    <a href="catalogo.html" class="topic-cta__button">Ver catálogo completo →</a>
                 </div>
             </div>
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/educacion-data.js"></script>
     <script src="js/navegacion.js"></script>
     <script src="js/tema.js"></script>
     <script src="js/tema-enlaces.js"></script>
-
 </body>
 </html>
