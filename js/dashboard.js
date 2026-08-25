@@ -133,10 +133,26 @@
             panel.classList.toggle('is-active', panel.dataset.panel === tab);
         });
 
-        document.querySelector('.admin-workspace-section')?.scrollIntoView({
+        document.querySelector('.admin-workspace')?.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
         });
+    }
+
+    function openNewPlantForm() {
+        const form = $('plantForm');
+        if (!form) return;
+
+        switchTab('plants');
+        form.hidden = false;
+        form.reset();
+        $('plantId').value = '';
+        form.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+
+        setTimeout(() => $('plantNombre')?.focus(), 450);
     }
 
     function buildWorkspace() {
@@ -164,11 +180,16 @@
 
                 <div class="admin-panel is-active" data-panel="plants">
                     <div class="admin-panel-heading">
-                        <div><span class="dashboard-label">Base de conocimiento</span><h3>Plantas</h3></div>
+                        <div>
+                            <span class="dashboard-label">Base de conocimiento</span>
+                            <h3>Plantas</h3>
+                        </div>
                         <button class="secondary-button" id="newPlantButton" type="button">+ Nueva planta</button>
                     </div>
+
                     <form class="admin-form" id="plantForm" hidden>
                         <input type="hidden" id="plantId">
+
                         <div class="form-grid">
                             <label>Nombre común<input id="plantNombre" required></label>
                             <label>Nombre científico<input id="plantCientifico"></label>
@@ -187,9 +208,18 @@
                             <label>Imagen URL<input id="plantImagen" type="url"></label>
                             <label>Video URL<input id="plantVideo" type="url"></label>
                         </div>
-                        <label>Descripción<textarea id="plantDescripcion" rows="5"></textarea></label>
-                        <div class="form-actions"><button class="primary-button" type="submit">Guardar planta</button><button class="secondary-button" type="button" id="cancelPlant">Cancelar</button></div>
+
+                        <label>
+                            Descripción
+                            <textarea id="plantDescripcion" rows="5"></textarea>
+                        </label>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit">Guardar planta</button>
+                            <button class="secondary-button" type="button" id="cancelPlant">Cancelar</button>
+                        </div>
                     </form>
+
                     <div class="admin-list" id="plantsList"></div>
                 </div>
 
@@ -198,7 +228,13 @@
                 ${learningPanel('documents', '📄', 'Documentos', 'document', 'Nuevo documento')}
 
                 <div class="admin-panel" data-panel="crop">
-                    <div class="admin-panel-heading"><div><span class="dashboard-label">Reglas de cultivo</span><h3>Etapas y tareas</h3></div></div>
+                    <div class="admin-panel-heading">
+                        <div>
+                            <span class="dashboard-label">Reglas de cultivo</span>
+                            <h3>Etapas y tareas</h3>
+                        </div>
+                    </div>
+
                     <div class="crop-management-grid">
                         <form class="admin-form" id="stageForm">
                             <h4>Nueva etapa</h4>
@@ -207,6 +243,7 @@
                             <label>Orden<input id="stageOrden" type="number" min="1" value="1" required></label>
                             <button class="primary-button" type="submit">Guardar etapa</button>
                         </form>
+
                         <form class="admin-form" id="taskForm">
                             <h4>Nueva tarea</h4>
                             <label>Planta<select id="taskPlant" required></select></label>
@@ -222,11 +259,18 @@
                             <button class="primary-button" type="submit">Guardar tarea</button>
                         </form>
                     </div>
+
                     <div class="admin-list" id="stagesList"></div>
                 </div>
 
                 <div class="admin-panel" data-panel="comments">
-                    <div class="admin-panel-heading"><div><span class="dashboard-label">Comunidad</span><h3>Moderación</h3></div><button class="secondary-button" id="refreshComments" type="button">Actualizar</button></div>
+                    <div class="admin-panel-heading">
+                        <div>
+                            <span class="dashboard-label">Comunidad</span>
+                            <h3>Moderación</h3>
+                        </div>
+                        <button class="secondary-button" id="refreshComments" type="button">Actualizar</button>
+                    </div>
                     <div class="admin-list" id="commentsList"></div>
                     <div class="admin-list" id="reportsList"></div>
                 </div>
@@ -240,7 +284,18 @@
         document.querySelectorAll('.quick-action[data-target]').forEach(button => {
             button.addEventListener('click', () => {
                 const target = button.dataset.target;
-                const map = { plantsManagement: 'plants', learningManagement: 'courses', cropManagement: 'crop', commentsManagement: 'comments' };
+                const map = {
+                    plantsManagement: 'plants',
+                    learningManagement: 'courses',
+                    cropManagement: 'crop',
+                    commentsManagement: 'comments'
+                };
+
+                if (target === 'plantsManagement') {
+                    openNewPlantForm();
+                    return;
+                }
+
                 switchTab(map[target] || 'plants');
             });
         });
@@ -249,9 +304,17 @@
     function learningPanel(type, icon, title, prefix, buttonText) {
         return `
             <div class="admin-panel" data-panel="${type}">
-                <div class="admin-panel-heading"><div><span class="dashboard-label">Aprendizaje</span><h3>${icon} ${title}</h3></div><button class="secondary-button" id="new${capitalize(prefix)}Button" type="button">+ ${buttonText}</button></div>
+                <div class="admin-panel-heading">
+                    <div>
+                        <span class="dashboard-label">Aprendizaje</span>
+                        <h3>${icon} ${title}</h3>
+                    </div>
+                    <button class="secondary-button" id="new${capitalize(prefix)}Button" type="button">+ ${buttonText}</button>
+                </div>
+
                 <form class="admin-form" id="${prefix}Form" hidden>
                     <input type="hidden" id="${prefix}Id">
+
                     <div class="form-grid">
                         <label>Título<input id="${prefix}Titulo" required></label>
                         <label>Slug<input id="${prefix}Slug" required></label>
@@ -262,9 +325,15 @@
                         <label>Duración (min)<input id="${prefix}Duracion" type="number" min="0"></label>
                         <label>Estado<select id="${prefix}Estado"><option value="borrador">Borrador</option><option value="publicado">Publicado</option><option value="archivado">Archivado</option></select></label>
                     </div>
+
                     <label>Descripción<textarea id="${prefix}Descripcion" rows="4"></textarea></label>
-                    <div class="form-actions"><button class="primary-button" type="submit">Guardar ${title.toLowerCase()}</button><button class="secondary-button" type="button" id="cancel${capitalize(prefix)}">Cancelar</button></div>
+
+                    <div class="form-actions">
+                        <button class="primary-button" type="submit">Guardar ${title.toLowerCase()}</button>
+                        <button class="secondary-button" type="button" id="cancel${capitalize(prefix)}">Cancelar</button>
+                    </div>
                 </form>
+
                 <div class="admin-list" id="${prefix}sList"></div>
             </div>
         `;
@@ -275,37 +344,68 @@
     }
 
     async function loadFamilies(supabase) {
-        const { data, error } = await supabase.from('familias').select('id,nombre').order('nombre');
+        const { data, error } = await supabase
+            .from('familias')
+            .select('id,nombre')
+            .order('nombre');
+
         if (error) return;
+
         state.families = data || [];
-        $('plantFamilia').innerHTML = '<option value="">Sin familia</option>' + state.families.map(item => `<option value="${item.id}">${escapeHtml(item.nombre)}</option>`).join('');
+
+        $('plantFamilia').innerHTML = '<option value="">Sin familia</option>' +
+            state.families
+                .map(item => `<option value="${item.id}">${escapeHtml(item.nombre)}</option>`)
+                .join('');
     }
 
     async function loadPlants(supabase) {
-        const { data, error } = await supabase.from('plantas').select('*').order('nombre_comun');
+        const { data, error } = await supabase
+            .from('plantas')
+            .select('*')
+            .order('nombre_comun');
+
         if (error) {
             toast(`No se pudieron cargar las plantas: ${error.message}`, true);
             return;
         }
+
         state.plants = data || [];
+
         $('plantsList').innerHTML = state.plants.map(plant => `
             <div class="admin-list-item">
-                <div><strong>${escapeHtml(plant.nombre_comun)}</strong><small>${escapeHtml(plant.nombre_cientifico || 'Sin nombre científico')} · ${escapeHtml(plant.dificultad || 'Sin dificultad')}</small></div>
-                <div class="admin-list-actions"><button class="text-button" data-edit-plant="${plant.id}">Editar</button><button class="text-button danger" data-delete-plant="${plant.id}">Eliminar</button></div>
+                <div>
+                    <strong>${escapeHtml(plant.nombre_comun)}</strong>
+                    <small>${escapeHtml(plant.nombre_cientifico || 'Sin nombre científico')} · ${escapeHtml(plant.dificultad || 'Sin dificultad')}</small>
+                </div>
+                <div class="admin-list-actions">
+                    <button class="text-button" data-edit-plant="${plant.id}">Editar</button>
+                    <button class="text-button danger" data-delete-plant="${plant.id}">Eliminar</button>
+                </div>
             </div>
         `).join('') || '<p class="empty-state">Todavía no hay plantas.</p>';
 
-        document.querySelectorAll('[data-edit-plant]').forEach(button => button.addEventListener('click', () => editPlant(Number(button.dataset.editPlant))));
-        document.querySelectorAll('[data-delete-plant]').forEach(button => button.addEventListener('click', () => deletePlant(supabase, Number(button.dataset.deletePlant))));
+        document.querySelectorAll('[data-edit-plant]').forEach(button => {
+            button.addEventListener('click', () => editPlant(Number(button.dataset.editPlant)));
+        });
 
-        $('taskPlant').innerHTML = state.plants.map(plant => `<option value="${plant.id}">${escapeHtml(plant.nombre_comun)}</option>`).join('');
+        document.querySelectorAll('[data-delete-plant]').forEach(button => {
+            button.addEventListener('click', () => deletePlant(supabase, Number(button.dataset.deletePlant)));
+        });
+
+        $('taskPlant').innerHTML = state.plants
+            .map(plant => `<option value="${plant.id}">${escapeHtml(plant.nombre_comun)}</option>`)
+            .join('');
     }
 
     function editPlant(id) {
         const plant = state.plants.find(item => item.id === id);
         if (!plant) return;
+
+        switchTab('plants');
         $('plantForm').hidden = false;
         $('plantId').value = plant.id;
+
         const fields = {
             plantNombre: plant.nombre_comun,
             plantCientifico: plant.nombre_cientifico,
@@ -325,7 +425,11 @@
             plantVideo: plant.video_url,
             plantDescripcion: plant.descripcion
         };
-        Object.entries(fields).forEach(([idField, value]) => { if ($(idField)) $(idField).value = value ?? ''; });
+
+        Object.entries(fields).forEach(([idField, value]) => {
+            if ($(idField)) $(idField).value = value ?? '';
+        });
+
         $('plantForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
@@ -337,7 +441,9 @@
 
     async function savePlant(supabase, event) {
         event.preventDefault();
+
         const id = $('plantId').value;
+
         const payload = {
             nombre_comun: $('plantNombre').value.trim(),
             nombre_cientifico: $('plantCientifico').value.trim() || null,
@@ -361,11 +467,14 @@
         const query = id
             ? supabase.from('plantas').update(payload).eq('id', Number(id))
             : supabase.from('plantas').insert(payload);
+
         const { error } = await query;
+
         if (error) {
             toast(`No se pudo guardar la planta: ${error.message}`, true);
             return;
         }
+
         toast(id ? 'Planta actualizada correctamente.' : 'Planta creada correctamente.');
         clearPlantForm();
         await loadPlants(supabase);
@@ -375,47 +484,84 @@
     async function deletePlant(supabase, id) {
         const plant = state.plants.find(item => item.id === id);
         if (!plant || !confirm(`¿Eliminar la planta "${plant.nombre_comun}"?`)) return;
-        const { error } = await supabase.from('plantas').delete().eq('id', id);
+
+        const { error } = await supabase
+            .from('plantas')
+            .delete()
+            .eq('id', id);
+
         if (error) {
             toast(`No se pudo eliminar: ${error.message}`, true);
             return;
         }
+
         toast('Planta eliminada.');
         await loadPlants(supabase);
         await loadStats(supabase);
     }
 
     async function loadLearning(supabase, table, prefix) {
-        const { data, error } = await supabase.from(table).select('*').order('created_at', { ascending: false });
+        const { data, error } = await supabase
+            .from(table)
+            .select('*')
+            .order('created_at', { ascending: false });
+
         const container = $(`${prefix}sList`);
+
         if (error) {
             container.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
             return;
         }
+
         container.innerHTML = (data || []).map(item => `
             <div class="admin-list-item">
-                <div><strong>${escapeHtml(item.titulo)}</strong><small>${escapeHtml(item.estado)} · ${escapeHtml(item.dificultad)}</small></div>
-                <div class="admin-list-actions"><button class="text-button" data-delete-resource="${item.id}" data-resource-table="${table}">Eliminar</button></div>
+                <div>
+                    <strong>${escapeHtml(item.titulo)}</strong>
+                    <small>${escapeHtml(item.estado)} · ${escapeHtml(item.dificultad)}</small>
+                </div>
+                <div class="admin-list-actions">
+                    <button class="text-button" data-delete-resource="${item.id}" data-resource-table="${table}">Eliminar</button>
+                </div>
             </div>
         `).join('') || '<p class="empty-state">No hay registros todavía.</p>';
 
         container.querySelectorAll('[data-delete-resource]').forEach(button => {
             button.addEventListener('click', async () => {
                 if (!confirm('¿Eliminar este contenido?')) return;
-                const result = await supabase.from(button.dataset.resourceTable).delete().eq('id', Number(button.dataset.deleteResource));
-                if (result.error) toast(result.error.message, true);
-                else { toast('Contenido eliminado.'); await loadLearning(supabase, table, prefix); await loadStats(supabase); }
+
+                const result = await supabase
+                    .from(button.dataset.resourceTable)
+                    .delete()
+                    .eq('id', Number(button.dataset.deleteResource));
+
+                if (result.error) {
+                    toast(result.error.message, true);
+                } else {
+                    toast('Contenido eliminado.');
+                    await loadLearning(supabase, table, prefix);
+                    await loadStats(supabase);
+                }
             });
         });
     }
 
     function bindLearningForm(supabase, table, prefix) {
         const form = $(`${prefix}Form`);
-        $(`new${capitalize(prefix)}Button`).addEventListener('click', () => { form.hidden = false; form.reset(); });
-        $(`cancel${capitalize(prefix)}`).addEventListener('click', () => { form.reset(); form.hidden = true; });
+
+        $(`new${capitalize(prefix)}Button`).addEventListener('click', () => {
+            switchTab(prefix === 'course' ? 'courses' : prefix === 'video' ? 'videos' : 'documents');
+            form.hidden = false;
+            form.reset();
+        });
+
+        $(`cancel${capitalize(prefix)}`).addEventListener('click', () => {
+            form.reset();
+            form.hidden = true;
+        });
 
         form.addEventListener('submit', async event => {
             event.preventDefault();
+
             const payload = {
                 titulo: $(`${prefix}Titulo`).value.trim(),
                 slug: $(`${prefix}Slug`).value.trim(),
@@ -427,20 +573,26 @@
             };
 
             if (table === 'cursos') payload.imagen_url = $('courseImagen').value.trim() || null;
+
             if (table === 'videos') {
                 payload.video_url = $('videoUrl').value.trim();
                 payload.miniatura_url = $('videoMiniatura').value.trim() || null;
             }
+
             if (table === 'documentos') {
                 payload.archivo_path = $('documentPath').value.trim();
                 payload.archivo_url = $('documentUrl').value.trim() || null;
             }
 
-            if (payload.estado === 'publicado') payload.publicado_at = new Date().toISOString();
+            if (payload.estado === 'publicado') {
+                payload.publicado_at = new Date().toISOString();
+            }
 
             const { error } = await supabase.from(table).insert(payload);
-            if (error) toast(`No se pudo guardar: ${error.message}`, true);
-            else {
+
+            if (error) {
+                toast(`No se pudo guardar: ${error.message}`, true);
+            } else {
                 toast('Contenido guardado correctamente.');
                 form.reset();
                 form.hidden = true;
@@ -451,27 +603,52 @@
     }
 
     async function loadCrop(supabase) {
-        const { data, error } = await supabase.from('etapas_cultivo').select('*').order('orden');
+        const { data, error } = await supabase
+            .from('etapas_cultivo')
+            .select('*')
+            .order('orden');
+
         if (error) return;
+
         state.stages = data || [];
-        $('taskStage').innerHTML = '<option value="">Sin etapa</option>' + state.stages.map(stage => `<option value="${stage.id}">${escapeHtml(stage.nombre)}</option>`).join('');
-        $('stagesList').innerHTML = state.stages.map(stage => `<div class="admin-list-item"><div><strong>${escapeHtml(stage.nombre)}</strong><small>Orden ${stage.orden}</small></div></div>`).join('') || '<p class="empty-state">No hay etapas.</p>';
+
+        $('taskStage').innerHTML = '<option value="">Sin etapa</option>' +
+            state.stages
+                .map(stage => `<option value="${stage.id}">${escapeHtml(stage.nombre)}</option>`)
+                .join('');
+
+        $('stagesList').innerHTML = state.stages.map(stage => `
+            <div class="admin-list-item">
+                <div>
+                    <strong>${escapeHtml(stage.nombre)}</strong>
+                    <small>Orden ${stage.orden}</small>
+                </div>
+            </div>
+        `).join('') || '<p class="empty-state">No hay etapas.</p>';
     }
 
     async function bindCrop(supabase) {
         $('stageForm').addEventListener('submit', async event => {
             event.preventDefault();
+
             const { error } = await supabase.from('etapas_cultivo').insert({
                 nombre: $('stageNombre').value.trim(),
                 descripcion: $('stageDescripcion').value.trim() || null,
                 orden: Number($('stageOrden').value)
             });
-            if (error) toast(error.message, true);
-            else { toast('Etapa guardada.'); event.target.reset(); await loadCrop(supabase); }
+
+            if (error) {
+                toast(error.message, true);
+            } else {
+                toast('Etapa guardada.');
+                event.target.reset();
+                await loadCrop(supabase);
+            }
         });
 
         $('taskForm').addEventListener('submit', async event => {
             event.preventDefault();
+
             const { error } = await supabase.from('tareas_cultivo').insert({
                 planta_id: Number($('taskPlant').value),
                 etapa_id: $('taskStage').value ? Number($('taskStage').value) : null,
@@ -483,27 +660,53 @@
                 depende_luna: $('taskLuna').checked,
                 orden: 1
             });
-            if (error) toast(error.message, true);
-            else { toast('Tarea de cultivo guardada.'); event.target.reset(); }
+
+            if (error) {
+                toast(error.message, true);
+            } else {
+                toast('Tarea de cultivo guardada.');
+                event.target.reset();
+            }
         });
     }
 
     async function loadComments(supabase) {
-        const { data, error } = await supabase.from('comentarios').select('id,contenido,calificacion,estado,created_at').order('created_at', { ascending: false }).limit(30);
+        const { data, error } = await supabase
+            .from('comentarios')
+            .select('id,contenido,calificacion,estado,created_at')
+            .order('created_at', { ascending: false })
+            .limit(30);
+
         if (error) {
             $('commentsList').innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
             return;
         }
-        $('commentsList').innerHTML = '<h4>Comentarios recientes</h4>' + ((data || []).map(comment => `
-            <div class="admin-list-item">
-                <div><strong>${escapeHtml(comment.estado)}</strong><small>${escapeHtml(comment.contenido)} · ${new Date(comment.created_at).toLocaleString('es-MX')}</small></div>
-            </div>
-        `).join('') || '<p class="empty-state">No hay comentarios.</p>');
 
-        const reports = await supabase.from('reportes_comentario').select('id,comentario_id,motivo,resuelto,created_at').order('created_at', { ascending: false }).limit(30);
-        $('reportsList').innerHTML = '<h4>Reportes</h4>' + ((reports.data || []).map(report => `
-            <div class="admin-list-item"><div><strong>${report.resuelto ? 'Resuelto' : 'Pendiente'}</strong><small>Comentario #${report.comentario_id} · ${escapeHtml(report.motivo)}</small></div></div>
-        `).join('') || '<p class="empty-state">No hay reportes.</p>');
+        $('commentsList').innerHTML = '<h4>Comentarios recientes</h4>' +
+            ((data || []).map(comment => `
+                <div class="admin-list-item">
+                    <div>
+                        <strong>${escapeHtml(comment.estado)}</strong>
+                        <small>${escapeHtml(comment.contenido)} · ${new Date(comment.created_at).toLocaleString('es-MX')}</small>
+                    </div>
+                </div>
+            `).join('') || '<p class="empty-state">No hay comentarios.</p>');
+
+        const reports = await supabase
+            .from('reportes_comentario')
+            .select('id,comentario_id,motivo,resuelto,created_at')
+            .order('created_at', { ascending: false })
+            .limit(30);
+
+        $('reportsList').innerHTML = '<h4>Reportes</h4>' +
+            ((reports.data || []).map(report => `
+                <div class="admin-list-item">
+                    <div>
+                        <strong>${report.resuelto ? 'Resuelto' : 'Pendiente'}</strong>
+                        <small>Comentario #${report.comentario_id} · ${escapeHtml(report.motivo)}</small>
+                    </div>
+                </div>
+            `).join('') || '<p class="empty-state">No hay reportes.</p>');
     }
 
     function renderDemoAnalytics() {
@@ -516,6 +719,7 @@
         buildWorkspace();
 
         let supabase;
+
         try {
             supabase = await loadSupabaseClient();
         } catch (error) {
@@ -524,8 +728,8 @@
         }
 
         const authorized = await verifyAdmin(supabase);
+
         if (!authorized) {
-            document.querySelectorAll('#adminWorkspace button, #adminWorkspace input, #adminWorkspace textarea, #adminWorkspace select').forEach(element => element.disabled = true);
             renderDemoAnalytics();
             return;
         }
@@ -537,12 +741,7 @@
         await bindCrop(supabase);
         await loadComments(supabase);
 
-        $('newPlantButton').addEventListener('click', () => {
-            $('plantForm').hidden = false;
-            $('plantForm').reset();
-            $('plantId').value = '';
-            $('plantForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
+        $('newPlantButton').addEventListener('click', openNewPlantForm);
         $('cancelPlant').addEventListener('click', clearPlantForm);
         $('plantForm').addEventListener('submit', event => savePlant(supabase, event));
 
