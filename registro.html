@@ -1,334 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta
-        name="description"
-        content="Regístrate o inicia sesión en Agropedia para personalizar tu experiencia de cultivo."
-    >
-
+    <meta name="description" content="Regístrate o inicia sesión en Agropedia para personalizar tu experiencia de cultivo.">
     <title>Registro | Agropedia</title>
-
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/registro.css">
 </head>
-
 <body>
-
     <main class="auth-page">
-
         <section class="auth-container">
-
-            <!-- ==================================================
-                 PRESENTACIÓN
-            =================================================== -->
             <div class="auth-intro">
                 <span class="section-label">🌱 Bienvenido a Agropedia</span>
-
-                <h1>
-                    Cultiva conocimiento.
-                    <br>
-                    Cultiva tu huerto.
-                </h1>
-
-                <p>
-                    Crea tu cuenta para comenzar a personalizar tu experiencia,
-                    guardar tus plantas favoritas y preparar las funciones de
-                    <strong>Mi huerto</strong>.
-                </p>
-
+                <h1>Cultiva conocimiento.<br>Cultiva tu huerto.</h1>
+                <p>Crea tu cuenta para comenzar a personalizar tu experiencia, guardar tus plantas favoritas y preparar las funciones de <strong>Mi huerto</strong>.</p>
                 <div class="auth-benefits">
-                    <div class="auth-benefit">
-                        <span>🌱</span>
-                        <div>
-                            <strong>Tu perfil</strong>
-                            <p>Personaliza tu experiencia en Agropedia.</p>
-                        </div>
-                    </div>
-
-                    <div class="auth-benefit">
-                        <span>🌎</span>
-                        <div>
-                            <strong>Tu zona</strong>
-                            <p>Recibe información adaptada a tu clima.</p>
-                        </div>
-                    </div>
-
-                    <div class="auth-benefit">
-                        <span>🪴</span>
-                        <div>
-                            <strong>Tu huerto</strong>
-                            <p>Prepara el espacio para administrar tus plantas.</p>
-                        </div>
-                    </div>
+                    <div class="auth-benefit"><span>🌱</span><div><strong>Tu perfil</strong><p>Personaliza tu experiencia en Agropedia.</p></div></div>
+                    <div class="auth-benefit"><span>🌎</span><div><strong>Tu zona</strong><p>Recibe información adaptada a tu clima.</p></div></div>
+                    <div class="auth-benefit"><span>🪴</span><div><strong>Tu huerto</strong><p>Prepara el espacio para administrar tus plantas.</p></div></div>
                 </div>
             </div>
 
-
-            <!-- ==================================================
-                 FORMULARIOS
-            =================================================== -->
             <div class="auth-card">
-
                 <div class="auth-tabs" role="tablist" aria-label="Acceso a Agropedia">
-                    <button
-                        class="auth-tab is-active"
-                        type="button"
-                        role="tab"
-                        aria-selected="true"
-                        aria-controls="login-panel"
-                        data-auth-tab="login"
-                    >
-                        Iniciar sesión
-                    </button>
-
-                    <button
-                        class="auth-tab"
-                        type="button"
-                        role="tab"
-                        aria-selected="false"
-                        aria-controls="register-panel"
-                        data-auth-tab="register"
-                    >
-                        Registrarme
-                    </button>
+                    <button class="auth-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="login-panel" data-auth-tab="login">Iniciar sesión</button>
+                    <button class="auth-tab" type="button" role="tab" aria-selected="false" aria-controls="register-panel" data-auth-tab="register">Registrarme</button>
                 </div>
 
-
-                <!-- ==================================================
-                     LOGIN
-                =================================================== -->
-                <div
-                    id="login-panel"
-                    class="auth-panel is-active"
-                    role="tabpanel"
-                >
-                    <div class="form-heading">
-                        <h2>Inicia sesión</h2>
-                        <p>Continúa donde lo dejaste.</p>
-                    </div>
-
+                <div id="login-panel" class="auth-panel is-active" role="tabpanel">
+                    <div class="form-heading"><h2>Inicia sesión</h2><p>Continúa donde lo dejaste.</p></div>
                     <form id="login-form" novalidate>
-
                         <div class="form-group">
-                            <label for="login-identifier">
-                                Correo, teléfono o usuario
-                            </label>
-
-                            <input
-                                id="login-identifier"
-                                name="identifier"
-                                type="text"
-                                autocomplete="username"
-                                placeholder="Ej. juan@email.com"
-                                required
-                            >
-
+                            <label for="login-identifier">Correo electrónico</label>
+                            <input id="login-identifier" name="identifier" type="email" autocomplete="username" placeholder="Ej. juan@email.com" required>
                             <small class="field-error" data-error-for="login-identifier"></small>
                         </div>
-
                         <div class="form-group">
-                            <div class="label-row">
-                                <label for="login-password">Contraseña</label>
-
-                                <button
-                                    class="forgot-password"
-                                    type="button"
-                                    id="forgot-password"
-                                >
-                                    ¿Olvidaste tu contraseña?
-                                </button>
-                            </div>
-
+                            <div class="label-row"><label for="login-password">Contraseña</label><button class="forgot-password" type="button" id="forgot-password">¿Olvidaste tu contraseña?</button></div>
                             <div class="password-input">
-                                <input
-                                    id="login-password"
-                                    name="password"
-                                    type="password"
-                                    autocomplete="current-password"
-                                    placeholder="Tu contraseña"
-                                    required
-                                >
-
-                                <button
-                                    class="password-toggle"
-                                    type="button"
-                                    data-toggle-password="login-password"
-                                    aria-label="Mostrar contraseña"
-                                >
-                                    👁
-                                </button>
+                                <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required>
+                                <button class="password-toggle" type="button" data-toggle-password="login-password" aria-label="Mostrar contraseña">👁</button>
                             </div>
-
                             <small class="field-error" data-error-for="login-password"></small>
                         </div>
-
-                        <button class="auth-submit" type="submit">
-                            Iniciar sesión
-                        </button>
-
+                        <button class="auth-submit" type="submit">Iniciar sesión</button>
                         <p class="form-message" id="login-message" role="status"></p>
                     </form>
                 </div>
 
-
-                <!-- ==================================================
-                     REGISTRO
-                =================================================== -->
-                <div
-                    id="register-panel"
-                    class="auth-panel"
-                    role="tabpanel"
-                    hidden
-                >
-                    <div class="form-heading">
-                        <h2>Crea tu cuenta</h2>
-                        <p>Completa tus datos para comenzar.</p>
-                    </div>
-
+                <div id="register-panel" class="auth-panel" role="tabpanel" hidden>
+                    <div class="form-heading"><h2>Crea tu cuenta</h2><p>Completa tus datos para comenzar.</p></div>
                     <form id="register-form" novalidate>
-
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="register-name">Nombre</label>
-
-                                <input
-                                    id="register-name"
-                                    name="name"
-                                    type="text"
-                                    autocomplete="given-name"
-                                    placeholder="Tu nombre"
-                                    required
-                                >
-
+                                <input id="register-name" name="name" type="text" autocomplete="given-name" placeholder="Tu nombre" required>
                                 <small class="field-error" data-error-for="register-name"></small>
                             </div>
-
                             <div class="form-group">
                                 <label for="register-username">Nombre de usuario</label>
-
-                                <input
-                                    id="register-username"
-                                    name="username"
-                                    type="text"
-                                    autocomplete="username"
-                                    placeholder="Ej. jardinero01"
-                                    minlength="3"
-                                    required
-                                >
-
+                                <input id="register-username" name="username" type="text" autocomplete="username" placeholder="Ej. jardinero01" minlength="3" required>
                                 <small class="field-error" data-error-for="register-username"></small>
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label for="register-contact">
-                                Correo electrónico o número de teléfono
-                            </label>
-
-                            <input
-                                id="register-contact"
-                                name="contact"
-                                type="text"
-                                autocomplete="email"
-                                placeholder="Ej. correo@email.com o 4491234567"
-                                required
-                            >
-
-                            <small class="field-help">
-                                Utilizaremos uno de estos datos como medio de contacto.
-                            </small>
-
+                            <label for="register-contact">Correo electrónico</label>
+                            <input id="register-contact" name="contact" type="email" autocomplete="email" placeholder="Ej. correo@email.com" required>
+                            <small class="field-help">El correo será el medio de acceso y recuperación de la cuenta.</small>
                             <small class="field-error" data-error-for="register-contact"></small>
                         </div>
-
                         <div class="form-group">
                             <label for="register-password">Contraseña</label>
-
                             <div class="password-input">
-                                <input
-                                    id="register-password"
-                                    name="password"
-                                    type="password"
-                                    autocomplete="new-password"
-                                    placeholder="Crea una contraseña"
-                                    minlength="8"
-                                    required
-                                >
-
-                                <button
-                                    class="password-toggle"
-                                    type="button"
-                                    data-toggle-password="register-password"
-                                    aria-label="Mostrar contraseña"
-                                >
-                                    👁
-                                </button>
+                                <input id="register-password" name="password" type="password" autocomplete="new-password" placeholder="Crea una contraseña" minlength="8" required>
+                                <button class="password-toggle" type="button" data-toggle-password="register-password" aria-label="Mostrar contraseña">👁</button>
                             </div>
-
-                            <div class="password-strength" id="password-strength">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-
-                            <small class="field-help" id="password-strength-text">
-                                Usa al menos 8 caracteres.
-                            </small>
-
+                            <div class="password-strength" id="password-strength"><span></span><span></span><span></span><span></span></div>
+                            <small class="field-help" id="password-strength-text">Usa al menos 8 caracteres.</small>
                             <small class="field-error" data-error-for="register-password"></small>
                         </div>
-
                         <div class="form-group">
-                            <label for="register-zone">
-                                Preferencia de zona climática
-                            </label>
-
+                            <label for="register-zone">Preferencia de zona climática</label>
                             <select id="register-zone" name="zone" required>
                                 <option value="">Selecciona tu zona</option>
-                                <option value="tropical">Tropical</option>
-                                <option value="subtropical">Subtropical</option>
-                                <option value="templada">Templada</option>
-                                <option value="mediterranea">Mediterránea</option>
-                                <option value="desertica">Desértica o semiárida</option>
-                                <option value="fria">Fría</option>
-                                <option value="montana">Montaña o altiplano</option>
+                                <option value="tropical">Tropical</option><option value="subtropical">Subtropical</option><option value="templada">Templada</option><option value="mediterranea">Mediterránea</option><option value="desertica">Desértica o semiárida</option><option value="fria">Fría</option><option value="montana">Montaña o altiplano</option>
                             </select>
-
-                            <small class="field-help">
-                                Esta preferencia nos permitirá adaptar recomendaciones
-                                de cultivo a tu clima en futuras funciones.
-                            </small>
-
+                            <small class="field-help">Esta preferencia permitirá adaptar las recomendaciones de cultivo a tu clima.</small>
                             <small class="field-error" data-error-for="register-zone"></small>
                         </div>
-
-                        <label class="terms-check">
-                            <input id="register-terms" type="checkbox" required>
-                            <span>
-                                Acepto los términos de uso y la política de privacidad de Agropedia.
-                            </span>
-                        </label>
-
+                        <label class="terms-check"><input id="register-terms" type="checkbox" required><span>Acepto los términos de uso y la política de privacidad de Agropedia.</span></label>
                         <small class="field-error" data-error-for="register-terms"></small>
-
-                        <button class="auth-submit" type="submit">
-                            Crear mi cuenta
-                        </button>
-
+                        <button class="auth-submit" type="submit">Crear mi cuenta</button>
                         <p class="form-message" id="register-message" role="status"></p>
                     </form>
                 </div>
             </div>
         </section>
-
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
     <script src="js/navegacion.js"></script>
     <script src="js/registro.js"></script>
-
 </body>
 </html>
