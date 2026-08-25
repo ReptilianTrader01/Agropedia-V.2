@@ -4,26 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta
-        name="description"
-        content="Panel de administración de Agropedia para gestionar contenido y consultar estadísticas."
-    >
+    <meta name="description" content="Panel de administración de Agropedia para gestionar contenido y consultar estadísticas.">
 
     <title>Dashboard | Agropedia</title>
 
     <link rel="stylesheet" href="css/navegacion.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/dashboard-admin.css">
 </head>
 
 <body>
 
-    <!-- La navegación y el footer universales se cargan desde navegacion.js. -->
-
     <main class="dashboard-page">
 
-        <!-- ==================================================
-             ENCABEZADO DEL DASHBOARD
-        =================================================== -->
         <section class="dashboard-hero">
             <div class="dashboard-container dashboard-hero__content">
                 <div>
@@ -42,9 +35,6 @@
             </div>
         </section>
 
-        <!-- ==================================================
-             ESTADÍSTICAS GENERALES
-        =================================================== -->
         <section class="dashboard-section dashboard-stats-section">
             <div class="dashboard-container">
                 <div class="dashboard-section-heading">
@@ -62,7 +52,6 @@
                             <strong id="statUsers">0</strong>
                             <span>Usuarios registrados</span>
                         </div>
-                        <small class="stat-card__trend">+0 este mes</small>
                     </article>
 
                     <article class="stat-card">
@@ -71,7 +60,6 @@
                             <strong id="statPlants">0</strong>
                             <span>Plantas en Agropedia</span>
                         </div>
-                        <small class="stat-card__trend">Contenido publicado</small>
                     </article>
 
                     <article class="stat-card">
@@ -80,7 +68,6 @@
                             <strong id="statGardens">0</strong>
                             <span>Huertos creados</span>
                         </div>
-                        <small class="stat-card__trend">Actividad de usuarios</small>
                     </article>
 
                     <article class="stat-card">
@@ -89,15 +76,11 @@
                             <strong id="statLearning">0</strong>
                             <span>Recursos de aprendizaje</span>
                         </div>
-                        <small class="stat-card__trend">Cursos, videos y documentos</small>
                     </article>
                 </div>
             </div>
         </section>
 
-        <!-- ==================================================
-             ACCIONES RÁPIDAS
-        =================================================== -->
         <section class="dashboard-section dashboard-actions-section">
             <div class="dashboard-container">
                 <div class="dashboard-section-heading">
@@ -147,56 +130,19 @@
             </div>
         </section>
 
-        <!-- ==================================================
-             GESTIÓN DE CONTENIDO
-        =================================================== -->
         <section class="dashboard-section management-section" id="plantsManagement">
             <div class="dashboard-container">
                 <div class="dashboard-section-heading">
                     <div>
                         <span class="dashboard-label">🌿 Conocimiento</span>
-                        <h2>Gestión de contenido</h2>
-                        <p>La interfaz queda preparada para conectar posteriormente estas acciones con Supabase.</p>
+                        <h2>Gestor de Agropedia</h2>
+                        <p id="workspaceMessage">Cargando herramientas administrativas...</p>
                     </div>
-                </div>
-
-                <div class="management-grid">
-                    <article class="management-card">
-                        <div class="management-card__icon">🌱</div>
-                        <div>
-                            <span>Base de conocimiento</span>
-                            <h3>Plantas</h3>
-                            <p>Administra plantas, familias, nutrientes, plagas, hongos, enfermedades y compatibilidad.</p>
-                        </div>
-                        <button type="button" class="secondary-button" data-action="demo">Gestionar</button>
-                    </article>
-
-                    <article class="management-card" id="learningManagement">
-                        <div class="management-card__icon">📚</div>
-                        <div>
-                            <span>Aprendizaje</span>
-                            <h3>Cursos, videos y documentos</h3>
-                            <p>Crea y organiza los recursos educativos que aparecerán en Aprende, Tema y Catálogo.</p>
-                        </div>
-                        <button type="button" class="secondary-button" data-action="demo">Gestionar</button>
-                    </article>
-
-                    <article class="management-card" id="cropManagement">
-                        <div class="management-card__icon">🌾</div>
-                        <div>
-                            <span>Cultivo</span>
-                            <h3>Temporadas, etapas y tareas</h3>
-                            <p>Define las reglas que posteriormente alimentarán las recomendaciones de Mi huerto.</p>
-                        </div>
-                        <button type="button" class="secondary-button" data-action="demo">Gestionar</button>
-                    </article>
+                    <strong id="dashboardRole">Verificando acceso...</strong>
                 </div>
             </div>
         </section>
 
-        <!-- ==================================================
-             ACTIVIDAD Y ESTADÍSTICAS
-        =================================================== -->
         <section class="dashboard-section analytics-section">
             <div class="dashboard-container analytics-grid">
                 <article class="dashboard-panel popularity-panel">
@@ -205,13 +151,7 @@
                             <span class="dashboard-label">⭐ Popularidad</span>
                             <h2>Contenido destacado</h2>
                         </div>
-                        <select id="popularityPeriod" aria-label="Periodo de popularidad">
-                            <option value="month">Este mes</option>
-                            <option value="week">Esta semana</option>
-                            <option value="year">Este año</option>
-                        </select>
                     </div>
-
                     <div class="ranking-list" id="rankingList"></div>
                 </article>
 
@@ -221,27 +161,20 @@
                             <span class="dashboard-label">🕒 Actividad</span>
                             <h2>Actividad reciente</h2>
                         </div>
-                        <button type="button" class="text-button" id="showAllActivity">Ver todo</button>
                     </div>
-
                     <div class="activity-list" id="activityList"></div>
                 </article>
             </div>
         </section>
 
-        <!-- ==================================================
-             AVISO DE ARQUITECTURA
-        =================================================== -->
         <section class="dashboard-section dashboard-note-section">
             <div class="dashboard-container">
                 <div class="dashboard-note">
                     <span class="dashboard-note__icon">🔐</span>
                     <div>
-                        <strong>Dashboard preparado para la siguiente fase.</strong>
-                        <p>
-                            Por ahora las cifras y actividades son datos de demostración. Cuando
-                            conectemos Supabase, este panel podrá usar roles, permisos, estadísticas,
-                            auditoría y contenido real sin cambiar su estructura visual.
+                        <strong>Panel administrativo conectado.</strong>
+                        <p id="securityNote">
+                            Los cambios se validan mediante Supabase Auth, roles y políticas RLS.
                         </p>
                     </div>
                 </div>
