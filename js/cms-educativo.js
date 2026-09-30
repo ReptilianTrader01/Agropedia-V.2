@@ -574,6 +574,7 @@
     }
 
     async function init() {
+        supabase = window.agropediaSupabase;
         if (!supabase) return;
         var userResult = await supabase.auth.getUser();
         if (userResult.error || !userResult.data.user) return;
