@@ -1,36 +1,5 @@
-/* =========================================================
-   DOCUMENTO - DATOS DE PRUEBA
-   ========================================================= */
-
-document.addEventListener('DOMContentLoaded', () => {
-    const related = [
-        {
-            title: 'Guía básica del suelo',
-            type: '📄 Documento',
-            description: 'Material introductorio para conocer mejor el suelo.'
-        },
-        {
-            title: 'Calendario de cultivo',
-            type: '📄 Documento',
-            description: 'Consulta las principales temporadas de cultivo.'
-        },
-        {
-            title: 'Introducción al riego',
-            type: '🎥 Video',
-            description: 'Aprende conceptos básicos sobre el riego.'
-        }
-    ];
-
-    const container = document.getElementById('relatedDocuments');
-
-    related.forEach(item => {
-        const card = document.createElement('article');
-        card.className = 'related-card';
-        card.innerHTML = `
-            <strong>${item.type}</strong>
-            <h3>${item.title}</h3>
-            <p>${item.description}</p>
-        `;
-        container.appendChild(card);
-    });
-});
+'use strict';
+const id=Number(new URLSearchParams(location.search).get('id'));
+const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
+async function init(){if(!id)return;const r=await AgropediaEducation.getDocument(id);if(r.error){document.getElementById('documentTitle').textContent='Documento no disponible';return;}const d=r.data;document.getElementById('documentTitle').textContent=d.titulo;document.getElementById('documentDescription').textContent=d.descripcion||'';document.getElementById('documentHeading').textContent=d.titulo;document.getElementById('documentText').textContent=d.descripcion||'';document.getElementById('documentDifficulty').textContent=`📊 ${d.dificultad}`;document.getElementById('documentDuration').textContent=`⏱ ${AgropediaEducation.formatDuration(d.duracion_minutos)||'Duración no especificada'}`;document.getElementById('documentTopic').textContent=`🌱 ${AgropediaEducation.topicNames(d,'documento_temas').join(', ')||'Agropedia'}`;const url=d.archivo_url||d.archivo_path;document.getElementById('documentLink').href=url||'#';document.getElementById('documentViewer').innerHTML=url?`<iframe src="${esc(url)}" title="${esc(d.titulo)}" style="width:100%;height:700px;border:0"></iframe>`:'<div class="document-placeholder"><span>📄</span><h2>Documento no disponible</h2></div>';}
+init().catch(console.error);
