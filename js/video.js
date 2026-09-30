@@ -1,36 +1,5 @@
-/* =========================================================
-   VIDEO - DATOS DE PRUEBA
-   ========================================================= */
-
-document.addEventListener('DOMContentLoaded', () => {
-    const related = [
-        {
-            title: 'Cómo preparar el suelo',
-            type: '🌱 Video',
-            description: 'Conoce los primeros pasos para preparar tu terreno.'
-        },
-        {
-            title: 'Riego básico para principiantes',
-            type: '💧 Video',
-            description: 'Aprende a organizar el riego de tus plantas.'
-        },
-        {
-            title: 'Primeros pasos para un huerto',
-            type: '🏡 Curso',
-            description: 'Una introducción para comenzar a cultivar.'
-        }
-    ];
-
-    const container = document.getElementById('relatedContent');
-
-    related.forEach(item => {
-        const card = document.createElement('article');
-        card.className = 'related-card';
-        card.innerHTML = `
-            <strong>${item.type}</strong>
-            <h3>${item.title}</h3>
-            <p>${item.description}</p>
-        `;
-        container.appendChild(card);
-    });
-});
+'use strict';
+const supabase=window.agropediaSupabase, id=Number(new URLSearchParams(location.search).get('id'));
+const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
+async function init(){if(!id)return;const r=await AgropediaEducation.getVideo(id);if(r.error){document.getElementById('videoTitle').textContent='Video no disponible';return;}const v=r.data;document.getElementById('videoTitle').textContent=v.titulo;document.getElementById('videoDescription').textContent=v.descripcion||'';document.getElementById('videoHeading').textContent=v.titulo;document.getElementById('videoText').textContent=v.descripcion||'';document.getElementById('videoDifficulty').textContent=`📊 ${v.dificultad}`;document.getElementById('videoDuration').textContent=`⏱ ${AgropediaEducation.formatDuration(v.duracion_minutos)||'Duración no especificada'}`;const player=document.getElementById('videoPlayer');player.innerHTML=`<video controls preload="metadata" poster="${esc(v.miniatura_url||'')}" style="width:100%;height:auto"><source src="${esc(v.video_url)}"></video>`;document.getElementById('videoTopic').textContent=`🌱 ${AgropediaEducation.topicNames(v,'video_temas').join(', ')||'Agropedia'}`;}
+init().catch(console.error);
