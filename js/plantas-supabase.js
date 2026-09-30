@@ -16,6 +16,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     let plants = [];
     let category = 'todas';
 
+    const escapeHtml = value => String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+
     const norm = value => (value || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
     function card(plant) {
@@ -33,15 +40,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         article.innerHTML = `
             <a href="planta.html?id=${encodeURIComponent(plant.id)}">
                 <div class="plant-card-image">
-                    <img src="${plant.imagen_url || 'assets/images/logo.png'}" alt="${plant.nombre_comun}" loading="lazy">
-                    <span class="plant-card-category">${tags[0] || 'Planta'}</span>
+                    <img src="\${escapeHtml(plant.imagen_url || 'assets/images/logo.png')}" alt="\${escapeHtml(plant.nombre_comun)}" loading="lazy">
+                    <span class="plant-card-category">\${escapeHtml(tags[0] || 'Planta')}</span>
                 </div>
                 <div class="plant-card-content">
-                    <h3>${plant.nombre_comun}</h3>
-                    <p class="scientific-name"><em>${plant.nombre_cientifico || ''}</em></p>
-                    <p class="plant-card-description">${plant.descripcion || ''}</p>
+                    <h3>\${escapeHtml(plant.nombre_comun)}</h3>
+                    <p class="scientific-name"><em>\${escapeHtml(plant.nombre_cientifico || '')}</em></p>
+                    <p class="plant-card-description">\${escapeHtml(plant.descripcion || '')}</p>
                     <div class="plant-tags">
-                        ${tags.slice(0, 3).map(tag => `<span>${tag}</span>`).join('')}
+                        ${tags.slice(0, 3).map(tag => `<span>\${escapeHtml(tag)}</span>`).join('')}
                         <span>${({facil:'Fácil',media:'Intermedio',dificil:'Difícil'})[plant.dificultad] || 'Intermedio'}</span>
                     </div>
                     <span class="view-plant">Ver planta →</span>
@@ -60,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }));
         box.innerHTML = '<button type="button" class="category-button active" data-category="todas">Todas</button>';
         [...map.entries()].sort((a,b) => a[1].localeCompare(b[1], 'es')).forEach(([value, name]) => {
-            box.insertAdjacentHTML('beforeend', `<button type="button" class="category-button" data-category="${value}">${name}</button>`);
+            box.insertAdjacentHTML('beforeend', `<button type="button" class="category-button" data-category="\${escapeHtml(value)}">\${escapeHtml(name)}</button>`);
         });
         box.querySelectorAll('.category-button').forEach(button => button.addEventListener('click', () => {
             box.querySelectorAll('.category-button').forEach(b => b.classList.remove('active'));
@@ -91,8 +98,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const matches = plants.filter(p => norm(p.nombre_comun).includes(q) || norm(p.nombre_cientifico).includes(q)).slice(0,5);
         suggestions.innerHTML = matches.map(p => `
             <a class="search-suggestion" href="planta.html?id=${encodeURIComponent(p.id)}">
-                <img src="${p.imagen_url || 'assets/images/logo.png'}" alt="${p.nombre_comun}">
-                <div><strong>${p.nombre_comun}</strong><br><small>${p.nombre_cientifico || ''}</small></div>
+                <img src="\${escapeHtml(p.imagen_url || 'assets/images/logo.png')}" alt="\${escapeHtml(p.nombre_comun)}">
+                <div><strong>\${escapeHtml(p.nombre_comun)}</strong><br><small>\${escapeHtml(p.nombre_cientifico || '')}</small></div>
             </a>`).join('');
         suggestions.classList.toggle('active', matches.length > 0);
     }
