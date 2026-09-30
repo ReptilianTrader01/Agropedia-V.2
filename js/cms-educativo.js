@@ -589,6 +589,15 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        setTimeout(init, 400);
+        var attempts = 0;
+        var timer = setInterval(function () {
+            attempts += 1;
+            if (window.agropediaSupabase && document.querySelector('#plantsManagement .admin-workspace')) {
+                clearInterval(timer);
+                init();
+            } else if (attempts >= 50) {
+                clearInterval(timer);
+            }
+        }, 200);
     });
 })();
