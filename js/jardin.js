@@ -1,134 +1,39 @@
 /* ==================================================
    MI HUERTO - JAVASCRIPT
-   V2 sin base de datos.
-   Todo se mantiene en memoria mientras la página está abierta.
+   Agropedia V2 - Supabase
 ================================================== */
-
 'use strict';
 
-/* ==================================================
-   DATOS DE DEMOSTRACIÓN
-================================================== */
-
-const plantCatalog = {
-    tomate: {
-        name: 'Tomate',
-        icon: '🍅',
-        type: 'Hortaliza',
-        slug: 'tomate'
-    },
-    chile: {
-        name: 'Chile',
-        icon: '🌶️',
-        type: 'Hortaliza',
-        slug: 'chile'
-    },
-    albahaca: {
-        name: 'Albahaca',
-        icon: '🌿',
-        type: 'Aromática',
-        slug: 'albahaca'
-    },
-    zanahoria: {
-        name: 'Zanahoria',
-        icon: '🥕',
-        type: 'Hortaliza',
-        slug: 'zanahoria'
-    },
-    fresa: {
-        name: 'Fresa',
-        icon: '🍓',
-        type: 'Frutilla',
-        slug: 'fresa'
-    },
-    lechuga: {
-        name: 'Lechuga',
-        icon: '🥬',
-        type: 'Hortaliza',
-        slug: 'lechuga'
-    }
-};
-
-const initialGarden = [
-    { plant: 'tomate', watered: true, pest: false, fungus: false, disease: false, harvest: false },
-    { plant: 'tomate', watered: true, pest: false, fungus: false, disease: false, harvest: false },
-    null,
-    { plant: 'chile', watered: false, pest: false, fungus: false, disease: false, harvest: false },
-    null,
-    { plant: 'albahaca', watered: true, pest: false, fungus: false, disease: false, harvest: false },
-    null,
-    { plant: 'albahaca', watered: true, pest: false, fungus: false, disease: false, harvest: false },
-    { plant: 'zanahoria', watered: false, pest: false, fungus: false, disease: false, harvest: false },
-    null,
-    { plant: 'zanahoria', watered: true, pest: false, fungus: false, disease: false, harvest: false },
-    null,
-    null,
-    { plant: 'chile', watered: true, pest: true, fungus: false, disease: false, harvest: false },
-    null,
-    { plant: 'fresa', watered: true, pest: false, fungus: false, disease: false, harvest: false },
-    null,
-    { plant: 'lechuga', watered: true, pest: false, fungus: false, disease: false, harvest: false },
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
-];
-
-const favoritePlants = [
-    plantCatalog.tomate,
-    plantCatalog.chile,
-    plantCatalog.albahaca,
-    plantCatalog.fresa,
-    plantCatalog.zanahoria
-];
-
-let garden = cloneGarden(initialGarden);
-let selectedIndex = null;
-let activeTool = 'select';
-let selectedRating = 5;
-
-/* ==================================================
-   ELEMENTOS DEL DOM
-================================================== */
-
+const supabase = window.agropediaSupabase;
 const gardenBoard = document.getElementById('gardenBoard');
 const emptyStatus = document.getElementById('emptyStatus');
 const statusContent = document.getElementById('statusContent');
 const selectedCellLabel = document.getElementById('selectedCellLabel');
-
 const plantCount = document.getElementById('plantCount');
 const healthyCount = document.getElementById('healthyCount');
 const attentionCount = document.getElementById('attentionCount');
 const harvestCount = document.getElementById('harvestCount');
-
 const statusPlantIcon = document.getElementById('statusPlantIcon');
 const statusPlantType = document.getElementById('statusPlantType');
 const statusPlantName = document.getElementById('statusPlantName');
 const statusLocation = document.getElementById('statusLocation');
 const statusCondition = document.getElementById('statusCondition');
-
 const wateredCheck = document.getElementById('wateredCheck');
 const pestCheck = document.getElementById('pestCheck');
 const fungusCheck = document.getElementById('fungusCheck');
 const diseaseCheck = document.getElementById('diseaseCheck');
 const harvestCheck = document.getElementById('harvestCheck');
-
 const plantInfoButton = document.getElementById('plantInfoButton');
 const resetGardenButton = document.getElementById('resetGarden');
-
 const currentDate = document.getElementById('currentDate');
 const currentSeason = document.getElementById('currentSeason');
 const currentMoon = document.getElementById('currentMoon');
 const currentTemperature = document.getElementById('currentTemperature');
 const weatherIcon = document.getElementById('weatherIcon');
-
 const progressPercentage = document.getElementById('progressPercentage');
 const progressBar = document.getElementById('progressBar');
 const progressMessage = document.getElementById('progressMessage');
 const taskList = document.getElementById('taskList');
-
 const favoritesGrid = document.getElementById('favoritesGrid');
 const commentForm = document.getElementById('commentForm');
 const commentsList = document.getElementById('commentsList');
@@ -138,722 +43,370 @@ const commentType = document.getElementById('commentType');
 const ratingGroup = document.getElementById('ratingGroup');
 const ratingInput = document.getElementById('ratingInput');
 
-/* ==================================================
-   UTILIDADES
-================================================== */
+let user = null;
+let garden = null;
+let beds = [];
+let plants = [];
+let selectedIndex = null;
+let activeTool = 'select';
+let selectedRating = 5;
+let tasks = [];
 
-function cloneGarden(source) {
-    return source.map(cell => cell ? { ...cell } : null);
-}
+const escapeHtml = value => String(value ?? '')
+    .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+    .replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
 function getCellCoordinates(index) {
     const row = Math.floor(index / 6);
     const column = index % 6;
-
-    return {
-        row,
-        column,
-        rowName: row + 1,
-        columnName: String.fromCharCode(65 + column)
-    };
+    return { rowName: row + 1, columnName: String.fromCharCode(65 + column) };
 }
 
-function getPlantStatus(cell) {
-    if (!cell) {
-        return 'empty';
-    }
+function getPlantForBed(bed) {
+    return bed?.plantas_bancal?.[0] || null;
+}
 
-    if (cell.harvest) {
-        return 'harvest';
-    }
-
-    if (cell.pest || cell.fungus || cell.disease) {
-        return 'danger';
-    }
-
-    if (!cell.watered) {
-        return 'warning';
-    }
-
+function getStatus(pb) {
+    if (!pb) return 'empty';
+    const records = pb._records || [];
+    if (records.some(r => r.tipo === 'cosecha')) return 'harvest';
+    if (records.some(r => ['plaga','hongo','enfermedad'].includes(r.tipo))) return 'danger';
+    if (!records.some(r => r.tipo === 'riego')) return 'warning';
     return 'healthy';
 }
 
-function getStatusText(cell) {
-    const status = getPlantStatus(cell);
-
-    if (status === 'harvest') {
-        return '🌾 Ciclo completado';
-    }
-
-    if (status === 'danger') {
-        return '🔴 Necesita atención';
-    }
-
-    if (status === 'warning') {
-        return '🟡 Necesita riego';
-    }
-
-    return '🟢 Saludable';
+function getStatusText(pb) {
+    return ({harvest:'🌾 Ciclo completado',danger:'🔴 Necesita atención',warning:'🟡 Necesita riego',healthy:'🟢 Saludable',empty:''})[getStatus(pb)];
 }
 
-function getStatusClass(cell) {
-    const status = getPlantStatus(cell);
-
-    if (status === 'danger') return 'danger';
-    if (status === 'warning') return 'warning';
-    if (status === 'harvest') return 'harvest';
-
-    return '';
+function getStatusClass(pb) {
+    const status = getStatus(pb);
+    return ['danger','warning','harvest'].includes(status) ? status : '';
 }
 
-/* ==================================================
-   DIAGRAMA DEL HUERTO
-================================================== */
+async function requireUser() {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) {
+        alert('Inicia sesión para utilizar Mi Huerto.');
+        window.location.href = 'registro.html';
+        return false;
+    }
+    user = data.user;
+    return true;
+}
+
+async function loadPlants() {
+    const { data, error } = await supabase
+        .from('plantas')
+        .select('id,nombre_comun,nombre_cientifico,descripcion,imagen_url,planta_etiquetas(etiquetas_planta(nombre))')
+        .order('nombre_comun');
+    if (error) throw error;
+    plants = data || [];
+}
+
+async function getOrCreateGarden() {
+    let { data, error } = await supabase.from('huertos').select('*').eq('usuario_id', user.id).order('created_at').limit(1).maybeSingle();
+    if (error) throw error;
+
+    if (!data) {
+        const created = await supabase.from('huertos').insert({
+            usuario_id: user.id,
+            nombre: 'Mi huerto',
+            descripcion: 'Mi espacio de cultivo en Agropedia',
+            ancho: 6,
+            alto: 4
+        }).select().single();
+        if (created.error) throw created.error;
+        data = created.data;
+    }
+    garden = data;
+}
+
+async function ensureBeds() {
+    const { data, error } = await supabase.from('bancales')
+        .select('*,plantas_bancal(*,plantas(id,nombre_comun,nombre_cientifico,imagen_url))')
+        .eq('huerto_id', garden.id)
+        .order('fila').order('columna');
+    if (error) throw error;
+
+    beds = data || [];
+    if (beds.length >= 24) return;
+
+    const existing = new Set(beds.map(b => `${b.fila}-${b.columna}`));
+    const missing = [];
+    for (let row = 1; row <= 4; row++) {
+        for (let col = 1; col <= 6; col++) {
+            if (!existing.has(`${row}-${col}`)) {
+                missing.push({
+                    huerto_id: garden.id,
+                    nombre: `Bancal ${String.fromCharCode(64 + col)}${row}`,
+                    fila: row,
+                    columna: col,
+                    ancho: 1,
+                    alto: 1
+                });
+            }
+        }
+    }
+    if (missing.length) {
+        const created = await supabase.from('bancales').insert(missing).select('*,plantas_bancal(*,plantas(id,nombre_comun,nombre_cientifico,imagen_url))');
+        if (created.error) throw created.error;
+    }
+    const refreshed = await supabase.from('bancales')
+        .select('*,plantas_bancal(*,plantas(id,nombre_comun,nombre_cientifico,imagen_url))')
+        .eq('huerto_id', garden.id).order('fila').order('columna');
+    if (refreshed.error) throw refreshed.error;
+    beds = refreshed.data || [];
+}
+
+async function loadRecords() {
+    const ids = beds.flatMap(b => b.plantas_bancal || []).map(pb => pb.id);
+    if (!ids.length) return;
+    const { data, error } = await supabase.from('registros_cultivo')
+        .select('id,planta_bancal_id,tipo,valor,notas,realizado_at')
+        .eq('usuario_id', user.id).in('planta_bancal_id', ids)
+        .order('realizado_at', { ascending: false });
+    if (error) throw error;
+    const map = new Map();
+    (data || []).forEach(r => { if (!map.has(r.planta_bancal_id)) map.set(r.planta_bancal_id, []); map.get(r.planta_bancal_id).push(r); });
+    beds.forEach(b => { const pb = getPlantForBed(b); if (pb) pb._records = map.get(pb.id) || []; });
+}
+
+async function loadTasks() {
+    const today = new Date().toISOString().slice(0,10);
+    let { data, error } = await supabase.from('tareas_huerto').select('*').eq('huerto_id', garden.id).eq('fecha', today).order('id');
+    if (error) throw error;
+
+    if (!data?.length) {
+        const season = getSeason(new Date()).toLowerCase();
+        const moon = getMoonPhase(new Date()).toLowerCase();
+        const needsWater = beds.some(b => getStatus(getPlantForBed(b)) === 'warning');
+        const needsHealth = beds.some(b => getStatus(getPlantForBed(b)) === 'danger');
+        const rows = [
+            { huerto_id:garden.id,titulo:needsWater?'Revisar y regar las plantas que lo necesiten':'Revisar la humedad del suelo',descripcion:'Revisión diaria del riego.',fecha:today },
+            { huerto_id:garden.id,titulo:needsHealth?'Revisar las plantas con posibles problemas':'Inspeccionar hojas y tallos en busca de plagas',descripcion:'Revisión preventiva.',fecha:today },
+            { huerto_id:garden.id,titulo:`Realizar cuidados propios de ${season}`,descripcion:'Cuidados estacionales.',fecha:today },
+            { huerto_id:garden.id,titulo:`Planificar labores considerando la fase ${moon}`,descripcion:'Planificación según la fase lunar.',fecha:today },
+            { huerto_id:garden.id,titulo:'Revisar el estado general de los bancales',descripcion:'Revisión general del huerto.',fecha:today }
+        ];
+        const created = await supabase.from('tareas_huerto').insert(rows).select();
+        if (created.error) throw created.error;
+        data = created.data;
+    }
+    tasks = data || [];
+}
 
 function renderGarden() {
     gardenBoard.innerHTML = '';
-
-    garden.forEach((cell, index) => {
-        const cellElement = document.createElement('button');
+    const ordered = Array.from({length:24}, (_, i) => beds.find(b => b.fila === Math.floor(i/6)+1 && b.columna === (i%6)+1));
+    ordered.forEach((bed,index) => {
+        const cell = document.createElement('button');
         const coordinates = getCellCoordinates(index);
-
-        cellElement.type = 'button';
-        cellElement.className = 'garden-cell';
-        cellElement.dataset.index = index;
-        cellElement.setAttribute(
-            'aria-label',
-            cell
-                ? `${plantCatalog[cell.plant].name}, celda ${coordinates.columnName}${coordinates.rowName}`
-                : `Celda vacía ${coordinates.columnName}${coordinates.rowName}`
-        );
-
-        if (!cell) {
-            cellElement.classList.add('empty');
+        const pb = getPlantForBed(bed);
+        const plant = pb?.plantas;
+        cell.type='button'; cell.className='garden-cell'; cell.dataset.index=index;
+        cell.setAttribute('aria-label', plant ? `${plant.nombre_comun}, celda ${coordinates.columnName}${coordinates.rowName}` : `Celda vacía ${coordinates.columnName}${coordinates.rowName}`);
+        if (!plant) cell.classList.add('empty');
+        if (index === selectedIndex) cell.classList.add('selected');
+        if (plant) {
+            cell.innerHTML=`<span class="cell-plant">🌱</span><span class="cell-name">${escapeHtml(plant.nombre_comun)}</span><span class="cell-status ${getStatusClass(pb)}"></span>`;
         }
-
-        if (index === selectedIndex) {
-            cellElement.classList.add('selected');
-        }
-
-        if (cell) {
-            const plant = plantCatalog[cell.plant];
-            const status = getStatusClass(cell);
-
-            cellElement.innerHTML = `
-                <span class="cell-plant">${plant.icon}</span>
-                <span class="cell-name">${plant.name}</span>
-                <span class="cell-status ${status}"></span>
-            `;
-        }
-
-        cellElement.addEventListener('click', () => handleCellAction(index));
-        gardenBoard.appendChild(cellElement);
+        cell.addEventListener('click',()=>handleCellAction(index));
+        gardenBoard.appendChild(cell);
     });
-
     updateSummary();
 }
 
-function handleCellAction(index) {
-    const cell = garden[index];
+function bedAt(index) {
+    return beds.find(b => b.fila === Math.floor(index/6)+1 && b.columna === (index%6)+1);
+}
 
-    if (activeTool === 'add') {
-        addPlantToCell(index);
-        return;
+async function handleCellAction(index) {
+    if (activeTool==='add') return addPlantToCell(index);
+    if (activeTool==='edit') {
+        if (!getPlantForBed(bedAt(index))) return alert('Primero selecciona una celda que tenga una planta.');
+        selectCell(index); return editSelectedPlant();
     }
-
-    if (activeTool === 'edit') {
-        if (!cell) {
-            alert('Primero selecciona una celda que tenga una planta.');
-            return;
-        }
-
-        selectCell(index);
-        editSelectedPlant();
-        return;
+    if (activeTool==='delete') return deletePlantFromCell(index);
+    if (activeTool==='clear') {
+        const pb=getPlantForBed(bedAt(index)); if(pb) await deletePlantFromCell(index); return;
     }
-
-    if (activeTool === 'delete') {
-        deletePlantFromCell(index);
-        return;
-    }
-
-    if (activeTool === 'bed') {
-        alert('El modo de bancales está preparado para ampliar el editor en una próxima versión.');
-        setActiveTool('select');
-        return;
-    }
-
-    if (activeTool === 'clear') {
-        if (cell) {
-            garden[index] = null;
-            selectedIndex = null;
-            renderGarden();
-            hideStatusPanel();
-        }
-
-        return;
-    }
-
     selectCell(index);
 }
 
 function selectCell(index) {
-    selectedIndex = index;
-
-    const cell = garden[index];
-    const coordinates = getCellCoordinates(index);
-
-    selectedCellLabel.textContent = `Celda ${coordinates.columnName}${coordinates.rowName}`;
-
+    selectedIndex=index;
+    const bed=bedAt(index), pb=getPlantForBed(bed);
+    const c=getCellCoordinates(index);
+    selectedCellLabel.textContent=`Celda ${c.columnName}${c.rowName}`;
     renderGarden();
-
-    if (cell) {
-        showStatusPanel(cell, coordinates);
-    } else {
-        hideStatusPanel();
-    }
+    if(pb) showStatusPanel(pb,c); else hideStatusPanel();
 }
 
-function addPlantToCell(index) {
-    if (garden[index]) {
-        alert('Esta celda ya tiene una planta. Selecciona una celda vacía.');
-        return;
-    }
-
-    const plantKey = prompt(
-        'Escribe la planta que deseas agregar:\n\n' +
-        'tomate, chile, albahaca, zanahoria, fresa o lechuga'
-    );
-
-    if (!plantKey) return;
-
-    const normalized = plantKey.trim().toLowerCase();
-
-    if (!plantCatalog[normalized]) {
-        alert('Planta no encontrada en el catálogo de demostración.');
-        return;
-    }
-
-    garden[index] = {
-        plant: normalized,
-        watered: false,
-        pest: false,
-        fungus: false,
-        disease: false,
-        harvest: false
-    };
-
-    selectedIndex = index;
-    setActiveTool('select');
-    renderGarden();
+async function addPlantToCell(index) {
+    const bed=bedAt(index);
+    if (!bed) return;
+    if (getPlantForBed(bed)) return alert('Esta celda ya tiene una planta. Selecciona una celda vacía.');
+    if (!plants.length) return alert('No hay plantas disponibles en el catálogo.');
+    const list=plants.map((p,i)=>`${i+1}. ${p.nombre_comun}`).join('\n');
+    const input=prompt(`Escribe el número o nombre de la planta:\n\n${list}`);
+    if (!input) return;
+    const n=input.trim();
+    const indexFound=Number.isInteger(Number(n)) && Number(n)>0 ? Number(n)-1 : plants.findIndex(p=>p.nombre_comun.toLowerCase()===n.toLowerCase());
+    const plant=plants[indexFound];
+    if (!plant) return alert('Planta no encontrada.');
+    const {error}=await supabase.from('plantas_bancal').insert({bancal_id:bed.id,planta_id:plant.id,cantidad:1,estado:'activa'}).select().single();
+    if(error) return alert(`No se pudo agregar la planta: ${error.message}`);
+    await reloadGarden();
     selectCell(index);
 }
 
-function editSelectedPlant() {
-    if (selectedIndex === null || !garden[selectedIndex]) return;
+async function editSelectedPlant() {
+    const bed=bedAt(selectedIndex), pb=getPlantForBed(bed);
+    if(!pb) return;
+    const input=prompt('Escribe el número o nombre de la nueva planta:',pb.plantas?.nombre_comun||'');
+    if(!input) return;
+    const n=input.trim();
+    const found=Number.isInteger(Number(n)) && Number(n)>0 ? plants[Number(n)-1] : plants.find(p=>p.nombre_comun.toLowerCase()===n.toLowerCase());
+    if(!found) return alert('Planta no encontrada.');
+    const {error}=await supabase.from('plantas_bancal').update({planta_id:found.id}).eq('id',pb.id);
+    if(error) return alert(`No se pudo actualizar: ${error.message}`);
+    await reloadGarden(); selectCell(selectedIndex);
+}
 
-    const currentPlant = garden[selectedIndex].plant;
-    const newPlant = prompt(
-        'Escribe la nueva planta:\n\n' +
-        'tomate, chile, albahaca, zanahoria, fresa o lechuga',
-        currentPlant
-    );
+async function deletePlantFromCell(index) {
+    const bed=bedAt(index), pb=getPlantForBed(bed);
+    if(!pb) return alert('Esta celda ya está vacía.');
+    if(!confirm(`¿Quieres eliminar ${pb.plantas?.nombre_comun || 'esta planta'} de esta celda?`)) return;
+    const {error}=await supabase.from('plantas_bancal').delete().eq('id',pb.id);
+    if(error) return alert(`No se pudo eliminar: ${error.message}`);
+    selectedIndex=null; hideStatusPanel(); await reloadGarden();
+}
 
-    if (!newPlant) return;
-
-    const normalized = newPlant.trim().toLowerCase();
-
-    if (!plantCatalog[normalized]) {
-        alert('Planta no encontrada en el catálogo de demostración.');
-        return;
+async function setRecord(type, checked) {
+    const pb=getPlantForBed(bedAt(selectedIndex));
+    if(!pb) return;
+    if(checked) {
+        const {error}=await supabase.from('registros_cultivo').insert({planta_bancal_id:pb.id,usuario_id:user.id,tipo:type,notas:'Registrado desde Mi Huerto'});
+        if(error) return alert(`No se pudo guardar el registro: ${error.message}`);
+    } else {
+        const {data}=await supabase.from('registros_cultivo').select('id').eq('planta_bancal_id',pb.id).eq('usuario_id',user.id).eq('tipo',type).order('realizado_at',{ascending:false}).limit(1);
+        if(data?.[0]) await supabase.from('registros_cultivo').delete().eq('id',data[0].id);
     }
-
-    garden[selectedIndex].plant = normalized;
-    renderGarden();
-    selectCell(selectedIndex);
+    await reloadGarden(); selectCell(selectedIndex);
 }
 
-function deletePlantFromCell(index) {
-    if (!garden[index]) {
-        alert('Esta celda ya está vacía.');
-        return;
-    }
-
-    const plantName = plantCatalog[garden[index].plant].name;
-    const confirmed = confirm(`¿Quieres eliminar ${plantName} de esta celda?`);
-
-    if (!confirmed) return;
-
-    garden[index] = null;
-    selectedIndex = null;
-    hideStatusPanel();
-    renderGarden();
+function showStatusPanel(pb,c) {
+    const plant=pb.plantas;
+    emptyStatus.classList.add('hidden'); statusContent.classList.remove('hidden');
+    statusPlantIcon.textContent='🌱'; statusPlantType.textContent=(plant?.planta_etiquetas?.[0]?.etiquetas_planta?.nombre)||'Planta';
+    statusPlantName.textContent=plant?.nombre_comun||'Planta';
+    statusLocation.textContent=`Bancal ${c.columnName}${c.rowName}`;
+    statusCondition.textContent=getStatusText(pb);
+    const records=pb._records||[];
+    wateredCheck.checked=records.some(r=>r.tipo==='riego');
+    pestCheck.checked=records.some(r=>r.tipo==='plaga');
+    fungusCheck.checked=records.some(r=>r.tipo==='hongo');
+    diseaseCheck.checked=records.some(r=>r.tipo==='enfermedad');
+    harvestCheck.checked=records.some(r=>r.tipo==='cosecha');
 }
 
-function setActiveTool(tool) {
-    activeTool = tool;
+function hideStatusPanel(){emptyStatus.classList.remove('hidden');statusContent.classList.add('hidden');selectedCellLabel.textContent='Selecciona un bancal';}
 
-    document.querySelectorAll('.tool-button').forEach(button => {
-        button.classList.toggle('active', button.dataset.tool === tool);
-    });
+function updateSummary(){
+    const active=beds.map(getPlantForBed).filter(Boolean);
+    plantCount.textContent=active.length;
+    healthyCount.textContent=active.filter(x=>getStatus(x)==='healthy').length;
+    attentionCount.textContent=active.filter(x=>['warning','danger'].includes(getStatus(x))).length;
+    harvestCount.textContent=active.filter(x=>getStatus(x)==='harvest').length;
 }
 
-/* ==================================================
-   PANEL DE ESTADO
-================================================== */
-
-function showStatusPanel(cell, coordinates) {
-    const plant = plantCatalog[cell.plant];
-
-    emptyStatus.classList.add('hidden');
-    statusContent.classList.remove('hidden');
-
-    statusPlantIcon.textContent = plant.icon;
-    statusPlantType.textContent = plant.type;
-    statusPlantName.textContent = plant.name;
-    statusLocation.textContent = `Bancal principal · Celda ${coordinates.columnName}${coordinates.rowName}`;
-    statusCondition.textContent = getStatusText(cell);
-
-    wateredCheck.checked = cell.watered;
-    pestCheck.checked = cell.pest;
-    fungusCheck.checked = cell.fungus;
-    diseaseCheck.checked = cell.disease;
-    harvestCheck.checked = cell.harvest;
+function getSeason(date){
+    const m=date.getMonth()+1,d=date.getDate();
+    if((m===3&&d>=20)||m===4||m===5||(m===6&&d<21))return'Primavera';
+    if((m===6&&d>=21)||m===7||m===8||(m===9&&d<22))return'Verano';
+    if((m===9&&d>=22)||m===10||m===11||(m===12&&d<21))return'Otoño';
+    return'Invierno';
 }
 
-function hideStatusPanel() {
-    emptyStatus.classList.remove('hidden');
-    statusContent.classList.add('hidden');
-    selectedCellLabel.textContent = 'Selecciona un bancal';
+function getMoonPhase(date){
+    const reference=new Date(Date.UTC(2000,0,6,18,14)),current=Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes());
+    const days=(current-reference.getTime())/86400000,cycle=29.53058867,age=((days%cycle)+cycle)%cycle;
+    if(age<1.845)return'Luna nueva'; if(age<7.382)return'Creciente'; if(age<9.227)return'Cuarto creciente'; if(age<14.765)return'Gibosa creciente'; if(age<16.610)return'Luna llena'; if(age<22.148)return'Gibosa menguante'; if(age<23.993)return'Cuarto menguante'; return'Menguante';
 }
 
-function updateSelectedPlantStatus(property, value) {
-    if (selectedIndex === null || !garden[selectedIndex]) return;
-
-    garden[selectedIndex][property] = value;
-
-    renderGarden();
-    selectCell(selectedIndex);
-    updateProgress();
+function updateDailyStatus(){
+    const now=new Date();
+    currentDate.textContent=now.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    currentSeason.textContent=getSeason(now); currentMoon.textContent=getMoonPhase(now);
+    currentTemperature.textContent='—'; weatherIcon.textContent='🌱';
 }
 
-/* ==================================================
-   RESUMEN
-================================================== */
-
-function updateSummary() {
-    const plants = garden.filter(Boolean);
-    const healthy = plants.filter(cell => getPlantStatus(cell) === 'healthy');
-    const attention = plants.filter(cell => ['warning', 'danger'].includes(getPlantStatus(cell)));
-    const harvested = plants.filter(cell => cell.harvest);
-
-    plantCount.textContent = plants.length;
-    healthyCount.textContent = healthy.length;
-    attentionCount.textContent = attention.length;
-    harvestCount.textContent = harvested.length;
+async function toggleTask(task,checked){
+    const update={completada:checked,completed_at:checked?new Date().toISOString():null};
+    const {error}=await supabase.from('tareas_huerto').update(update).eq('id',task.id).eq('huerto_id',garden.id);
+    if(error) return alert(`No se pudo actualizar la tarea: ${error.message}`);
+    task.completada=checked; task.completed_at=update.completed_at; renderTasks();
 }
 
-/* ==================================================
-   FECHA, ESTACIÓN Y FASE LUNAR
-================================================== */
-
-function updateDailyStatus() {
-    const now = new Date();
-
-    currentDate.textContent = now.toLocaleDateString('es-MX', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    currentSeason.textContent = getSeason(now);
-    currentMoon.textContent = getMoonPhase(now);
-
-    // Temperatura local de demostración hasta conectar una API de clima.
-    currentTemperature.textContent = getDemoTemperature(now) + ' °C';
-
-    weatherIcon.textContent = getWeatherIcon(now);
-}
-
-function getSeason(date) {
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    if ((month === 3 && day >= 20) || month === 4 || month === 5 || (month === 6 && day < 21)) {
-        return 'Primavera';
-    }
-
-    if ((month === 6 && day >= 21) || month === 7 || month === 8 || (month === 9 && day < 22)) {
-        return 'Verano';
-    }
-
-    if ((month === 9 && day >= 22) || month === 10 || month === 11 || (month === 12 && day < 21)) {
-        return 'Otoño';
-    }
-
-    return 'Invierno';
-}
-
-function getMoonPhase(date) {
-    // Cálculo aproximado basado en una luna nueva de referencia.
-    const reference = new Date(Date.UTC(2000, 0, 6, 18, 14));
-    const current = Date.UTC(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        date.getHours(),
-        date.getMinutes()
-    );
-
-    const days = (current - reference.getTime()) / 86400000;
-    const cycle = 29.53058867;
-    const age = ((days % cycle) + cycle) % cycle;
-
-    if (age < 1.845) return 'Luna nueva';
-    if (age < 7.382) return 'Creciente';
-    if (age < 9.227) return 'Cuarto creciente';
-    if (age < 14.765) return 'Gibosa creciente';
-    if (age < 16.610) return 'Luna llena';
-    if (age < 22.148) return 'Gibosa menguante';
-    if (age < 23.993) return 'Cuarto menguante';
-    return 'Menguante';
-}
-
-function getDemoTemperature(date) {
-    const month = date.getMonth() + 1;
-    const hour = date.getHours();
-
-    const baseTemperatures = {
-        1: 17,
-        2: 19,
-        3: 22,
-        4: 25,
-        5: 27,
-        6: 25,
-        7: 24,
-        8: 24,
-        9: 23,
-        10: 22,
-        11: 19,
-        12: 17
-    };
-
-    const dailyVariation = hour >= 12 && hour <= 17 ? 3 : 0;
-
-    return baseTemperatures[month] + dailyVariation;
-}
-
-function getWeatherIcon(date) {
-    const hour = date.getHours();
-
-    if (hour < 6 || hour >= 20) {
-        return '🌙';
-    }
-
-    if (hour < 9) {
-        return '🌤️';
-    }
-
-    return '☀️';
-}
-
-/* ==================================================
-   TAREAS Y PROGRESO
-================================================== */
-
-let tasks = [];
-
-function createTasks() {
-    const season = getSeason(new Date());
-    const moon = getMoonPhase(new Date());
-    const plants = garden.filter(Boolean);
-
-    tasks = [
-        {
-            id: 'water',
-            text: plants.some(cell => !cell.watered)
-                ? 'Revisar y regar las plantas que lo necesiten'
-                : 'Revisar la humedad del suelo',
-            completed: false
-        },
-        {
-            id: 'health',
-            text: plants.some(cell => cell.pest || cell.fungus || cell.disease)
-                ? 'Revisar las plantas con posibles problemas'
-                : 'Inspeccionar hojas y tallos en busca de plagas',
-            completed: false
-        },
-        {
-            id: 'season',
-            text: `Realizar cuidados propios de ${season.toLowerCase()}`,
-            completed: false
-        },
-        {
-            id: 'moon',
-            text: `Planificar labores considerando la fase ${moon.toLowerCase()}`,
-            completed: false
-        },
-        {
-            id: 'garden',
-            text: 'Revisar el estado general de los bancales',
-            completed: false
-        }
-    ];
-
-    renderTasks();
-}
-
-function renderTasks() {
-    taskList.innerHTML = '';
-
-    tasks.forEach(task => {
-        const label = document.createElement('label');
-        label.className = `task-item ${task.completed ? 'completed' : ''}`;
-
-        label.innerHTML = `
-            <input type="checkbox" ${task.completed ? 'checked' : ''}>
-            <span>${task.text}</span>
-        `;
-
-        const checkbox = label.querySelector('input');
-
-        checkbox.addEventListener('change', () => {
-            task.completed = checkbox.checked;
-            renderTasks();
-            updateProgress();
-        });
-
+function renderTasks(){
+    taskList.innerHTML='';
+    tasks.forEach(task=>{
+        const label=document.createElement('label'); label.className=`task-item ${task.completada?'completed':''}`;
+        label.innerHTML=`<input type="checkbox" ${task.completada?'checked':''}><span>${escapeHtml(task.titulo)}</span>`;
+        label.querySelector('input').addEventListener('change',e=>toggleTask(task,e.target.checked));
         taskList.appendChild(label);
     });
-
     updateProgress();
 }
 
-function updateProgress() {
-    if (!tasks.length) {
-        progressPercentage.textContent = '0%';
-        progressBar.style.width = '0%';
-        return;
-    }
-
-    const completed = tasks.filter(task => task.completed).length;
-    const percentage = Math.round((completed / tasks.length) * 100);
-
-    progressPercentage.textContent = `${percentage}%`;
-    progressBar.style.width = `${percentage}%`;
-
-    if (percentage === 100) {
-        progressMessage.textContent = '¡Excelente! Has completado las tareas de hoy.';
-    } else if (percentage >= 60) {
-        progressMessage.textContent = '¡Vas muy bien! Solo quedan algunas tareas.';
-    } else if (percentage > 0) {
-        progressMessage.textContent = 'Ya comenzaste. Continúa con el cuidado de tu huerto.';
-    } else {
-        progressMessage.textContent = 'Revisa las tareas de hoy para mantener tu huerto en buen estado.';
-    }
+function updateProgress(){
+    const percentage=tasks.length?Math.round(tasks.filter(t=>t.completada).length/tasks.length*100):0;
+    progressPercentage.textContent=`${percentage}%`; progressBar.style.width=`${percentage}%`;
+    progressMessage.textContent=percentage===100?'¡Excelente! Has completado las tareas de hoy.':percentage>=60?'¡Vas muy bien! Solo quedan algunas tareas.':percentage?'Ya comenzaste. Continúa con el cuidado de tu huerto.':'Revisa las tareas de hoy para mantener tu huerto en buen estado.';
 }
 
-/* ==================================================
-   PLANTAS FAVORITAS
-================================================== */
-
-function renderFavorites() {
-    favoritesGrid.innerHTML = '';
-
-    favoritePlants.forEach(plant => {
-        const link = document.createElement('a');
-
-        link.className = 'favorite-card';
-        link.href = `planta.html?id=${encodeURIComponent(plant.slug)}`;
-        link.innerHTML = `
-            <div class="favorite-image">${plant.icon}</div>
-            <div class="favorite-content">
-                <h3>${plant.name}</h3>
-                <p>${plant.type}</p>
-                <strong>Ver información →</strong>
-            </div>
-        `;
-
+async function renderFavorites(){
+    const {data,error}=await supabase.from('plantas_favoritas').select('planta_id,plantas(id,nombre_comun,nombre_cientifico,imagen_url)').eq('usuario_id',user.id);
+    if(error){favoritesGrid.innerHTML='<p>No se pudieron cargar tus favoritos.</p>';return;}
+    favoritesGrid.innerHTML='';
+    (data||[]).forEach(item=>{
+        const p=item.plantas; if(!p)return;
+        const link=document.createElement('a'); link.className='favorite-card'; link.href=`planta.html?id=${encodeURIComponent(p.id)}`;
+        link.innerHTML=`<div class="favorite-image"><img src="${escapeHtml(p.imagen_url||'assets/images/logo.png')}" alt="${escapeHtml(p.nombre_comun)}"></div><div class="favorite-content"><h3>${escapeHtml(p.nombre_comun)}</h3><p>${escapeHtml(p.nombre_cientifico||'')}</p><strong>Ver información →</strong></div>`;
         favoritesGrid.appendChild(link);
     });
+    if(!data?.length) favoritesGrid.innerHTML='<p>Aún no tienes plantas favoritas. Añádelas desde el catálogo.</p>';
 }
 
-/* ==================================================
-   COMENTARIOS
-================================================== */
+function setupEvents(){
+    document.querySelectorAll('.tool-button').forEach(button=>button.addEventListener('click',()=>setActiveTool(button.dataset.tool)));
+    const map={wateredCheck:'riego',pestCheck:'plaga',fungusCheck:'hongo',diseaseCheck:'enfermedad',harvestCheck:'cosecha'};
+    [wateredCheck,pestCheck,fungusCheck,diseaseCheck,harvestCheck].forEach(check=>check.addEventListener('change',()=>setRecord(map[check.id],check.checked)));
+    plantInfoButton.addEventListener('click',()=>{const pb=getPlantForBed(bedAt(selectedIndex));if(pb?.plantas)window.location.href=`planta.html?id=${encodeURIComponent(pb.plantas.id)}`;});
+    resetGardenButton.addEventListener('click',async()=>{
+        if(!confirm('Esto eliminará las plantas de tu huerto y conservará el huerto. ¿Continuar?'))return;
+        const ids=beds.flatMap(b=>b.plantas_bancal||[]).map(x=>x.id);
+        if(ids.length){const {error}=await supabase.from('plantas_bancal').delete().in('id',ids);if(error)return alert(error.message);}
+        selectedIndex=null; await reloadGarden();
+    });
+    commentText.addEventListener('input',()=>characterCount.textContent=`${commentText.value.length} / 500`);
+    commentType.addEventListener('change',()=>ratingGroup.style.display=commentType.value==='review'?'block':'none');
+    ratingInput.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{selectedRating=Number(b.dataset.rating);ratingInput.querySelectorAll('button').forEach(x=>x.classList.toggle('active',Number(x.dataset.rating)<=selectedRating));}));
+    commentForm.addEventListener('submit',e=>{e.preventDefault(); if(!commentText.value.trim())return alert('Escribe un comentario antes de publicarlo.'); alert('Los comentarios de comunidad se integrarán con el módulo social en una fase posterior.'); commentForm.reset(); characterCount.textContent='0 / 500';});
+}
 
-const demoComments = [
-    {
-        author: 'Jardinero_01',
-        rating: 5,
-        type: 'Reseña',
-        text: 'Me gusta la idea de poder organizar visualmente los bancales. Sería genial poder guardar diferentes huertos.',
-        date: 'Hace 3 días'
-    },
-    {
-        author: 'CultivaMX',
-        rating: 4,
-        type: 'Recomendación',
-        text: 'Me gustaría que Agropedia añadiera alertas para saber cuándo regar o cosechar.',
-        date: 'Hace 1 semana'
+function setActiveTool(tool){activeTool=tool;document.querySelectorAll('.tool-button').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool));}
+
+async function reloadGarden(){await getOrCreateGarden();await ensureBeds();await loadRecords();await loadTasks();renderGarden();renderTasks();renderFavorites();}
+
+async function initGarden(){
+    try{
+        if(!await requireUser())return;
+        await loadPlants(); await getOrCreateGarden(); await ensureBeds(); await loadRecords(); await loadTasks();
+        setupEvents(); renderGarden(); renderTasks(); renderFavorites(); updateDailyStatus(); characterCount.textContent='0 / 500'; ratingInput.querySelectorAll('button')[4]?.classList.add('active');
+    }catch(error){
+        console.error(error); gardenBoard.innerHTML='<p class="loading-plants">No pudimos cargar tu huerto. Revisa tu sesión e inténtalo nuevamente.</p>';
     }
-];
-
-function renderComments(comments = demoComments) {
-    commentsList.innerHTML = '';
-
-    comments.forEach(comment => {
-        const article = document.createElement('article');
-        article.className = 'community-comment';
-
-        const stars = '★'.repeat(comment.rating) + '☆'.repeat(5 - comment.rating);
-
-        article.innerHTML = `
-            <div class="comment-author-row">
-                <span class="comment-author">🌱 ${escapeHtml(comment.author)}</span>
-                <span class="comment-stars">${stars}</span>
-            </div>
-
-            <div class="comment-type">
-                ${escapeHtml(comment.type)}
-            </div>
-
-            <p>
-                ${escapeHtml(comment.text)}
-            </p>
-
-            <span class="comment-date">
-                ${escapeHtml(comment.date)}
-            </span>
-        `;
-
-        commentsList.appendChild(article);
-    });
 }
-
-function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.textContent = value;
-    return div.innerHTML;
-}
-
-function updateCharacterCount() {
-    characterCount.textContent = `${commentText.value.length} / 500`;
-}
-
-function updateRatingVisibility() {
-    ratingGroup.style.display = commentType.value === 'review' ? 'block' : 'none';
-}
-
-function setRating(rating) {
-    selectedRating = rating;
-
-    ratingInput.querySelectorAll('button').forEach(button => {
-        const buttonRating = Number(button.dataset.rating);
-        button.classList.toggle('active', buttonRating <= rating);
-    });
-}
-
-/* ==================================================
-   EVENTOS
-================================================== */
-
-document.querySelectorAll('.tool-button').forEach(button => {
-    button.addEventListener('click', () => {
-        setActiveTool(button.dataset.tool);
-    });
-});
-
-[wateredCheck, pestCheck, fungusCheck, diseaseCheck, harvestCheck].forEach(check => {
-    check.addEventListener('change', () => {
-        const propertyMap = {
-            wateredCheck: 'watered',
-            pestCheck: 'pest',
-            fungusCheck: 'fungus',
-            diseaseCheck: 'disease',
-            harvestCheck: 'harvest'
-        };
-
-        updateSelectedPlantStatus(
-            propertyMap[check.id],
-            check.checked
-        );
-    });
-});
-
-plantInfoButton.addEventListener('click', () => {
-    if (selectedIndex === null || !garden[selectedIndex]) return;
-
-    const plant = plantCatalog[garden[selectedIndex].plant];
-
-    window.location.href = `planta.html?id=${encodeURIComponent(plant.slug)}`;
-});
-
-resetGardenButton.addEventListener('click', () => {
-    const confirmed = confirm('¿Quieres restaurar el huerto de demostración?');
-
-    if (!confirmed) return;
-
-    garden = cloneGarden(initialGarden);
-    selectedIndex = null;
-    setActiveTool('select');
-    hideStatusPanel();
-    renderGarden();
-    createTasks();
-});
-
-commentText.addEventListener('input', updateCharacterCount);
-commentType.addEventListener('change', updateRatingVisibility);
-
-ratingInput.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', () => {
-        setRating(Number(button.dataset.rating));
-    });
-});
-
-commentForm.addEventListener('submit', event => {
-    event.preventDefault();
-
-    const text = commentText.value.trim();
-
-    if (!text) {
-        alert('Escribe un comentario antes de publicarlo.');
-        return;
-    }
-
-    const newComment = {
-        author: 'Tú',
-        rating: commentType.value === 'review' ? selectedRating : 0,
-        type: commentType.options[commentType.selectedIndex].text,
-        text,
-        date: 'Justo ahora'
-    };
-
-    const comments = [newComment, ...demoComments];
-    renderComments(comments);
-
-    commentForm.reset();
-    setRating(5);
-    updateCharacterCount();
-    updateRatingVisibility();
-
-    alert('Tu comentario se agregó a la demostración. En una futura versión se guardará en tu cuenta.');
-});
-
-/* ==================================================
-   INICIALIZACIÓN
-================================================== */
-
-function initGarden() {
-    renderGarden();
-    updateDailyStatus();
-    createTasks();
-    renderFavorites();
-    renderComments();
-    updateCharacterCount();
-    setRating(5);
-    updateRatingVisibility();
-}
-
 initGarden();
