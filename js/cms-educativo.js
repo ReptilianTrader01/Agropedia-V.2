@@ -48,6 +48,12 @@
         return type === 'courses' ? 'Cursos' : type === 'videos' ? 'Videos' : 'Documentos';
     }
 
+    // El CMS usa nombres internos en inglés, pero las tablas reales de Supabase
+    // están en español.
+    function resourceTable(type) {
+        return type === 'courses' ? 'cursos' : type === 'videos' ? 'videos' : 'documentos';
+    }
+
     function openPanel(name) {
         var tab = document.querySelector('.cms-edu-tab[data-cms-tab="' + name + '"]');
         var panels = document.querySelectorAll('.cms-edu-panel');
@@ -263,7 +269,7 @@
     }
 
     async function loadResources(type) {
-        var result = await supabase.from(type).select('*').order('created_at', { ascending: false });
+        var result = await supabase.from(resourceTable(type)).select('*').order('created_at', { ascending: false });
         if (result.error) return toast(result.error.message, true);
         state[type] = result.data || [];
         $('cms-' + type + '-count').textContent = state[type].length + ' registros';
@@ -342,9 +348,9 @@
 
         var result;
         if (id) {
-            result = await supabase.from(type).update(payload).eq('id', Number(id)).select('id').single();
+            result = await supabase.from(resourceTable(type)).update(payload).eq('id', Number(id)).select('id').single();
         } else {
-            result = await supabase.from(type).insert(payload).select('id').single();
+            result = await supabase.from(resourceTable(type)).insert(payload).select('id').single();
         }
         if (result.error) throw result.error;
 
@@ -357,7 +363,7 @@
     async function deleteResource(type, id) {
         var item = state[type].find(function (row) { return row.id === id; });
         if (!item || !confirm('¿Eliminar "' + item.titulo + '"?')) return;
-        var result = await supabase.from(type).delete().eq('id', id);
+        var result = await supabase.from(resourceTable(type)).delete().eq('id', id);
         if (result.error) return toast(result.error.message, true);
         toast('Contenido eliminado.');
         await loadResources(type);
