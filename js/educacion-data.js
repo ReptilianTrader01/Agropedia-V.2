@@ -1,116 +1,34 @@
-/* =========================================================
-   CAPA DE DATOS EDUCATIVOS
-   Agropedia V.2
-
-   Centraliza las consultas a Supabase para que las páginas
-   no dependan directamente de la estructura de la BD.
-========================================================= */
-
 'use strict';
 
 const AgropediaEducation = {
+    published: 'publicado',
     async getCourses(filters = {}) {
-        let query = agropediaSupabase
-            .from('cursos')
-            .select('*')
-            .eq('publicado', true)
-            .order('created_at', { ascending: false });
-
-        if (filters.topicId) {
-            query = query.eq('tema_id', filters.topicId);
-        }
-
-        if (filters.search) {
-            query = query.ilike('titulo', `%${filters.search}%`);
-        }
-
-        return query;
+        let q = agropediaSupabase.from('cursos').select('id,titulo,slug,descripcion,imagen_url,dificultad,duracion_minutos,estado,curso_temas(tema_id,temas(id,nombre,slug))').eq('estado',this.published).order('created_at',{ascending:false});
+        if(filters.search) q=q.or(`titulo.ilike.%${filters.search}%,descripcion.ilike.%${filters.search}%`);
+        if(filters.topicId) q=q.eq('curso_temas.tema_id',filters.topicId);
+        if(filters.slug) q=q.eq('slug',filters.slug);
+        return q;
     },
-
     async getVideos(filters = {}) {
-        let query = agropediaSupabase
-            .from('videos')
-            .select('*')
-            .eq('publicado', true)
-            .order('created_at', { ascending: false });
-
-        if (filters.topicId) {
-            query = query.eq('tema_id', filters.topicId);
-        }
-
-        if (filters.search) {
-            query = query.ilike('titulo', `%${filters.search}%`);
-        }
-
-        return query;
+        let q = agropediaSupabase.from('videos').select('id,titulo,slug,descripcion,video_url,miniatura_url,dificultad,duracion_minutos,estado,video_temas(tema_id,temas(id,nombre,slug))').eq('estado',this.published).order('created_at',{ascending:false});
+        if(filters.search) q=q.or(`titulo.ilike.%${filters.search}%,descripcion.ilike.%${filters.search}%`);
+        if(filters.topicId) q=q.eq('video_temas.tema_id',filters.topicId);
+        if(filters.slug) q=q.eq('slug',filters.slug);
+        return q;
     },
-
     async getDocuments(filters = {}) {
-        let query = agropediaSupabase
-            .from('documentos')
-            .select('*')
-            .eq('publicado', true)
-            .order('created_at', { ascending: false });
-
-        if (filters.topicId) {
-            query = query.eq('tema_id', filters.topicId);
-        }
-
-        if (filters.search) {
-            query = query.ilike('titulo', `%${filters.search}%`);
-        }
-
-        return query;
+        let q = agropediaSupabase.from('documentos').select('id,titulo,slug,descripcion,archivo_path,archivo_url,dificultad,duracion_minutos,estado,documento_temas(tema_id,temas(id,nombre,slug))').eq('estado',this.published).order('created_at',{ascending:false});
+        if(filters.search) q=q.or(`titulo.ilike.%${filters.search}%,descripcion.ilike.%${filters.search}%`);
+        if(filters.topicId) q=q.eq('documento_temas.tema_id',filters.topicId);
+        if(filters.slug) q=q.eq('slug',filters.slug);
+        return q;
     },
-
-    async getCourse(id) {
-        return agropediaSupabase
-            .from('cursos')
-            .select('*')
-            .eq('id', id)
-            .eq('publicado', true)
-            .single();
-    },
-
-    async getCourseModules(courseId) {
-        return agropediaSupabase
-            .from('modulos_curso')
-            .select('*')
-            .eq('curso_id', courseId)
-            .order('orden', { ascending: true });
-    },
-
-    async getCourseLessons(moduleId) {
-        return agropediaSupabase
-            .from('lecciones_curso')
-            .select('*')
-            .eq('modulo_id', moduleId)
-            .order('orden', { ascending: true });
-    },
-
-    async getVideo(id) {
-        return agropediaSupabase
-            .from('videos')
-            .select('*')
-            .eq('id', id)
-            .eq('publicado', true)
-            .single();
-    },
-
-    async getDocument(id) {
-        return agropediaSupabase
-            .from('documentos')
-            .select('*')
-            .eq('id', id)
-            .eq('publicado', true)
-            .single();
-    },
-
-    async getTopics() {
-        return agropediaSupabase
-            .from('temas')
-            .select('*')
-            .eq('activo', true)
-            .order('nombre', { ascending: true });
-    }
+    async getCourse(id){ return agropediaSupabase.from('cursos').select('*').eq('id',id).eq('estado',this.published).single(); },
+    async getCourseModules(id){ return agropediaSupabase.from('modulos_curso').select('*').eq('curso_id',id).order('orden',{ascending:true}); },
+    async getCourseLessons(id){ return agropediaSupabase.from('lecciones_curso').select('*').eq('modulo_id',id).order('orden',{ascending:true}); },
+    async getVideo(id){ return agropediaSupabase.from('videos').select('*').eq('id',id).eq('estado',this.published).single(); },
+    async getDocument(id){ return agropediaSupabase.from('documentos').select('*').eq('id',id).eq('estado',this.published).single(); },
+    async getTopics(){ return agropediaSupabase.from('temas').select('id,nombre,slug,descripcion,imagen_url,frase').eq('activo',true).order('nombre',{ascending:true}); },
+    formatDuration(m){ if(!m)return ''; if(m<60)return `${m} min`; const h=Math.floor(m/60),r=m%60; return r?`${h} h ${r} min`:`${h} h`; },
+    topicNames(item,key){ return (item[key]||[]).map(x=>x.temas?.nombre).filter(Boolean); }
 };
