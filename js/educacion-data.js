@@ -28,7 +28,7 @@ const AgropediaEducation = {
     async getCourseLessons(id){ return agropediaSupabase.from('lecciones_curso').select('*').eq('modulo_id',id).order('orden',{ascending:true}); },
     async getVideo(id){ return agropediaSupabase.from('videos').select('*').eq('id',id).eq('estado',this.published).single(); },
     async getDocument(id){ return agropediaSupabase.from('documentos').select('*').eq('id',id).eq('estado',this.published).single(); },
-    async getTopics(){ return agropediaSupabase.from('temas').select('id,nombre,slug,descripcion,imagen_url,frase').eq('activo',true).order('nombre',{ascending:true}); },
+    async getTopics(){ return agropediaSupabase.from('temas').select('id,nombre,slug,descripcion,imagen_url,frase').order('nombre',{ascending:true}); },
     formatDuration(m){ if(!m)return ''; if(m<60)return `${m} min`; const h=Math.floor(m/60),r=m%60; return r?`${h} h ${r} min`:`${h} h`; },
     topicNames(item,key){ return (item[key]||[]).map(x=>x.temas?.nombre).filter(Boolean); }
 };
