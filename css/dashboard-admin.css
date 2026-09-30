@@ -234,3 +234,135 @@ body.agropedia-dark .admin-form select {
         width: 100%;
     }
 }
+
+/* CMS educativo avanzado */
+.cms-edu-wrapper {
+    margin-top: 28px;
+    padding: 24px;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 22px;
+    background: var(--dashboard-surface);
+    box-shadow: var(--dashboard-shadow);
+}
+.cms-edu-heading h3 { margin: 7px 0 6px; color: var(--dashboard-text); font-size: 1.5rem; }
+.cms-edu-heading p { margin: 0; color: var(--dashboard-muted); }
+.cms-edu-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px 0;
+    padding: 7px;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 14px;
+    background: var(--dashboard-surface-soft);
+}
+.cms-edu-tab {
+    border: 1px solid transparent;
+    border-radius: 9px;
+    padding: 9px 13px;
+    background: transparent;
+    color: var(--dashboard-muted);
+    font-weight: 800;
+}
+.cms-edu-tab:hover,
+.cms-edu-tab.is-active {
+    border-color: var(--dashboard-border);
+    background: var(--dashboard-surface);
+    color: var(--dashboard-green-dark);
+}
+.cms-edu-panel {
+    padding-top: 4px;
+}
+.cms-edu-panel-heading,
+.cms-structure-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+.cms-edu-panel-heading h4,
+.cms-structure-heading h4 {
+    margin: 0;
+    color: var(--dashboard-text);
+    font-size: 1.2rem;
+}
+.cms-edu-count {
+    display: block;
+    margin-top: 4px;
+    color: var(--dashboard-muted);
+    font-size: .82rem;
+}
+.cms-edu-form {
+    margin-bottom: 20px;
+}
+.topic-picker {
+    margin: 16px 0 0;
+    padding: 14px;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 12px;
+}
+.topic-picker legend {
+    padding: 0 6px;
+    color: var(--dashboard-text);
+    font-size: .82rem;
+    font-weight: 800;
+}
+.topic-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.topic-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: auto !important;
+    padding: 8px 10px;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 9px;
+    background: var(--dashboard-surface);
+    color: var(--dashboard-text) !important;
+    font-weight: 600 !important;
+}
+.topic-option input {
+    width: auto !important;
+}
+.cms-course-structure {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--dashboard-border);
+}
+.cms-structure-grid,
+.cms-structure-lists {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+.cms-structure-lists {
+    margin-top: 20px;
+}
+.cms-structure-lists h5,
+.cms-structure-grid h5 {
+    margin: 0 0 12px;
+    color: var(--dashboard-text);
+    font-size: 1rem;
+}
+body.agropedia-dark .cms-edu-wrapper {
+    background: var(--dashboard-surface);
+}
+body.agropedia-dark .cms-edu-tab.is-active,
+body.agropedia-dark .topic-option {
+    background: var(--dashboard-surface-soft);
+}
+@media (max-width: 800px) {
+    .cms-structure-grid,
+    .cms-structure-lists {
+        grid-template-columns: 1fr;
+    }
+    .cms-edu-panel-heading,
+    .cms-structure-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
