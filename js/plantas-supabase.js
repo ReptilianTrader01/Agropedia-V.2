@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const searchButton = document.getElementById('plantSearchButton');
     let plants = [];
     let category = 'todas';
+    let currentUser = null;
+    let favoriteIds = new Set();
 
     const escapeHtml = value => String(value ?? '')
         .replaceAll('&', '&amp;')
@@ -24,6 +26,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         .replaceAll("'", '&#039;');
 
     const norm = value => (value || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+    async function loadFavorites() {
+        const { data: authData } = await agropediaSupabase.auth.getUser();
+        currentUser = authData?.user || null;
+        if (!currentUser) return;
+        const { data } = await agropediaSupabase.from('plantas_favoritas').select('planta_id').eq('usuario_id', currentUser.id);
+        favoriteIds = new Set((data || []).map(row => row.planta_id));
+    }
+
+    async function toggleFavorite(plant, button) {
+        if (!currentUser) {
+            alert('Inicia sesión para guardar plantas favoritas.');
+            return;
+        }
+        const isFavorite = favoriteIds.has(plant.id);
+        const query = isFavorite
+            ? agropediaSupabase.from('plantas_favoritas').delete().eq('usuario_id', currentUser.id).eq('planta_id', plant.id)
+            : agropediaSupabase.from('plantas_favoritas').insert({ usuario_id: currentUser.id, planta_id: plant.id });
+        const { error } = await query;
+        if (error) {
+            alert('No se pudo actualizar el favorito.');
+            console.error(error);
+            return;
+        }
+        if (isFavorite) favoriteIds.delete(plant.id); else favoriteIds.add(plant.id);
+        button.textContent = favoriteIds.has(plant.id) ? '★' : '☆';
+        button.setAttribute('aria-label', favoriteIds.has(plant.id) ? 'Quitar de favoritos' : 'Agregar a favoritos');
+        button.title = favoriteIds.has(plant.id) ? 'Quitar de favoritos' : 'Agregar a favoritos';
+    }
 
     function card(plant) {
         const tags = (plant.planta_etiquetas || [])
@@ -53,7 +84,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                     <span class="view-plant">Ver planta →</span>
                 </div>
-            </a>`;
+            </a>
+            <button type="button" class="plant-card-favorite" aria-label="${favoriteIds.has(plant.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'}" title="${favoriteIds.has(plant.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'}">${favoriteIds.has(plant.id) ? '★' : '☆'}</button>`;
+        const favoriteButton = article.querySelector('.plant-card-favorite');
+        favoriteButton.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleFavorite(plant, favoriteButton);
+        });
         article.querySelector('img').addEventListener('error', event => event.target.src = 'assets/images/logo.png');
         return article;
     }
@@ -114,6 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             count.textContent = '0'; return;
         }
         plants = data || []; grid.innerHTML = '';
+        await loadFavorites();
         plants.forEach(p => grid.appendChild(card(p)));
         categories(); filter();
     }
