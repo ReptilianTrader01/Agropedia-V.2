@@ -290,8 +290,7 @@ async function setRecord(type, checked) {
         const {error}=await supabase.from('registros_cultivo').insert({planta_bancal_id:pb.id,usuario_id:user.id,tipo:type,notas:'Registrado desde Mi Huerto'});
         if(error) return alert(`No se pudo guardar el registro: ${error.message}`);
     } else {
-        const {data}=await supabase.from('registros_cultivo').select('id').eq('planta_bancal_id',pb.id).eq('usuario_id',user.id).eq('tipo',type).order('realizado_at',{ascending:false}).limit(1);
-        if(data?.[0]) await supabase.from('registros_cultivo').delete().eq('id',data[0].id);
+        await supabase.from('registros_cultivo').delete().eq('planta_bancal_id',pb.id).eq('usuario_id',user.id).eq('tipo',type);
     }
     await reloadGarden(); selectCell(selectedIndex);
 }
