@@ -1,76 +1,17 @@
 /* ==================================================
    PREFERENCIAS DE USUARIO - JAVASCRIPT
-   V2 sin base de datos.
-   Las preferencias se guardan localmente en el navegador
-   únicamente para poder probar la interfaz.
+   Agropedia V2 - Supabase
 ================================================== */
-
 'use strict';
 
-const courses = [
-    {
-        icon: '🌱',
-        title: 'Introducción a la jardinería',
-        description: 'Conoce los fundamentos para comenzar a cultivar.',
-        progress: 75
-    },
-    {
-        icon: '🌎',
-        title: 'Preparación y cuidado del suelo',
-        description: 'Aprende sobre nutrientes, estructura y fertilidad.',
-        progress: 40
-    },
-    {
-        icon: '💧',
-        title: 'Riego y cuidados básicos',
-        description: 'Aprende a identificar las necesidades de tus plantas.',
-        progress: 100
-    },
-    {
-        icon: '🐛',
-        title: 'Plagas y enfermedades',
-        description: 'Identifica problemas comunes y aprende a prevenirlos.',
-        progress: 0
-    },
-    {
-        icon: '🌙',
-        title: 'Cultivo y fases de la luna',
-        description: 'Conoce las prácticas tradicionales relacionadas con el ciclo lunar.',
-        progress: 60
-    },
-    {
-        icon: '🌿',
-        title: 'Planificación de un huerto',
-        description: 'Organiza el espacio y selecciona plantas compatibles.',
-        progress: 100
-    }
-];
-
-const defaultPreferences = {
-    darkMode: false,
-    showFavorites: true,
-    moonRecommendations: true,
-    gardenTips: true,
-    recommendationFrequency: 'daily'
-};
-
-const defaultProfile = {
-    name: '',
-    username: '',
-    contact: '',
-    zone: '',
-    climate: 'auto'
-};
-
+const supabase = window.agropediaSupabase;
 const body = document.body;
 const sessionNotice = document.getElementById('sessionNotice');
-
 const darkMode = document.getElementById('darkMode');
 const showFavorites = document.getElementById('showFavorites');
 const moonRecommendations = document.getElementById('moonRecommendations');
 const gardenTips = document.getElementById('gardenTips');
 const recommendationFrequency = document.getElementById('recommendationFrequency');
-
 const profileForm = document.getElementById('profileForm');
 const profileName = document.getElementById('profileName');
 const profileUsername = document.getElementById('profileUsername');
@@ -78,230 +19,203 @@ const profileContact = document.getElementById('profileContact');
 const profileZone = document.getElementById('profileZone');
 const profileClimate = document.getElementById('profileClimate');
 const saveMessage = document.getElementById('saveMessage');
-
 const logoutButton = document.getElementById('logoutButton');
 const deleteAccountButton = document.getElementById('deleteAccountButton');
-
 const enrolledCount = document.getElementById('enrolledCount');
 const inProgressCount = document.getElementById('inProgressCount');
 const completedCount = document.getElementById('completedCount');
 const overallProgress = document.getElementById('overallProgress');
 const courseList = document.getElementById('courseList');
 
-function readPreferences() {
-    try {
-        const stored = localStorage.getItem('agropedia_preferences');
-        return stored
-            ? { ...defaultPreferences, ...JSON.parse(stored) }
-            : { ...defaultPreferences };
-    } catch (error) {
-        return { ...defaultPreferences };
+let user = null;
+
+const escapeHtml = value => {
+    const div = document.createElement('div');
+    div.textContent = value ?? '';
+    return div.innerHTML;
+};
+
+async function requireUser() {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) {
+        sessionNotice.textContent = 'Inicia sesión para guardar tus preferencias.';
+        profileForm.querySelectorAll('input,select,button').forEach(el => el.disabled = true);
+        return false;
     }
-}
-
-function loadLocalData() {
-    const preferences = readPreferences();
-    const storedProfile = localStorage.getItem('agropedia_profile');
-
-    let profile = { ...defaultProfile };
-
-    try {
-        profile = storedProfile
-            ? { ...defaultProfile, ...JSON.parse(storedProfile) }
-            : { ...defaultProfile };
-    } catch (error) {
-        profile = { ...defaultProfile };
-    }
-
-    applyPreferences(preferences);
-    fillProfile(profile);
-}
-
-function savePreferences() {
-    const preferences = {
-        darkMode: darkMode.checked,
-        showFavorites: showFavorites.checked,
-        moonRecommendations: moonRecommendations.checked,
-        gardenTips: gardenTips.checked,
-        recommendationFrequency: recommendationFrequency.value
-    };
-
-    localStorage.setItem(
-        'agropedia_preferences',
-        JSON.stringify(preferences)
-    );
-
-    applyGlobalTheme(preferences.darkMode);
+    user = data.user;
+    sessionNotice.textContent = `Sesión activa: ${user.email || 'usuario autenticado'}`;
+    return true;
 }
 
 function applyGlobalTheme(enabled) {
     body.classList.toggle('agropedia-dark', enabled);
     body.classList.toggle('preferences-dark', enabled);
+    localStorage.setItem('agropedia_theme_cache', enabled ? 'dark' : 'light');
 }
 
-function applyPreferences(preferences) {
-    darkMode.checked = preferences.darkMode;
-    showFavorites.checked = preferences.showFavorites;
-    moonRecommendations.checked = preferences.moonRecommendations;
-    gardenTips.checked = preferences.gardenTips;
-    recommendationFrequency.value = preferences.recommendationFrequency;
+async function loadPreferences() {
+    const { data, error } = await supabase.from('preferencias_usuario').select('*').eq('usuario_id',user.id).maybeSingle();
+    if (error) throw error;
 
-    applyGlobalTheme(preferences.darkMode);
-}
-
-function fillProfile(profile) {
-    profileName.value = profile.name;
-    profileUsername.value = profile.username;
-    profileContact.value = profile.contact;
-    profileZone.value = profile.zone;
-    profileClimate.value = profile.climate;
-}
-
-function saveProfile() {
-    const profile = {
-        name: profileName.value.trim(),
-        username: profileUsername.value.trim(),
-        contact: profileContact.value.trim(),
-        zone: profileZone.value.trim(),
-        climate: profileClimate.value
+    const preferences = data || {
+        modo_nocturno:false,
+        mostrar_favoritas:true,
+        mostrar_recomendaciones_luna:true,
+        mostrar_recomendaciones_clima:true,
+        frecuencia_recomendaciones:'daily',
+        clima_preferido:'auto'
     };
 
-    localStorage.setItem(
-        'agropedia_profile',
-        JSON.stringify(profile)
-    );
+    darkMode.checked = preferences.modo_nocturno;
+    showFavorites.checked = preferences.mostrar_favoritas;
+    moonRecommendations.checked = preferences.mostrar_recomendaciones_luna;
+    gardenTips.checked = preferences.mostrar_recomendaciones_clima;
+    recommendationFrequency.value = preferences.frecuencia_recomendaciones || 'daily';
+    profileClimate.value = preferences.clima_preferido || 'auto';
+    applyGlobalTheme(preferences.modo_nocturno);
 }
 
-function renderCourses() {
-    const enrolledCourses = courses.filter(course => course.progress > 0);
-    const completedCourses = courses.filter(course => course.progress === 100);
-    const inProgressCourses = courses.filter(
-        course => course.progress > 0 && course.progress < 100
-    );
+async function savePreferences() {
+    const payload = {
+        usuario_id:user.id,
+        modo_nocturno:darkMode.checked,
+        mostrar_favoritas:showFavorites.checked,
+        mostrar_recomendaciones_luna:moonRecommendations.checked,
+        mostrar_recomendaciones_clima:gardenTips.checked,
+        frecuencia_recomendaciones:recommendationFrequency.value,
+        clima_preferido:profileClimate.value
+    };
+    const { error } = await supabase.from('preferencias_usuario').upsert(payload,{onConflict:'usuario_id'});
+    if (error) {
+        console.error(error);
+        saveMessage.textContent = 'No se pudieron guardar las preferencias.';
+        return;
+    }
+    applyGlobalTheme(darkMode.checked);
+    saveMessage.textContent = '✓ Preferencias guardadas en tu cuenta.';
+    window.setTimeout(()=>{saveMessage.textContent='';},2500);
+}
 
-    const average = courses.length
-        ? Math.round(
-            courses.reduce((total, course) => total + course.progress, 0) /
-            courses.length
-        )
-        : 0;
+async function loadProfile() {
+    const { data, error } = await supabase.from('perfiles').select('nombre,nombre_usuario,telefono,ubicacion').eq('id',user.id).maybeSingle();
+    if (error) throw error;
+    if (!data) return;
+    profileName.value = data.nombre || '';
+    profileUsername.value = data.nombre_usuario || '';
+    profileContact.value = data.telefono || '';
+    profileZone.value = data.ubicacion || '';
+}
 
-    enrolledCount.textContent = enrolledCourses.length;
-    inProgressCount.textContent = inProgressCourses.length;
-    completedCount.textContent = completedCourses.length;
-    overallProgress.textContent = `${average}%`;
+async function saveProfile() {
+    const payload = {
+        id:user.id,
+        nombre:profileName.value.trim(),
+        nombre_usuario:profileUsername.value.trim(),
+        telefono:profileContact.value.trim() || null,
+        ubicacion:profileZone.value.trim() || null
+    };
+    if (!payload.nombre || !payload.nombre_usuario) {
+        saveMessage.textContent = 'El nombre y el nombre de usuario son obligatorios.';
+        return;
+    }
+    const { error } = await supabase.from('perfiles').upsert(payload,{onConflict:'id'});
+    if (error) {
+        console.error(error);
+        saveMessage.textContent = 'No se pudo guardar el perfil.';
+        return;
+    }
+    await savePreferences();
+    saveMessage.textContent = '✓ Perfil y preferencias guardados en tu cuenta.';
+}
 
-    courseList.innerHTML = '';
+async function loadCourses() {
+    const { data, error } = await supabase.from('inscripciones_curso')
+        .select('curso_id,completado_at,cursos(id,titulo,descripcion,imagen_url)')
+        .eq('usuario_id',user.id);
+    if (error) throw error;
 
-    courses.forEach(course => {
-        const card = document.createElement('article');
-        const completed = course.progress === 100;
-        const enrolled = course.progress > 0;
+    const enrollments = data || [];
+    const ids = enrollments.map(x=>x.curso_id);
+    let progressMap = new Map();
 
-        card.className = 'course-card';
+    if (ids.length) {
+        const modules = await supabase.from('modulos_curso').select('id,curso_id,lecciones_curso(id)').in('curso_id',ids);
+        if (!modules.error) {
+            const lessonIds = (modules.data||[]).flatMap(m=>(m.lecciones_curso||[]).map(l=>l.id));
+            if (lessonIds.length) {
+                const progress = await supabase.from('progreso_leccion').select('leccion_id,progreso,completado').eq('usuario_id',user.id).in('leccion_id',lessonIds);
+                if (!progress.error) {
+                    const lessonsByCourse = new Map();
+                    (modules.data||[]).forEach(m=>(m.lecciones_curso||[]).forEach(l=>{
+                        if(!lessonsByCourse.has(m.curso_id)) lessonsByCourse.set(m.curso_id,[]);
+                        lessonsByCourse.get(m.curso_id).push(l.id);
+                    }));
+                    ids.forEach(courseId=>{
+                        const ls=lessonsByCourse.get(courseId)||[];
+                        const vals=ls.map(id=>(progress.data||[]).find(p=>p.leccion_id===id)?.progreso||0);
+                        progressMap.set(courseId,vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0);
+                    });
+                }
+            }
+        }
+    }
 
-        card.innerHTML = `
-            <div class="course-card__top">
-                <span class="course-card__icon">${course.icon}</span>
-                <span class="course-status">
-                    ${completed ? 'Completado' : enrolled ? 'En progreso' : 'No iniciado'}
-                </span>
-            </div>
+    const cards=enrollments.map(item=>({...item,progress:item.completado_at?100:(progressMap.get(item.curso_id)||0)}));
+    const inProgress=cards.filter(c=>c.progress>0&&c.progress<100);
+    const completed=cards.filter(c=>c.progress===100);
+    const average=cards.length?Math.round(cards.reduce((a,c)=>a+c.progress,0)/cards.length):0;
+    enrolledCount.textContent=cards.length;
+    inProgressCount.textContent=inProgress.length;
+    completedCount.textContent=completed.length;
+    overallProgress.textContent=`${average}%`;
+    courseList.innerHTML='';
 
-            <h3>${escapeHtml(course.title)}</h3>
-
-            <p>${escapeHtml(course.description)}</p>
-
-            <div class="course-progress-row">
-                <span>Progreso</span>
-                <strong>${course.progress}%</strong>
-            </div>
-
-            <div class="course-progress-track">
-                <div
-                    class="course-progress-bar"
-                    style="width: ${course.progress}%"
-                ></div>
-            </div>
+    cards.forEach(course=>{
+        const card=document.createElement('article');
+        card.className='course-card';
+        card.innerHTML=`
+            <div class="course-card__top"><span class="course-card__icon">🌱</span><span class="course-status">${course.progress===100?'Completado':course.progress?'En progreso':'No iniciado'}</span></div>
+            <h3>${escapeHtml(course.cursos?.titulo||'Curso')}</h3>
+            <p>${escapeHtml(course.cursos?.descripcion||'')}</p>
+            <div class="course-progress-row"><span>Progreso</span><strong>${course.progress}%</strong></div>
+            <div class="course-progress-track"><div class="course-progress-bar" style="width:${course.progress}%"></div></div>
         `;
-
         courseList.appendChild(card);
     });
+    if(!cards.length) courseList.innerHTML='<p>Aún no estás inscrito en ningún curso.</p>';
 }
 
-function setupPreferenceEvents() {
-    darkMode.addEventListener('change', () => {
-        savePreferences();
+async function savePreferenceField() {
+    if (!user) return;
+    await savePreferences();
+}
+
+function setupEvents() {
+    [darkMode,showFavorites,moonRecommendations,gardenTips,recommendationFrequency].forEach(el=>el.addEventListener('change',savePreferenceField));
+    profileClimate.addEventListener('change',savePreferenceField);
+    profileForm.addEventListener('submit',e=>{e.preventDefault();saveProfile();});
+    logoutButton.addEventListener('click',async()=>{
+        if(!confirm('¿Quieres cerrar sesión?'))return;
+        const {error}=await supabase.auth.signOut();
+        if(error)return alert('No se pudo cerrar sesión.');
+        window.location.href='index.html';
     });
-
-    showFavorites.addEventListener('change', savePreferences);
-    moonRecommendations.addEventListener('change', savePreferences);
-    gardenTips.addEventListener('change', savePreferences);
-    recommendationFrequency.addEventListener('change', savePreferences);
-
-    window.addEventListener('storage', event => {
-        if (event.key !== 'agropedia_preferences') {
-            return;
-        }
-
-        const preferences = readPreferences();
-        applyPreferences(preferences);
+    deleteAccountButton.addEventListener('click',()=>{
+        alert('La eliminación permanente de la cuenta requiere un endpoint seguro de administración. No se ejecutará desde el navegador para proteger tu cuenta.');
     });
 }
 
-profileForm.addEventListener('submit', event => {
-    event.preventDefault();
-
-    saveProfile();
-
-    saveMessage.textContent = '✓ Cambios guardados en este navegador.';
-
-    window.setTimeout(() => {
-        saveMessage.textContent = '';
-    }, 3000);
-});
-
-logoutButton.addEventListener('click', () => {
-    const confirmed = confirm('¿Quieres cerrar sesión?');
-
-    if (!confirmed) return;
-
-    localStorage.removeItem('agropedia_profile');
-    localStorage.removeItem('agropedia_preferences');
-
-    alert('Sesión cerrada en la demostración.');
-    window.location.reload();
-});
-
-deleteAccountButton.addEventListener('click', () => {
-    const firstConfirmation = confirm(
-        'Borrar una cuenta será una acción permanente cuando exista la base de datos. ¿Quieres simularla ahora?'
-    );
-
-    if (!firstConfirmation) return;
-
-    const secondConfirmation = confirm(
-        'Esta demostración eliminará los datos locales de Agropedia. ¿Continuar?'
-    );
-
-    if (!secondConfirmation) return;
-
-    localStorage.clear();
-
-    alert('Los datos locales de demostración fueron eliminados.');
-    window.location.reload();
-});
-
-function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.textContent = value;
-    return div.innerHTML;
-}
-
-function initPreferences() {
-    loadLocalData();
-    renderCourses();
-    setupPreferenceEvents();
+async function initPreferences(){
+    try{
+        if(!await requireUser())return;
+        await loadPreferences();
+        await loadProfile();
+        await loadCourses();
+        setupEvents();
+    }catch(error){
+        console.error(error);
+        saveMessage.textContent='No pudimos cargar tus datos. Recarga la página e inténtalo nuevamente.';
+    }
 }
 
 initPreferences();
