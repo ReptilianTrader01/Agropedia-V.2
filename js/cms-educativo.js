@@ -338,9 +338,16 @@
             dificultad: $('cms-' + type + '-difficulty').value,
             duracion_minutos: $('cms-' + type + '-duration').value ? Number($('cms-' + type + '-duration').value) : null,
             estado: $('cms-' + type + '-status').value,
-            autor_id: state.user.id,
-            publicado_at: $('cms-' + type + '-status').value === 'publicado' ? new Date().toISOString() : null
+            autor_id: state.user.id
         };
+
+        // Solo la tabla cursos tiene publicado_at en el esquema actual.
+        // Videos y documentos no deben recibir esa columna.
+        if (type === 'courses') {
+            payload.publicado_at = $('cms-' + type + '-status').value === 'publicado'
+                ? new Date().toISOString()
+                : null;
+        }
 
         if (type === 'courses') payload.imagen_url = $('cms-course-image').value.trim() || null;
         if (type === 'videos') { payload.video_url = $('cms-video-url').value.trim(); payload.miniatura_url = $('cms-video-thumb').value.trim() || null; }
