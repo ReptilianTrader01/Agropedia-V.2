@@ -18,8 +18,8 @@ async function loadRelatedResources(){
     ]);
     if(v.error||d.error){grid.innerHTML='<p>No pudimos cargar los recursos relacionados.</p>';return;}
     const seen=new Set(), items=[];
-    (v.data||[]).forEach(x=>{const item=x.videos;if(item&&item.estado==='publicado'&&!seen.has('v'+item.id)){seen.add('v'+item.id);items.push({...item,_type:'Video',_url='video.html?id='+item.id});}});
-    (d.data||[]).forEach(x=>{const item=x.documentos;if(item&&item.estado==='publicado'&&!seen.has('d'+item.id)){seen.add('d'+item.id);items.push({...item,_type:'Documento',_url='documento.html?id='+item.id});}});
+    (v.data||[]).forEach(x=>{const item=x.videos;if(item&&item.estado==='publicado'&&!seen.has('v'+item.id)){seen.add('v'+item.id);items.push({...item,_type:'Video',_url:'video.html?id='+item.id});}});
+    (d.data||[]).forEach(x=>{const item=x.documentos;if(item&&item.estado==='publicado'&&!seen.has('d'+item.id)){seen.add('d'+item.id);items.push({...item,_type:'Documento',_url:'documento.html?id='+item.id});}});
     grid.innerHTML=items.length?items.map(x=>'<a class="related-card" href="'+x._url+'"><strong>'+esc(x._type)+'</strong><h3>'+esc(x.titulo)+'</h3><p>'+esc(x.descripcion||'')+'</p></a>').join(''):'<p>No hay recursos relacionados con este curso.</p>';
 }
 function renderCourseTopics(){
