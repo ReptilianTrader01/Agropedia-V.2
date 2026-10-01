@@ -24,8 +24,39 @@ const AgropediaEducation = {
         return q;
     },
     async getCourse(ref){
-        const query = agropediaSupabase.from('cursos').select('*,curso_temas(tema_id,temas(id,nombre,slug))').eq('estado', this.published);
-        return /^\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
+        const query = agropediaSupabase.from('cursos').select('*').eq('estado', this.published);
+        const result = /^\d+$/.test(String(ref))
+            ? await query.eq('id', Number(ref)).maybeSingle()
+            : await query.eq('slug', ref).maybeSingle();
+
+        if (result.error || !result.data) return result;
+
+        const relations = await agropediaSupabase
+            .from('curso_temas')
+            .select('tema_id')
+            .eq('curso_id', result.data.id);
+
+        if (relations.error) return { data: null, error: relations.error };
+
+        const topicIds = (relations.data || []).map(x => x.tema_id).filter(Boolean);
+        let topics = [];
+
+        if (topicIds.length) {
+            const topicResult = await agropediaSupabase
+                .from('temas')
+                .select('id,nombre,slug')
+                .in('id', topicIds);
+
+            if (topicResult.error) return { data: null, error: topicResult.error };
+            topics = topicResult.data || [];
+        }
+
+        result.data.curso_temas = topics.map(t => ({
+            tema_id: t.id,
+            temas: t
+        }));
+
+        return result;
     },
     async getCourseModules(id){ return agropediaSupabase.from('modulos_curso').select('*').eq('curso_id',id).order('orden',{ascending:true}); },
     async getCourseLessons(id){ return agropediaSupabase.from('lecciones_curso').select('*').eq('modulo_id',id).order('orden',{ascending:true}); },
