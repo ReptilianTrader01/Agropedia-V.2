@@ -11,5 +11,19 @@ if(youtubeId){
     player.innerHTML=`<video controls preload="metadata" poster="${esc(v.miniatura_url||'')}" style="width:100%;height:auto"><source src="${esc(v.video_url)}"></video>`;
 }else{
     player.innerHTML='<div class="video-placeholder"><span>▶</span><p>Video no disponible.</p></div>';
-}document.getElementById('videoTopic').textContent=`🌱 ${AgropediaEducation.topicNames(v,'video_temas').join(', ')||'Agropedia'}`;}
+}document.getElementById('videoTopic').textContent=`🌱 ${AgropediaEducation.topicNames(v,'video_temas').join(', ')||'Agropedia'}`;
+await loadRelated(v);
+}
+async function loadRelated(v){
+ const box=document.getElementById('relatedContent'); if(!box)return;
+ const ids=(v.video_temas||[]).map(x=>x.tema_id); if(!ids.length){box.innerHTML='<p>No hay contenido relacionado.</p>';return;}
+ const [c,d]=await Promise.all([
+   supabase.from('curso_temas').select('curso_id,cursos(id,titulo,descripcion,estado)').in('tema_id',ids),
+   supabase.from('documento_temas').select('documento_id,documentos(id,titulo,descripcion,estado)').in('tema_id',ids)
+ ]);
+ const items=[];
+ (c.data||[]).forEach(x=>{if(x.cursos?.estado==='publicado')items.push({...x.cursos,url:'curso.html?id='+x.cursos.id,type:'Curso'});});
+ (d.data||[]).forEach(x=>{if(x.documentos?.estado==='publicado')items.push({...x.documentos,url:'documento.html?id='+x.documentos.id,type:'Documento'});});
+ box.innerHTML=items.length?items.map(x=>`<a class="related-card" href="${x.url}"><strong>${esc(x.type)}</strong><h3>${esc(x.titulo)}</h3><p>${esc(x.descripcion||'')}</p></a>`).join(''):'<p>No hay contenido relacionado.</p>';
+}
 init().catch(console.error);
