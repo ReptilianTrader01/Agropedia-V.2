@@ -23,11 +23,20 @@ const AgropediaEducation = {
         if(filters.slug) q=q.eq('slug',filters.slug);
         return q;
     },
-    async getCourse(id){ return agropediaSupabase.from('cursos').select('*').eq('id',id).eq('estado',this.published).single(); },
+    async getCourse(ref){
+        const query = agropediaSupabase.from('cursos').select('*').eq('estado', this.published);
+        return /^\\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
+    },
     async getCourseModules(id){ return agropediaSupabase.from('modulos_curso').select('*').eq('curso_id',id).order('orden',{ascending:true}); },
     async getCourseLessons(id){ return agropediaSupabase.from('lecciones_curso').select('*').eq('modulo_id',id).order('orden',{ascending:true}); },
-    async getVideo(id){ return agropediaSupabase.from('videos').select('*').eq('id',id).eq('estado',this.published).single(); },
-    async getDocument(id){ return agropediaSupabase.from('documentos').select('*').eq('id',id).eq('estado',this.published).single(); },
+    async getVideo(ref){
+        const query = agropediaSupabase.from('videos').select('*,video_temas(tema_id,temas(id,nombre,slug))').eq('estado', this.published);
+        return /^\\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
+    },
+    async getDocument(ref){
+        const query = agropediaSupabase.from('documentos').select('*,documento_temas(tema_id,temas(id,nombre,slug))').eq('estado', this.published);
+        return /^\\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
+    },
     async getTopics(){ return agropediaSupabase.from('temas').select('id,nombre,slug,descripcion,imagen_url,frase').order('nombre',{ascending:true}); },
     formatDuration(m){ if(!m)return ''; if(m<60)return `${m} min`; const h=Math.floor(m/60),r=m%60; return r?`${h} h ${r} min`:`${h} h`; },
     topicNames(item,key){ return (item[key]||[]).map(x=>x.temas?.nombre).filter(Boolean); }
