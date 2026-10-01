@@ -1,6 +1,6 @@
 'use strict';
 const supabase=window.agropediaSupabase;
-const slug=new URLSearchParams(location.search).get('tema')||new URLSearchParams(location.search).get('slug');
+const params=new URLSearchParams(location.search);\nconst slug=params.get('tema')||params.get('slug');
 const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
 const norm=v=>String(v??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 const grid=document.getElementById('topicContentGrid'),search=document.getElementById('topicSearch'),empty=document.getElementById('topicEmpty');
@@ -16,7 +16,7 @@ async function related(table, idField, resourceTable){
 }
 async function init(){
     const t=await AgropediaEducation.getTopics(); if(t.error)throw t.error;
-    topic=(t.data||[]).find(x=>x.slug===slug);
+    topic=(t.data||[]).find(x=>String(x.id)===String(slug)||x.slug===slug);
     if(!topic){document.getElementById('topicTitle').textContent='Tema no disponible';return;}
     document.getElementById('topicTitle').textContent=topic.nombre;
     document.getElementById('topicHeading').textContent=topic.nombre.toLowerCase();
