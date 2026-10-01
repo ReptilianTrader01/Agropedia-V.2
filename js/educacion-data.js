@@ -24,18 +24,18 @@ const AgropediaEducation = {
         return q;
     },
     async getCourse(ref){
-        const query = agropediaSupabase.from('cursos').select('*').eq('estado', this.published);
-        return /^\\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
+        const query = agropediaSupabase.from('cursos').select('*,curso_temas(tema_id,temas(id,nombre,slug))').eq('estado', this.published);
+        return /^\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
     },
     async getCourseModules(id){ return agropediaSupabase.from('modulos_curso').select('*').eq('curso_id',id).order('orden',{ascending:true}); },
     async getCourseLessons(id){ return agropediaSupabase.from('lecciones_curso').select('*').eq('modulo_id',id).order('orden',{ascending:true}); },
     async getVideo(ref){
         const query = agropediaSupabase.from('videos').select('*,video_temas(tema_id,temas(id,nombre,slug))').eq('estado', this.published);
-        return /^\\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
+        return /^\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
     },
     async getDocument(ref){
         const query = agropediaSupabase.from('documentos').select('*,documento_temas(tema_id,temas(id,nombre,slug))').eq('estado', this.published);
-        return /^\\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
+        return /^\d+$/.test(String(ref)) ? query.eq('id', Number(ref)).single() : query.eq('slug', ref).single();
     },
     async getTopics(){ return agropediaSupabase.from('temas').select('id,nombre,slug,descripcion,imagen_url,frase').order('nombre',{ascending:true}); },
     formatDuration(m){ if(!m)return ''; if(m<60)return `${m} min`; const h=Math.floor(m/60),r=m%60; return r?`${h} h ${r} min`:`${h} h`; },
