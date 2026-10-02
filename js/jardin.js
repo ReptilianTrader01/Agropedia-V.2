@@ -4,7 +4,7 @@
 ================================================== */
 'use strict';
 
-const supabase = window.agropediaSupabase;
+const agropediaSupabase = window.agropediaSupabase;
 const gardenBoard = document.getElementById('gardenBoard');
 const emptyStatus = document.getElementById('emptyStatus');
 const statusContent = document.getElementById('statusContent');
@@ -85,7 +85,7 @@ function getStatusClass(pb) {
 }
 
 async function requireUser() {
-    const { data, error } = await supabase.auth.getUser();
+    const { data, error } = await agropediaSupabase.auth.getUser();
     if (error || !data.user) {
         alert('Inicia sesión para utilizar Mi Huerto.');
         window.location.href = 'registro.html';
@@ -96,7 +96,7 @@ async function requireUser() {
 }
 
 async function loadPlants() {
-    const { data, error } = await supabase
+    const { data, error } = await agropediaSupabase
         .from('plantas')
         .select('id,nombre_comun,nombre_cientifico,descripcion,imagen_url,planta_etiquetas(etiquetas_planta(nombre))')
         .order('nombre_comun');
@@ -105,11 +105,11 @@ async function loadPlants() {
 }
 
 async function getOrCreateGarden() {
-    let { data, error } = await supabase.from('huertos').select('*').eq('usuario_id', user.id).order('created_at').limit(1).maybeSingle();
+    let { data, error } = await agropediaSupabase.from('huertos').select('*').eq('usuario_id', user.id).order('created_at').limit(1).maybeSingle();
     if (error) throw error;
 
     if (!data) {
-        const created = await supabase.from('huertos').insert({
+        const created = await agropediaSupabase.from('huertos').insert({
             usuario_id: user.id,
             nombre: 'Mi huerto',
             descripcion: 'Mi espacio de cultivo en Agropedia',
@@ -123,7 +123,7 @@ async function getOrCreateGarden() {
 }
 
 async function ensureBeds() {
-    const { data, error } = await supabase.from('bancales')
+    const { data, error } = await agropediaSupabase.from('bancales')
         .select('*,plantas_bancal(*,plantas(id,nombre_comun,nombre_cientifico,imagen_url))')
         .eq('huerto_id', garden.id)
         .order('fila').order('columna');
@@ -149,10 +149,10 @@ async function ensureBeds() {
         }
     }
     if (missing.length) {
-        const created = await supabase.from('bancales').insert(missing).select('*,plantas_bancal(*,plantas(id,nombre_comun,nombre_cientifico,imagen_url))');
+        const created = await agropediaSupabase.from('bancales').insert(missing).select('*,plantas_bancal(*,plantas(id,nombre_comun,nombre_cientifico,imagen_url))');
         if (created.error) throw created.error;
     }
-    const refreshed = await supabase.from('bancales')
+    const refreshed = await agropediaSupabase.from('bancales')
         .select('*,plantas_bancal(*,plantas(id,nombre_comun,nombre_cientifico,imagen_url))')
         .eq('huerto_id', garden.id).order('fila').order('columna');
     if (refreshed.error) throw refreshed.error;
@@ -162,7 +162,7 @@ async function ensureBeds() {
 async function loadRecords() {
     const ids = beds.flatMap(b => b.plantas_bancal || []).map(pb => pb.id);
     if (!ids.length) return;
-    const { data, error } = await supabase.from('registros_cultivo')
+    const { data, error } = await agropediaSupabase.from('registros_cultivo')
         .select('id,planta_bancal_id,tipo,valor,notas,realizado_at')
         .eq('usuario_id', user.id).in('planta_bancal_id', ids)
         .order('realizado_at', { ascending: false });
@@ -174,7 +174,7 @@ async function loadRecords() {
 
 async function loadTasks() {
     const today = new Date().toISOString().slice(0,10);
-    let { data, error } = await supabase.from('tareas_huerto').select('*').eq('huerto_id', garden.id).eq('fecha', today).order('id');
+    let { data, error } = await agropediaSupabase.from('tareas_huerto').select('*').eq('huerto_id', garden.id).eq('fecha', today).order('id');
     if (error) throw error;
 
     if (!data?.length) {
@@ -189,7 +189,7 @@ async function loadTasks() {
             { huerto_id:garden.id,titulo:`Planificar labores considerando la fase ${moon}`,descripcion:'Planificación según la fase lunar.',fecha:today },
             { huerto_id:garden.id,titulo:'Revisar el estado general de los bancales',descripcion:'Revisión general del huerto.',fecha:today }
         ];
-        const created = await supabase.from('tareas_huerto').insert(rows).select();
+        const created = await agropediaSupabase.from('tareas_huerto').insert(rows).select();
         if (created.error) throw created.error;
         data = created.data;
     }
@@ -255,7 +255,7 @@ async function addPlantToCell(index) {
     const indexFound=Number.isInteger(Number(n)) && Number(n)>0 ? Number(n)-1 : plants.findIndex(p=>p.nombre_comun.toLowerCase()===n.toLowerCase());
     const plant=plants[indexFound];
     if (!plant) return alert('Planta no encontrada.');
-    const {error}=await supabase.from('plantas_bancal').insert({bancal_id:bed.id,planta_id:plant.id,cantidad:1,estado:'activa'}).select().single();
+    const {error}=await agropediaSupabase.from('plantas_bancal').insert({bancal_id:bed.id,planta_id:plant.id,cantidad:1,estado:'activa'}).select().single();
     if(error) return alert(`No se pudo agregar la planta: ${error.message}`);
     await reloadGarden();
     selectCell(index);
@@ -269,7 +269,7 @@ async function editSelectedPlant() {
     const n=input.trim();
     const found=Number.isInteger(Number(n)) && Number(n)>0 ? plants[Number(n)-1] : plants.find(p=>p.nombre_comun.toLowerCase()===n.toLowerCase());
     if(!found) return alert('Planta no encontrada.');
-    const {error}=await supabase.from('plantas_bancal').update({planta_id:found.id}).eq('id',pb.id);
+    const {error}=await agropediaSupabase.from('plantas_bancal').update({planta_id:found.id}).eq('id',pb.id);
     if(error) return alert(`No se pudo actualizar: ${error.message}`);
     await reloadGarden(); selectCell(selectedIndex);
 }
@@ -278,7 +278,7 @@ async function deletePlantFromCell(index) {
     const bed=bedAt(index), pb=getPlantForBed(bed);
     if(!pb) return alert('Esta celda ya está vacía.');
     if(!confirm(`¿Quieres eliminar ${pb.plantas?.nombre_comun || 'esta planta'} de esta celda?`)) return;
-    const {error}=await supabase.from('plantas_bancal').delete().eq('id',pb.id);
+    const {error}=await agropediaSupabase.from('plantas_bancal').delete().eq('id',pb.id);
     if(error) return alert(`No se pudo eliminar: ${error.message}`);
     selectedIndex=null; hideStatusPanel(); await reloadGarden();
 }
@@ -287,10 +287,10 @@ async function setRecord(type, checked) {
     const pb=getPlantForBed(bedAt(selectedIndex));
     if(!pb) return;
     if(checked) {
-        const {error}=await supabase.from('registros_cultivo').insert({planta_bancal_id:pb.id,usuario_id:user.id,tipo:type,notas:'Registrado desde Mi Huerto'});
+        const {error}=await agropediaSupabase.from('registros_cultivo').insert({planta_bancal_id:pb.id,usuario_id:user.id,tipo:type,notas:'Registrado desde Mi Huerto'});
         if(error) return alert(`No se pudo guardar el registro: ${error.message}`);
     } else {
-        await supabase.from('registros_cultivo').delete().eq('planta_bancal_id',pb.id).eq('usuario_id',user.id).eq('tipo',type);
+        await agropediaSupabase.from('registros_cultivo').delete().eq('planta_bancal_id',pb.id).eq('usuario_id',user.id).eq('tipo',type);
     }
     await reloadGarden(); selectCell(selectedIndex);
 }
@@ -343,7 +343,7 @@ function updateDailyStatus(){
 
 async function toggleTask(task,checked){
     const update={completada:checked,completed_at:checked?new Date().toISOString():null};
-    const {error}=await supabase.from('tareas_huerto').update(update).eq('id',task.id).eq('huerto_id',garden.id);
+    const {error}=await agropediaSupabase.from('tareas_huerto').update(update).eq('id',task.id).eq('huerto_id',garden.id);
     if(error) return alert(`No se pudo actualizar la tarea: ${error.message}`);
     task.completada=checked; task.completed_at=update.completed_at; renderTasks();
 }
@@ -366,7 +366,7 @@ function updateProgress(){
 }
 
 async function renderFavorites(){
-    const {data,error}=await supabase.from('plantas_favoritas').select('planta_id,plantas(id,nombre_comun,nombre_cientifico,imagen_url)').eq('usuario_id',user.id);
+    const {data,error}=await agropediaSupabase.from('plantas_favoritas').select('planta_id,plantas(id,nombre_comun,nombre_cientifico,imagen_url)').eq('usuario_id',user.id);
     if(error){favoritesGrid.innerHTML='<p>No se pudieron cargar tus favoritos.</p>';return;}
     favoritesGrid.innerHTML='';
     (data||[]).forEach(item=>{
@@ -386,7 +386,7 @@ function setupEvents(){
     resetGardenButton.addEventListener('click',async()=>{
         if(!confirm('Esto eliminará las plantas de tu huerto y conservará el huerto. ¿Continuar?'))return;
         const ids=beds.flatMap(b=>b.plantas_bancal||[]).map(x=>x.id);
-        if(ids.length){const {error}=await supabase.from('plantas_bancal').delete().in('id',ids);if(error)return alert(error.message);}
+        if(ids.length){const {error}=await agropediaSupabase.from('plantas_bancal').delete().in('id',ids);if(error)return alert(error.message);}
         selectedIndex=null; await reloadGarden();
     });
     commentText.addEventListener('input',()=>characterCount.textContent=`${commentText.value.length} / 500`);
