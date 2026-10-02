@@ -104,6 +104,31 @@
 
 
         <!-- ==================================================
+             GESTIÓN DE HUERTOS
+        =================================================== -->
+        <section class="garden-manager-section">
+            <div class="garden-container">
+                <div class="garden-manager">
+                    <div>
+                        <span class="section-label">🌿 Espacios</span>
+                        <h2>Mis huertos</h2>
+                        <p>Administra varios espacios de cultivo sin perder sus plantas, tareas ni registros.</p>
+                    </div>
+                    <div class="garden-manager-actions">
+                        <label for="gardenSelector">Huerto activo</label>
+                        <select id="gardenSelector" aria-label="Seleccionar huerto"></select>
+                        <div class="garden-manager-buttons">
+                            <button type="button" id="createGardenButton">＋ Nuevo</button>
+                            <button type="button" id="renameGardenButton">✏️ Renombrar</button>
+                            <button type="button" id="deleteGardenButton">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================================================
              EDITOR DEL HUERTO
         =================================================== -->
         <section class="garden-editor-section">
@@ -167,7 +192,7 @@
                             </div>
 
                             <div class="board-size">
-                                <span>6 × 4</span>
+                                <span id="boardSize">6 × 4</span>
                             </div>
                         </div>
 
@@ -246,9 +271,33 @@
                                 </label>
                             </div>
 
+                            <div class="plant-details-form">
+                                <h4>Datos del cultivo</h4>
+                                <label>Cantidad <input type="number" id="plantQuantity" min="1" value="1"></label>
+                                <label>Fecha de siembra <input type="date" id="plantSowingDate"></label>
+                                <label>Cosecha estimada <input type="date" id="plantHarvestDate"></label>
+                                <label>Etapa
+                                    <select id="plantStage">
+                                        <option value="">Sin etapa</option>
+                                    </select>
+                                </label>
+                                <label>Notas
+                                    <textarea id="plantNotes" rows="3" maxlength="500" placeholder="Notas sobre este cultivo..."></textarea>
+                                </label>
+                                <button class="plant-save-button" id="savePlantDetails" type="button">Guardar datos del cultivo</button>
+                            </div>
+
                             <button class="plant-info-button" id="plantInfoButton" type="button">
                                 📖 Ver información de la planta
                             </button>
+
+                            <div class="plant-history">
+                                <div class="plant-history-heading">
+                                    <h4>Bitácora reciente</h4>
+                                    <button type="button" id="refreshHistoryButton">↻</button>
+                                </div>
+                                <div id="plantHistoryList"></div>
+                            </div>
                         </div>
                     </aside>
                 </div>
@@ -259,7 +308,7 @@
         <!-- ==================================================
              ESTADO Y TAREAS DEL DÍA
         =================================================== -->
-        <section class="garden-status-section">
+        <section class="garden-status-section" id="gardenStatusSection">
             <div class="garden-container">
                 <div class="status-grid">
 
