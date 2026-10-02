@@ -17,28 +17,6 @@
         stages: []
     };
 
-    function loadScript(src) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        });
-    }
-
-    async function loadSupabaseClient() {
-        if (!window.supabase) {
-            await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
-        }
-
-        if (!window.agropediaSupabase) {
-            await loadScript('js/supabase-config.js');
-        }
-
-        return window.agropediaSupabase;
-    }
-
     function $(id) {
         return document.getElementById(id);
     }
@@ -718,11 +696,9 @@
         setDate();
         buildWorkspace();
 
-        let supabase;
+        const supabase = window.agropediaSupabase;
 
-        try {
-            supabase = await loadSupabaseClient();
-        } catch (error) {
+        if (!supabase) {
             toast('No se pudo cargar Supabase.', true);
             return;
         }
