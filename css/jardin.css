@@ -896,3 +896,76 @@ body.agropedia-dark .community-comment p {
     .comments-section { padding: 60px 0; }
     .favorites-grid { grid-template-columns: 1fr; }
 }
+
+/* ==================================================
+   FASE 3.1 — GESTIÓN AVANZADA
+================================================== */
+.garden-manager-section { padding: 35px 0 0; }
+.garden-manager {
+    display: grid;
+    grid-template-columns: 1fr minmax(300px, 430px);
+    gap: 25px;
+    align-items: end;
+    padding: 22px 25px;
+    border: 1px solid #dfe8db;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(35,70,35,.05);
+}
+.garden-manager h2 { margin: 6px 0 7px; color: #285c2c; font-size: 25px; }
+.garden-manager p { margin: 0; color: #748074; font-size: 12px; line-height: 1.6; }
+.garden-manager-actions label { display:block; margin-bottom:6px; color:#596259; font-size:10px; font-weight:700; }
+.garden-manager-actions select {
+    width:100%; height:40px; padding:0 10px; border:1px solid #d6e0d2; border-radius:8px;
+    background:white; color:#4d584d; font:inherit; font-size:12px;
+}
+.garden-manager-buttons { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-top:8px; }
+.garden-manager-buttons button,
+.plant-save-button {
+    padding:9px 8px; border:1px solid #cfe0c9; border-radius:8px; background:#edf5e9;
+    color:#285c2c; cursor:pointer; font:inherit; font-size:10px; font-weight:700;
+}
+.garden-manager-buttons button:hover,
+.plant-save-button:hover { background:#dfeeda; }
+.plant-details-form { margin-top:18px; padding-top:17px; border-top:1px solid #e6ece3; }
+.plant-details-form h4,
+.plant-history h4 { margin:0 0 10px; color:#315f35; font-size:12px; }
+.plant-details-form label { display:block; margin:8px 0; color:#6c766c; font-size:10px; }
+.plant-details-form input,
+.plant-details-form select,
+.plant-details-form textarea {
+    width:100%; box-sizing:border-box; margin-top:4px; padding:8px; border:1px solid #d6e0d2;
+    border-radius:7px; background:white; color:#4d584d; font:inherit; font-size:10px;
+}
+.plant-details-form textarea { resize:vertical; }
+.plant-save-button { width:100%; margin-top:4px; background:#2f7d32; color:white; border-color:#2f7d32; }
+.plant-history { margin-top:18px; padding-top:15px; border-top:1px solid #e6ece3; }
+.plant-history-heading { display:flex; justify-content:space-between; align-items:center; }
+.plant-history-heading button { border:0; background:transparent; color:#2f7d32; cursor:pointer; font-size:16px; }
+.history-item { display:flex; flex-direction:column; gap:2px; padding:8px 9px; margin-top:6px; border-radius:7px; background:#f5f8f3; }
+.history-item strong { color:#315f35; font-size:10px; }
+.history-item span { color:#6f786f; font-size:9px; line-height:1.4; }
+.history-item small { color:#9aa19a; font-size:8px; }
+.history-empty { margin:0; color:#909990; font-size:9px; }
+body.agropedia-dark .garden-manager { background:#182119; border-color:#304033; box-shadow:0 10px 30px rgba(0,0,0,.22); }
+body.agropedia-dark .garden-manager h2 { color:#b9ddb9; }
+body.agropedia-dark .garden-manager p,
+body.agropedia-dark .garden-manager-actions label { color:#9aa69b; }
+body.agropedia-dark .garden-manager-actions select,
+body.agropedia-dark .plant-details-form input,
+body.agropedia-dark .plant-details-form select,
+body.agropedia-dark .plant-details-form textarea { background:#101810; border-color:#344638; color:#dce6dd; }
+body.agropedia-dark .garden-manager-buttons button { background:#243627; border-color:#38563c; color:#b9ddb9; }
+body.agropedia-dark .plant-details-form,
+body.agropedia-dark .plant-history { border-color:#304033; }
+body.agropedia-dark .plant-details-form h4,
+body.agropedia-dark .plant-history h4,
+body.agropedia-dark .history-item strong { color:#a9d2ab; }
+body.agropedia-dark .plant-details-form label,
+body.agropedia-dark .history-item span { color:#aab5ab; }
+body.agropedia-dark .history-item { background:#202d22; }
+body.agropedia-dark .history-item small,
+body.agropedia-dark .history-empty { color:#8f9c91; }
+@media (max-width:850px) {
+    .garden-manager { grid-template-columns:1fr; align-items:start; }
+}
