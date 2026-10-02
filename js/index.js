@@ -20,24 +20,23 @@
         'diciembre'
     ];
 
-    const recommendedByMonth = {
-        1: ['Lechuga', 'Zanahoria', 'Rábano', 'Espinaca', 'Cilantro'],
-        2: ['Jitomate', 'Lechuga', 'Zanahoria', 'Rábano', 'Cilantro'],
-        3: ['Jitomate', 'Pepino', 'Calabacita', 'Albahaca', 'Frijol'],
-        4: ['Jitomate', 'Pepino', 'Calabacita', 'Chile', 'Albahaca'],
-        5: ['Pepino', 'Calabacita', 'Chile', 'Frijol', 'Albahaca'],
-        6: ['Pepino', 'Calabacita', 'Frijol', 'Maíz', 'Chile'],
-        7: ['Jitomate', 'Pepino', 'Frijol', 'Chile', 'Albahaca'],
-        8: ['Jitomate', 'Lechuga', 'Rábano', 'Cilantro', 'Zanahoria'],
-        9: ['Lechuga', 'Espinaca', 'Rábano', 'Zanahoria', 'Cilantro'],
-        10: ['Lechuga', 'Espinaca', 'Zanahoria', 'Rábano', 'Ajo'],
-        11: ['Espinaca', 'Lechuga', 'Zanahoria', 'Rábano', 'Ajo'],
-        12: ['Lechuga', 'Espinaca', 'Cilantro', 'Rábano', 'Zanahoria']
-    };
-
     const plantEmoji = ['🌱', '🥬', '🥕', '🌿', '🍅'];
 
     let carouselIndex = 0;
+    let recentPlants = [];
+
+    // =========================================================
+    // SEGURIDAD DE CONTENIDO
+    // =========================================================
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
 
     // =========================================================
     // ESTACIÓN
@@ -144,7 +143,6 @@
         const [currentSeason, seasonDescription] = season(now);
         const moon = moonPhase(now);
 
-        // current-month es opcional: algunas versiones del diseño no lo usan.
         setText('current-month', monthNames[now.getMonth()]);
         setText('popular-month', monthNames[now.getMonth()]);
 
@@ -223,12 +221,34 @@
     }
 
     // =========================================================
+    // CARGA REAL DE PLANTAS
+    // =========================================================
+
+    async function loadPlants() {
+        const { data, error } = await agropediaSupabase
+            .from('plantas')
+            .select('id,nombre_comun,nombre_cientifico,descripcion,imagen_url,tipo_cultivo,created_at')
+            .order('created_at', { ascending: false })
+            .limit(15);
+
+        if (error) {
+            console.error('Error al cargar plantas del inicio:', error);
+            recentPlants = [];
+            renderCarousel();
+            renderPopular();
+            return;
+        }
+
+        recentPlants = data || [];
+        renderCarousel();
+        renderPopular();
+    }
+
+    // =========================================================
     // CARRUSEL DE PLANTAS RECOMENDADAS
     // =========================================================
 
     function renderCarousel() {
-        const month = new Date().getMonth() + 1;
-        const plants = recommendedByMonth[month] || [];
         const track = document.getElementById('plant-track');
         const dots = document.getElementById('carousel-dots');
 
@@ -236,30 +256,48 @@
             return;
         }
 
-        track.innerHTML = plants
-            .map((plant, index) => `
-                <article class="plant-card">
-                    <div class="plant-card__image">
-                        ${plantEmoji[index % plantEmoji.length]}
-                    </div>
+        const plants = recentPlants.slice(0, 5);
 
-                    <div class="plant-card__body">
-                        <h3>${plant}</h3>
-                        <p>Recomendada para ${monthNames[month - 1]}.</p>
-                    </div>
-                </article>
-            `)
+        if (!plants.length) {
+            track.innerHTML = '<p class="loading-plants">No hay plantas disponibles todavía.</p>';
+            dots.innerHTML = '';
+            return;
+        }
+
+        track.innerHTML = plants
+            .map((plant, index) => {
+                const name = escapeHtml(plant.nombre_comun || 'Planta sin nombre');
+                const scientific = escapeHtml(plant.nombre_cientifico || '');
+                const description = escapeHtml(
+                    plant.descripcion || 'Consulta la ficha para conocer sus características y cuidados.'
+                );
+                const image = escapeHtml(plant.imagen_url || 'assets/images/logo.png');
+                const icon = plantEmoji[index % plantEmoji.length];
+
+                return '<article class="plant-card">' +
+                    '<div class="plant-card__image">' +
+                        '<img src="' + image + '" alt="' + name + '" loading="lazy">' +
+                    '</div>' +
+                    '<div class="plant-card__body">' +
+                        '<h3>' + name + '</h3>' +
+                        '<p>' + (scientific || description) + '</p>' +
+                    '</div>' +
+                    '</article>';
+            })
             .join('');
 
+        track.querySelectorAll('img').forEach(image => {
+            image.addEventListener('error', event => {
+                event.target.src = 'assets/images/logo.png';
+            });
+        });
+
         dots.innerHTML = plants
-            .map((_, index) => `
-                <button
-                    class="carousel-dot ${index === 0 ? 'is-active' : ''}"
-                    type="button"
-                    aria-label="Mostrar planta ${index + 1}"
-                    data-slide="${index}">
-                </button>
-            `)
+            .map((_, index) =>
+                '<button class="carousel-dot ' + (index === 0 ? 'is-active' : '') +
+                '" type="button" aria-label="Mostrar planta ' + (index + 1) +
+                '" data-slide="' + index + '"></button>'
+            )
             .join('');
 
         dots.querySelectorAll('.carousel-dot').forEach(button => {
@@ -273,20 +311,20 @@
         const next = document.getElementById('carousel-next');
 
         if (previous) {
-            previous.addEventListener('click', () => {
+            previous.onclick = () => {
                 carouselIndex = (carouselIndex + plants.length - 1) % plants.length;
                 moveCarousel();
-            });
+            };
         }
 
         if (next) {
-            next.addEventListener('click', () => {
+            next.onclick = () => {
                 carouselIndex = (carouselIndex + 1) % plants.length;
                 moveCarousel();
-            });
+            };
         }
 
-        window.addEventListener('resize', moveCarousel);
+        carouselIndex = 0;
         moveCarousel();
     }
 
@@ -311,7 +349,7 @@
         const maxIndex = Math.max(0, track.children.length - visibleCards);
         carouselIndex = Math.min(carouselIndex, maxIndex);
 
-        track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
+        track.style.transform = 'translateX(-' + (carouselIndex * cardWidth) + 'px)';
 
         document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
             dot.classList.toggle('is-active', index === carouselIndex);
@@ -329,17 +367,28 @@
             return;
         }
 
-        tableBody.innerHTML = Array.from(
-            { length: 10 },
-            (_, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td>Por definir</td>
-                    <td>—</td>
-                    <td>—</td>
-                </tr>
-            `
-        ).join('');
+        // Se utiliza un segundo bloque distinto del mismo resultado ordenado
+        // por created_at. No se calcula ni se simula una métrica de popularidad.
+        const plants = recentPlants.slice(5, 15);
+
+        if (!plants.length) {
+            tableBody.innerHTML = '<tr><td colspan="4">No hay suficientes plantas registradas todavía.</td></tr>';
+            return;
+        }
+
+        tableBody.innerHTML = plants
+            .map((plant, index) => {
+                const name = escapeHtml(plant.nombre_comun || 'Planta sin nombre');
+                const type = escapeHtml(plant.tipo_cultivo || '—');
+
+                return '<tr>' +
+                    '<td>' + (index + 1) + '</td>' +
+                    '<td>' + name + '</td>' +
+                    '<td>' + type + '</td>' +
+                    '<td>—</td>' +
+                    '</tr>';
+            })
+            .join('');
     }
 
     // =========================================================
@@ -349,8 +398,9 @@
     function init() {
         renderCalendarInfo();
         timeAdvice();
-        renderCarousel();
-        renderPopular();
+        loadPlants();
+
+        window.addEventListener('resize', moveCarousel);
 
         setInterval(() => {
             timeAdvice();
