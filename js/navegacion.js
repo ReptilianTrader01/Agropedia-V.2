@@ -31,6 +31,7 @@
         nosotros: ['nosotros.html'],
         registro: ['registro.html'],
         huerto: ['jardin.html'],
+        calendario: ['calendario.html'],
         usuario: ['preferencias_usuario.html']
     };
 
@@ -90,6 +91,7 @@
 
                 <a class="agro-navbar__link" data-nav="registro" href="registro.html">Regístrate</a>
                 <a class="agro-navbar__link" data-nav="huerto" href="jardin.html">Mi huerto</a>
+                <a class="agro-navbar__link" data-nav="calendario" href="calendario.html">Calendario</a>
 
                 <a
                     class="agro-navbar__user-link"
@@ -178,6 +180,7 @@
                     <h3>Tu espacio</h3>
                     <a href="registro.html">Regístrate</a>
                     <a href="jardin.html">Mi huerto</a>
+                    <a href="calendario.html">Calendario</a>
                     <a href="preferencias_usuario.html">Preferencias</a>
                 </div>
             </div>
