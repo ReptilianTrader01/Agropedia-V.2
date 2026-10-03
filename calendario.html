@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Consulta y organiza las tareas, siembras y cosechas de tu huerto en el calendario agrícola de Agropedia.">
+    <title>Calendario agrícola | Agropedia</title>
+    <link rel="stylesheet" href="css/navegacion.css">
+    <link rel="stylesheet" href="css/calendario.css">
+</head>
+<body>
+    <main class="calendar-page">
+        <section class="calendar-hero">
+            <div class="calendar-container">
+                <div>
+                    <span class="section-label">📅 Organización de tu huerto</span>
+                    <h1>Calendario agrícola</h1>
+                    <p>Reúne en un solo lugar tus tareas, fechas de siembra y cosechas estimadas.</p>
+                </div>
+                <div class="calendar-hero-icon" aria-hidden="true">🌱</div>
+            </div>
+        </section>
+
+        <section class="calendar-section">
+            <div class="calendar-container">
+                <div class="calendar-toolbar">
+                    <div class="garden-selector-group">
+                        <label for="gardenSelector">Huerto activo</label>
+                        <select id="gardenSelector" aria-label="Seleccionar huerto">
+                            <option value="">Cargando...</option>
+                        </select>
+                    </div>
+                    <div class="calendar-navigation" aria-label="Navegación del calendario">
+                        <button type="button" id="previousMonth" aria-label="Mes anterior">‹</button>
+                        <button type="button" id="todayButton">Hoy</button>
+                        <button type="button" id="nextMonth" aria-label="Mes siguiente">›</button>
+                    </div>
+                </div>
+
+                <div class="calendar-heading">
+                    <div>
+                        <span class="section-label">Vista mensual</span>
+                        <h2 id="calendarMonth">Cargando...</h2>
+                    </div>
+                    <div class="calendar-filters" role="group" aria-label="Filtrar eventos">
+                        <button type="button" class="filter-button is-active" data-filter="todos">Todos</button>
+                        <button type="button" class="filter-button" data-filter="tarea">Tareas</button>
+                        <button type="button" class="filter-button" data-filter="siembra">Siembras</button>
+                        <button type="button" class="filter-button" data-filter="cosecha">Cosechas</button>
+                    </div>
+                </div>
+
+                <div class="calendar-layout">
+                    <section class="calendar-card" aria-label="Calendario mensual">
+                        <div class="calendar-weekdays" aria-hidden="true">
+                            <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid">
+                            <div class="calendar-loading">Cargando calendario...</div>
+                        </div>
+                    </section>
+
+                    <aside class="day-details" id="dayDetails" aria-live="polite">
+                        <div class="day-details-empty">
+                            <span>🌿</span>
+                            <h3>Selecciona un día</h3>
+                            <p>Aquí aparecerán las tareas y eventos agrícolas correspondientes al día seleccionado.</p>
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="calendar-legend">
+                    <span><i class="legend-dot legend-task"></i>Tarea</span>
+                    <span><i class="legend-dot legend-sowing"></i>Siembra</span>
+                    <span><i class="legend-dot legend-harvest"></i>Cosecha</span>
+                    <span><i class="legend-dot legend-completed"></i>Completado</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js?v=20261002"></script>
+    <script src="js/navegacion.js?v=20261002"></script>
+    <script src="js/calendario.js?v=20261002"></script>
+</body>
+</html>
