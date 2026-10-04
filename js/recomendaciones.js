@@ -234,21 +234,23 @@
                 }
             });
 
-            context.cultivated.forEach(cultivated => {
-                if (Number(cultivated.id) === Number(plant.id)) {
-                    return;
-                }
+            if (context.cultivated.length >= 2) {
+                context.cultivated.forEach(cultivated => {
+                    if (Number(cultivated.id) === Number(plant.id)) {
+                        return;
+                    }
 
-                const similarity = plantSimilarity(plant, cultivated);
+                    const similarity = plantSimilarity(plant, cultivated);
 
-                if (similarity.score > 0) {
-                    candidate.score += similarity.score;
-                    candidate.reasons.push(
-                        'comparte características con ' + cultivated.nombre_comun + ', que ya cultivas'
-                    );
-                    candidate.referenceIds.add(Number(cultivated.id));
-                }
-            });
+                    if (similarity.score > 0) {
+                        candidate.score += similarity.score;
+                        candidate.reasons.push(
+                            'comparte características con ' + cultivated.nombre_comun + ', que ya cultivas'
+                        );
+                        candidate.referenceIds.add(Number(cultivated.id));
+                    }
+                });
+            }
         });
 
         return rankCandidates(candidates.values()).map(item => ({
