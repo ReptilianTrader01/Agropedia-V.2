@@ -305,22 +305,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function renderRelated(plantId) {
+        const grid = document.querySelector('.related-plants-grid');
+
+        if (!grid) return;
+
         const { data, error } = await agropediaSupabase
             .from('plantas_compatibles')
-            .select('planta_relacionada_id')
+            .select('planta_relacionada_id,descripcion')
             .eq('planta_id', plantId)
             .eq('compatible', true)
             .limit(4);
 
         if (error) {
             console.error('Error al cargar plantas relacionadas:', error);
+            grid.innerHTML = '<div class="related-plants-empty">No pudimos cargar los datos de compatibilidad en este momento.</div>';
             return;
         }
 
-        const ids = (data || []).map(row => row.planta_relacionada_id).filter(Boolean);
-        const grid = document.querySelector('.related-plants-grid');
+        const relations = data || [];
+        const ids = relations
+            .map(row => row.planta_relacionada_id)
+            .filter(Boolean);
 
-        if (!grid || !ids.length) return;
+        if (!ids.length) {
+            grid.innerHTML = '<div class="related-plants-empty">Aún no tenemos datos de compatibilidad para esta planta.</div>';
+            return;
+        }
 
         const { data: plants, error: plantsError } = await agropediaSupabase
             .from('plantas')
@@ -329,23 +339,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (plantsError) {
             console.error('Error al cargar plantas relacionadas:', plantsError);
+            grid.innerHTML = '<div class="related-plants-empty">No pudimos cargar las plantas relacionadas en este momento.</div>';
             return;
         }
 
+        const descriptionById = new Map(
+            relations.map(row => [Number(row.planta_relacionada_id), row.descripcion || ''])
+        );
+
         grid.innerHTML = '';
 
-        (plants || []).forEach(p => {
+        (plants || []).forEach(plant => {
+            const description = descriptionById.get(Number(plant.id)) || 'Compatibilidad registrada en Agropedia.';
+
             grid.insertAdjacentHTML('beforeend', `
                 <article class="related-plant-card">
-                    <img src="${escapeHtml(p.imagen_url || fallback)}" alt="${escapeHtml(p.nombre_comun)}">
+                    <img src="${escapeHtml(plant.imagen_url || fallback)}" alt="${escapeHtml(plant.nombre_comun)}">
                     <div>
-                        <span>Planta</span>
-                        <h3>${escapeHtml(p.nombre_comun)}</h3>
-                        <a href="planta.html?id=${p.id}">Ver planta →</a>
+                        <span>Compatibilidad registrada</span>
+                        <h3>${escapeHtml(plant.nombre_comun)}</h3>
+                        <p>${escapeHtml(description)}</p>
+                        <a href="planta.html?id=${encodeURIComponent(plant.id)}">Ver planta →</a>
                     </div>
                 </article>
             `);
         });
+
+        if (!(plants || []).length) {
+            grid.innerHTML = '<div class="related-plants-empty">Aún no tenemos datos de compatibilidad para esta planta.</div>';
+        }
     }
 
     function normalizarVideo(url) {
