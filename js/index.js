@@ -269,9 +269,11 @@
         if (!track || !dots) return;
 
         if (eyebrow) {
-            eyebrow.textContent = recommendationData.mode === 'cold-start'
-                ? 'Para empezar'
-                : 'Personalizadas';
+            eyebrow.textContent = recommendationData.mode === 'personalized'
+                ? 'Personalizadas'
+                : recommendationData.mode === 'cold-start'
+                    ? 'Para empezar'
+                    : 'Descubrimiento';
         }
 
         if (context) {
