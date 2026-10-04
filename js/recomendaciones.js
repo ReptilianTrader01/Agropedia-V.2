@@ -260,8 +260,11 @@
         }));
     }
 
-    function buildGeneralPlants(plants) {
+    function buildGeneralPlants(plants, excludedIds = []) {
+        const excluded = new Set(excludedIds.map(Number));
+
         return sortById(plants)
+            .filter(plant => !excluded.has(Number(plant.id)))
             .slice(0, BLOCK_SIZE)
             .map(plant => ({
                 ...plant,
@@ -382,11 +385,23 @@
 
         const hasPersonalSignal = Boolean(
             context.favorites.length
-            || context.cultivated.length
             || context.preferredClimate
+            || context.cultivated.length >= 2
         );
 
         if (!hasPersonalSignal) {
+            const hasSingleCultivatedPlant = context.cultivated.length === 1;
+
+            if (hasSingleCultivatedPlant) {
+                return {
+                    mode: 'general',
+                    title: 'Descubrimiento para tu huerto',
+                    description: 'Aún no tenemos suficientes señales para personalizar estas recomendaciones. Puedes explorar el catálogo sin asumir condiciones de tu huerto.',
+                    invitation: 'Agrega plantas a favoritos o configura tu clima preferido para recibir recomendaciones más personalizadas.',
+                    plants: buildGeneralPlants(catalog, context.cultivatedIds)
+                };
+            }
+
             return {
                 mode: 'cold-start',
                 title: 'Recomendaciones para empezar',
@@ -396,10 +411,19 @@
             };
         }
 
-        let recommendations = buildPersonalizedPlants(catalog, context);
+        const recommendations = buildPersonalizedPlants(catalog, context);
 
         if (!recommendations.length) {
-            recommendations = buildGeneralPlants(catalog);
+            return {
+                mode: 'general-fallback',
+                title: 'Descubrimiento para tu huerto',
+                description: 'No encontramos suficientes coincidencias confirmadas para personalizar las recomendaciones. Mostramos otras plantas del catálogo sin asumir preferencias que no están registradas.',
+                invitation: context.favorites.length
+                    ? null
+                    : 'Agrega plantas a favoritos para que el sistema pueda conocer mejor tus intereses.',
+                plants: buildGeneralPlants(catalog, context.cultivatedIds),
+                context
+            };
         }
 
         return {
