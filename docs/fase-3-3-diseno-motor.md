@@ -222,8 +222,12 @@ La regla será:
 1. consultar las plantas disponibles en `plantas`;
 2. ordenar los candidatos de forma determinista a partir de un valor estable del registro, utilizando `id` como base de ordenación;
 3. calcular una posición de inicio rotativa a partir de la fecha actual, de modo que no se muestre siempre el mismo primer bloque;
-4. seleccionar el número fijo de plantas que requiera la interfaz recorriendo circularmente el catálogo;
+4. seleccionar **5 plantas por bloque** y recorrer circularmente el catálogo si es necesario;
 5. no aplicar filtros de `dificultad`, `ciclo`, `clima_preferido`, `suelo_preferido`, experiencia ni ninguna otra característica como supuesto sobre el usuario.
+
+El tamaño de 5 plantas se establece deliberadamente por debajo de la mitad del catálogo actual de 11 plantas, evitando que un bloque pueda recorrer casi todo el catálogo y haciendo perceptible la rotación. El motor deberá evitar repetir una misma planta dentro del mismo bloque: si en algún caso futuro el catálogo contiene menos de 5 candidatos válidos, se mostrarán únicamente los disponibles en lugar de repetir registros.
+
+Este número es un parámetro de presentación de la v1 y deberá revisarse si el catálogo crece o se reduce significativamente.
 
 La rotación será únicamente una técnica de presentación. **No constituye una señal de recomendación ni modifica el significado agronómico de las plantas.** Si el catálogo cambia, las nuevas plantas pasan a formar parte automáticamente del universo disponible.
 
