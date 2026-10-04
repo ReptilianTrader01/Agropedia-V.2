@@ -24,6 +24,7 @@
 
     let carouselIndex = 0;
     let recentPlants = [];
+    let recommendationData = null;
 
     // =========================================================
     // SEGURIDAD DE CONTENIDO
@@ -240,26 +241,61 @@
         }
 
         recentPlants = data || [];
-        renderCarousel();
         renderPopular();
+        await loadRecommendations();
     }
 
     // =========================================================
-    // CARRUSEL DE PLANTAS RECOMENDADAS
+    // RECOMENDACIONES
     // =========================================================
 
-    function renderCarousel() {
+    async function loadRecommendations() {
+        try {
+            recommendationData = await window.agropediaRecommendations.getRecommendations();
+            renderRecommendations();
+        } catch (error) {
+            console.error('Error al cargar recomendaciones:', error);
+            recommendationData = null;
+            renderRecommendationError();
+        }
+    }
+
+    function renderRecommendations() {
         const track = document.getElementById('plant-track');
         const dots = document.getElementById('carousel-dots');
+        const context = document.getElementById('recommendation-context');
+        const eyebrow = document.getElementById('recommendation-eyebrow');
 
-        if (!track || !dots) {
-            return;
+        if (!track || !dots) return;
+
+        if (eyebrow) {
+            eyebrow.textContent = recommendationData.mode === 'personalized'
+                ? 'Personalizadas'
+                : recommendationData.mode === 'cold-start'
+                    ? 'Para empezar'
+                    : 'Descubrimiento';
         }
 
-        const plants = recentPlants.slice(0, 5);
+        if (context) {
+            const messages = [];
+
+            if (recommendationData.description) {
+                messages.push(recommendationData.description);
+            }
+
+            if (recommendationData.invitation) {
+                messages.push(recommendationData.invitation);
+            }
+
+            context.innerHTML = messages
+                .map(message => '<p>' + escapeHtml(message) + '</p>')
+                .join('');
+        }
+
+        const plants = recommendationData.plants || [];
 
         if (!plants.length) {
-            track.innerHTML = '<p class="loading-plants">No hay plantas disponibles todavía.</p>';
+            track.innerHTML = '<p class="loading-plants">No encontramos plantas para mostrar en este momento.</p>';
             dots.innerHTML = '';
             return;
         }
@@ -268,21 +304,23 @@
             .map((plant, index) => {
                 const name = escapeHtml(plant.nombre_comun || 'Planta sin nombre');
                 const scientific = escapeHtml(plant.nombre_cientifico || '');
-                const description = escapeHtml(
-                    plant.descripcion || 'Consulta la ficha para conocer sus características y cuidados.'
+                const reason = escapeHtml(
+                    plant.recommendationReason || 'Forma parte del catálogo disponible para explorar.'
                 );
                 const image = escapeHtml(plant.imagen_url || 'assets/images/logo.png');
-                const icon = plantEmoji[index % plantEmoji.length];
 
                 return '<article class="plant-card">' +
-                    '<div class="plant-card__image">' +
-                        '<img src="' + image + '" alt="' + name + '" loading="lazy">' +
-                    '</div>' +
-                    '<div class="plant-card__body">' +
-                        '<h3>' + name + '</h3>' +
-                        '<p>' + (scientific || description) + '</p>' +
-                    '</div>' +
-                    '</article>';
+                    '<a href="planta.html?id=' + encodeURIComponent(plant.id) + '" class="plant-card__link">' +
+                        '<div class="plant-card__image">' +
+                            '<img src="' + image + '" alt="' + name + '" loading="lazy">' +
+                        '</div>' +
+                        '<div class="plant-card__body">' +
+                            '<h3>' + name + '</h3>' +
+                            '<p>' + (scientific || 'Información botánica') + '</p>' +
+                            '<p class="plant-card__reason">' + reason + '</p>' +
+                        '</div>' +
+                    '</a>' +
+                '</article>';
             })
             .join('');
 
@@ -292,10 +330,12 @@
             });
         });
 
+        carouselIndex = 0;
+
         dots.innerHTML = plants
             .map((_, index) =>
                 '<button class="carousel-dot ' + (index === 0 ? 'is-active' : '') +
-                '" type="button" aria-label="Mostrar planta ' + (index + 1) +
+                '" type="button" aria-label="Mostrar recomendación ' + (index + 1) +
                 '" data-slide="' + index + '"></button>'
             )
             .join('');
@@ -324,38 +364,28 @@
             };
         }
 
-        carouselIndex = 0;
         moveCarousel();
     }
 
-    function moveCarousel() {
+    function renderRecommendationError() {
         const track = document.getElementById('plant-track');
-        const card = track?.querySelector('.plant-card');
+        const dots = document.getElementById('carousel-dots');
+        const context = document.getElementById('recommendation-context');
 
-        if (!track || !card) {
-            return;
+        if (track) {
+            track.innerHTML = '<p class="loading-plants">No pudimos cargar las recomendaciones. Inténtalo nuevamente más tarde.</p>';
         }
 
-        const gap = 18;
-        const cardWidth = card.getBoundingClientRect().width + gap;
+        if (dots) {
+            dots.innerHTML = '';
+        }
 
-        const visibleCards =
-            window.innerWidth <= 650
-                ? 1
-                : window.innerWidth <= 900
-                    ? 3
-                    : 5;
-
-        const maxIndex = Math.max(0, track.children.length - visibleCards);
-        carouselIndex = Math.min(carouselIndex, maxIndex);
-
-        track.style.transform = 'translateX(-' + (carouselIndex * cardWidth) + 'px)';
-
-        document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-            dot.classList.toggle('is-active', index === carouselIndex);
-        });
+        if (context) {
+            context.innerHTML = '<p>Las recomendaciones dependen de la información disponible en Agropedia.</p>';
+        }
     }
 
+    // =========================================================
     // =========================================================
     // TABLA DE 10 PLANTAS POPULARES
     // =========================================================
