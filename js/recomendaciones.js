@@ -253,7 +253,9 @@
             }
         });
 
-        return rankCandidates(candidates.values()).map(item => ({
+        return rankCandidates(
+            [...candidates.values()].filter(item => item.score > 0)
+        ).map(item => ({
             ...item.plant,
             recommendationScore: item.score,
             recommendationReason: reasonText(item.reasons)
