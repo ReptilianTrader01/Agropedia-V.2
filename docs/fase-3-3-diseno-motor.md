@@ -213,6 +213,22 @@ y un texto secundario:
 
 El conjunto mostrado será **genérico y basado únicamente en datos confirmados del catálogo**. No se afirmará que esas plantas son las mejores para el usuario, su jardín o su clima.
 
+### Criterio verificable de selección
+
+Para evitar que el contenido genérico dependa de una suposición sobre el usuario, **el arranque en frío utilizará el catálogo completo disponible como universo de candidatos y una rotación determinista basada en el propio catálogo**.
+
+La regla será:
+
+1. consultar las plantas disponibles en `plantas`;
+2. ordenar los candidatos de forma determinista a partir de un valor estable del registro, utilizando `id` como base de ordenación;
+3. calcular una posición de inicio rotativa a partir de la fecha actual, de modo que no se muestre siempre el mismo primer bloque;
+4. seleccionar el número fijo de plantas que requiera la interfaz recorriendo circularmente el catálogo;
+5. no aplicar filtros de `dificultad`, `ciclo`, `clima_preferido`, `suelo_preferido`, experiencia ni ninguna otra característica como supuesto sobre el usuario.
+
+La rotación será únicamente una técnica de presentación. **No constituye una señal de recomendación ni modifica el significado agronómico de las plantas.** Si el catálogo cambia, las nuevas plantas pasan a formar parte automáticamente del universo disponible.
+
+Por tanto, una planta aparece en "Recomendaciones para empezar" porque pertenece al catálogo disponible y entra en el bloque rotativo correspondiente, no porque el motor haya determinado que sea especialmente adecuada para ese usuario.
+
 No se inventará una preferencia a partir de este estado. En particular:
 
 - no se asumirá que el usuario prefiere plantas fáciles;
