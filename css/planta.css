@@ -593,3 +593,37 @@ body.dark-mode .related-plant-card {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* =========================================================
+   ESTADO DE COMPATIBILIDAD
+   ========================================================= */
+
+.related-plants-empty {
+    width: 100%;
+    padding: 28px 22px;
+    border: 1px dashed #cfd8cc;
+    border-radius: 14px;
+    background: #f8faf6;
+    color: #667066;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.related-plant-card p {
+    margin: 8px 0 12px;
+    color: #667066;
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+body.agropedia-dark .related-plants-empty {
+    border-color: #3a493c;
+    background: #182119;
+    color: #aeb9ae;
+}
+
+body.agropedia-dark .related-plant-card p {
+    color: #aeb9ae;
+}
+
